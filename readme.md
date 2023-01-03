@@ -2,10 +2,10 @@
 
 # Versions :
 
-> Symfony 6.2.4
-> PHP 8.2.0
+> * Symfony 6.2.4
+> * PHP 8.2.0
 
 
 # Développement par :
-> Louis HERMAN 
-> Thomas GUILBERT
+> * Louis HERMAN 
+> * Thomas GUILBERT
