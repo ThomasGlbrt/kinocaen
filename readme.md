@@ -1,4 +1,4 @@
-# Projet application WEB/Mobile de gestion d'utilisteur et martériel du Kinocaen
+# Projet application WEB/Mobile de gestion d'utilisteur et matériel du Kinocaen
 
 # Versions :
 
