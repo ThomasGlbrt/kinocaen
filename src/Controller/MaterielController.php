@@ -33,4 +33,14 @@ class MaterielController extends AbstractController
             'materiel' => $materiel,]);
 	}
 
+    public function listerMateriel(ManagerRegistry $doctrine){
+
+        $repository = $doctrine->getRepository(Materiel::class);
+
+        $materiel= $repository->findAll();
+        return $this->render('materiel/lister.html.twig', [
+    'pMateriels' => $materiel,]);	
+    
+}
+
 }
