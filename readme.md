@@ -9,3 +9,7 @@
 # Développement par :
 > * Louis HERMAN 
 > * Thomas GUILBERT
+
+
+# Accès bdd local :
+> kinocaen / MPkinocaen
