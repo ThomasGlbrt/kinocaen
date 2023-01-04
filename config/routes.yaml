@@ -14,3 +14,7 @@ accueil:
 materielConsulter:
     path: /materiel/consulter/{id}
     controller: App\Controller\MaterielController::consulterMateriel
+
+materielLister:
+    path: /materiel/lister/
+    controller: App\Controller\MaterielController::listerMateriel
