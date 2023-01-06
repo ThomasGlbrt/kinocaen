@@ -4,9 +4,11 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Materiel;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Form\MaterielType;
 
 class MaterielController extends AbstractController
 {
@@ -33,6 +35,7 @@ class MaterielController extends AbstractController
             'materiel' => $materiel,]);
 	}
 
+
     public function listerMateriel(ManagerRegistry $doctrine){
 
         $repository = $doctrine->getRepository(Materiel::class);
@@ -41,6 +44,28 @@ class MaterielController extends AbstractController
         return $this->render('materiel/lister.html.twig', [
     'pMateriels' => $materiel,]);	
     
+    }
+
+    
+    public function ajouterMateriel(ManagerRegistry $doctrine,Request $request){
+        $materiel = new materiel();
+	$form = $this->createForm(MaterielType::class, $materiel);
+	$form->handleRequest($request);
+ 
+	if ($form->isSubmitted() && $form->isValid()) {
+ 
+            $materiel = $form->getData();
+ 
+            $entityManager = $doctrine->getManager();
+            $entityManager->persist($materiel);
+            $entityManager->flush();
+ 
+	    return $this->render('materiel/consulter.html.twig', ['materiel' => $materiel,]);
+	}
+	else
+        {
+            return $this->render('materiel/ajouter.html.twig', array('form' => $form->createView(),));
+	}
 }
 
 }
