@@ -22,3 +22,7 @@ materielLister:
 materielAjouter:
     path: /materiel/ajouter/
     controller: App\Controller\MaterielController::ajouterMateriel
+
+materielModifier:
+    path: /materiel/modifier/{id}
+    controller: App\Controller\MaterielController::modifierMateriel
