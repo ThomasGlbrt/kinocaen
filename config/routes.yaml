@@ -18,3 +18,7 @@ materielConsulter:
 materielLister:
     path: /materiel/lister/
     controller: App\Controller\MaterielController::listerMateriel
+
+materielAjouter:
+    path: /materiel/ajouter/
+    controller: App\Controller\MaterielController::ajouterMateriel
