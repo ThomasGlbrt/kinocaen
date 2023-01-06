@@ -12,17 +12,21 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
-class MaterielType extends AbstractType
+class MaterielModifierType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('intitule', TextType::class)
             ->add('description', TextType::class, ['required' => false])
-            
-	    ->add('enregistrer', SubmitType::class, array('label' => 'Enregistrer'))
+           
+            ->add('enregistrer', SubmitType::class, array('label' => 'Enregistrer'))
         ;
     }
+
+    public function getParent(){
+        return MaterielType::class;
+      }
 
     public function configureOptions(OptionsResolver $resolver): void
     {

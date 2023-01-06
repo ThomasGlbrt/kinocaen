@@ -9,6 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Materiel;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Form\MaterielType;
+use App\Form\MaterielModifierType;
 
 class MaterielController extends AbstractController
 {
@@ -65,7 +66,36 @@ class MaterielController extends AbstractController
 	else
         {
             return $this->render('materiel/ajouter.html.twig', array('form' => $form->createView(),));
-	}
-}
+	    }
+    }
 
+
+    public function modifierMateriel(ManagerRegistry $doctrine, $id, Request $request){
+ 
+        //récupération du matériel dont l'id est passé en paramètre
+        $materiel = $doctrine
+            ->getRepository(Materiel::class)
+            ->find($id);
+     
+        if (!$materiel) {
+            throw $this->createNotFoundException('Aucun Materiel trouvé avec le numéro '.$id);
+        }
+        else
+        {
+                $form = $this->createForm(MaterielModifierType::class, $materiel);
+                $form->handleRequest($request);
+     
+                if ($form->isSubmitted() && $form->isValid()) {
+     
+                     $materiel = $form->getData();
+                     $entityManager = $doctrine->getManager();
+                     $entityManager->persist($materiel);
+                     $entityManager->flush();
+                     return $this->render('materiel/consulter.html.twig', ['materiel' => $materiel,]);
+               }
+               else{
+                    return $this->render('materiel/ajouter.html.twig', array('form' => $form->createView(),));
+               }
+            }
+     }
 }
