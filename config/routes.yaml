@@ -18,3 +18,13 @@ materielConsulter:
 materielLister:
     path: /materiel/lister/
     controller: App\Controller\MaterielController::listerMateriel
+
+#Connexion/Inscription
+
+inscription:
+    path: /inscription
+    controller: App\Controller\RegistrationController::register
+
+connexion:
+    path: /connexion
+    controller: App\Controller\LoginController::index
