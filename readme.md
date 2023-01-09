@@ -11,5 +11,5 @@
 > * Thomas GUILBERT
 
 
-# Accès bdd local :
-> kinocaen / MPkinocaen
+# Accès bdd distante :
+> kino.inforostand14.net | kino / MProot
