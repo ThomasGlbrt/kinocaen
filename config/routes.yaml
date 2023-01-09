@@ -26,3 +26,7 @@ materielAjouter:
 materielModifier:
     path: /materiel/modifier/{id}
     controller: App\Controller\MaterielController::modifierMateriel
+
+materielSupprimer:
+    path: /materiel/supprimer/{id}
+    controller: App\Controller\MaterielController::supprimerMateriel
