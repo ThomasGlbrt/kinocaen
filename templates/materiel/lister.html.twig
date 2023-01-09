@@ -2,18 +2,18 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>{% block title %}Liste du Matériel{% endblock %}</title>
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
         {% block body %}{% endblock %}
         {% block javascripts %}{% endblock %}
 		
-		LISTE DES MATERIELS</br>
+		LISTE DU MATERIELS</br>
 		<table>
 		{% for e in pMateriels %}
 		<tr>
-			<td>{{ e.intitule }}</a></td>
+			<td><a href="{{ path('materielConsulter', { 'id': e.id }) }}">{{ e.intitule }}</a></td>
 			<td>{{ e.description }}</td>
 	{% else %}
 		<tr>

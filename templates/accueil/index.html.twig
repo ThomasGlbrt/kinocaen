@@ -12,9 +12,14 @@
     <h1>Hello {{ controller_name }}! ✅</h1>
 
     This friendly message is coming from:
-    <ul>
+    <!--<ul>
         <li>Your controller at <code><a href="{{ 'C:/wamp64/www/kinocaen/src/Controller/AccueilController.php'|file_link(0) }}">src/Controller/AccueilController.php</a></code></li>
         <li>Your template at <code><a href="{{ 'C:/wamp64/www/kinocaen/templates/accueil/index.html.twig'|file_link(0) }}">templates/accueil/index.html.twig</a></code></li>
+    </ul>-->
+
+    <ul>
+        <li><a href="{{ path('materielLister') }}" type="button">Liste du Matériel</button></a></li>
     </ul>
+
 </div>
 {% endblock %}
