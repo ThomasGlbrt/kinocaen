@@ -19,6 +19,18 @@ materielLister:
     path: /materiel/lister/
     controller: App\Controller\MaterielController::listerMateriel
 
+materielAjouter:
+    path: /materiel/ajouter/
+    controller: App\Controller\MaterielController::ajouterMateriel
+
+materielModifier:
+    path: /materiel/modifier/{id}
+    controller: App\Controller\MaterielController::modifierMateriel
+
+materielSupprimer:
+    path: /materiel/supprimer/{id}
+    controller: App\Controller\MaterielController::supprimerMateriel
+
 #Connexion/Inscription
 
 inscription:
