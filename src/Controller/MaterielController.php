@@ -98,4 +98,20 @@ class MaterielController extends AbstractController
                }
             }
      }
+
+
+     public function supprimerMateriel(ManagerRegistry $doctrine, int $id, Request $request){
+
+        $materiel= $doctrine->getRepository(Materiel::class)->find($id);
+    
+        if (!$materiel){
+            throw $this->createNotFoundException('Aucun materiel trouvé avec cet id !');
+        }
+        else{
+            $entityManager = $doctrine->getManager();
+            $entityManager->remove($materiel);
+            $entityManager->flush();
+            return $this->redirectToRoute('materielLister');
+        }
+    }
 }
