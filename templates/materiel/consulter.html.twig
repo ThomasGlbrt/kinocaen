@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>{{materiel.intitule}}</title>
-    </head>
-    <body>       
-		<h5>PAGE DE CONSULTATION D'UN MATERIEL</h5>
+{% extends 'base.html.twig' %}
+{% block title %}{{materiel.intitule}}{% endblock %}
+{% block contenu %}   
+
+<h5>PAGE DE CONSULTATION D'UN MATERIEL</h5>
  <p>
   <table >
      <tr><td>Nom : </td><td>{{materiel.intitule}}</td></tr>
@@ -16,5 +14,4 @@
    
 
   </table>
-</body>
-</html>
+{% endblock %}
