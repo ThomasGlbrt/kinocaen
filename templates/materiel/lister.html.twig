@@ -1,17 +1,36 @@
 {% extends 'base.html.twig' %}
 {% block title %}Liste du Matériel{% endblock %}
+{% block style %}
+.card-columns {
+  @include media-breakpoint-only(lg) {
+    column-count: 4;
+  }
+  @include media-breakpoint-only(xl) {
+    column-count: 4;
+  }
+}
+{% endblock %}
 {% block contenu %}
-		
-		LISTE DU MATERIELS</br>
-		<table>
+	LISTE DU MATERIELS</br>
+	<div class="card-deck">
 		{% for e in pMateriels %}
-		<tr>
-			<td><a href="{{ path('materielConsulter', { 'id': e.id }) }}">{{ e.intitule }}</a></td>
-			<td>{{ e.description }}</td>
+		<div class="card ">
+    		<div class="card-body">
+      			<h5 class="card-title"><a href="{{ path('materielConsulter', { 'id': e.id }) }}">{{ e.intitule }}</a></h5>
+			{% if e.description != '' %}
+			<div class="card-text">
+				{{ e.description }}
+			</div>
+			{% else %}{% endif %}
+			</div>
+		</div>
 	{% else %}
-		<tr>
-		<td>Aucun materiel n'a été trouvé.</td>
-		</tr>
+	
+		<div>Aucun materiel n'a été trouvé.</div>
 	{% endfor %}
-</table>
+	</div>
+
+
 {% endblock %}	 
+
+
