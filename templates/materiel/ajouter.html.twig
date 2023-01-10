@@ -1,4 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un matériel{% endblock %}
+
+{% block contenu %}
+<h4>Ajouter un appareil</h4>
+</br>
 {# templates/etudiant/ajouter.html.twig #}
 {{ form_start(form) }}
 {{ form_widget(form) }}
 {{ form_end(form) }}
+{% endblock %}
