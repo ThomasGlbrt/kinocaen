@@ -12,16 +12,18 @@
 {% endblock %}
 {% block contenu %}
 	LISTE DU MATERIELS</br>
-	<div class="card-deck">
+	<div class="row">
 		{% for e in pMateriels %}
-		<div class="card ">
-    		<div class="card-body">
-      			<h5 class="card-title"><a href="{{ path('materielConsulter', { 'id': e.id }) }}">{{ e.intitule }}</a></h5>
-			{% if e.description != '' %}
-			<div class="card-text">
-				{{ e.description }}
-			</div>
-			{% else %}{% endif %}
+		<div class="col-md-4">
+			<div class="card mt-4 " style="height:90%;">
+    			<div class="card-body">
+      				<h5 class="card-title"><a href="{{ path('materielConsulter', { 'id': e.id }) }}">{{ e.intitule }}</a></h5>
+					{% if e.description != '' %}
+					<div class="card-text">
+						{{ e.description }}
+					</div>
+					{% else %}{% endif %}
+				</div>
 			</div>
 		</div>
 	{% else %}
