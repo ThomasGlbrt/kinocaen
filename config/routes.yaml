@@ -31,6 +31,7 @@ materielSupprimer:
     path: /materiel/supprimer/{id}
     controller: App\Controller\MaterielController::supprimerMateriel
 
+
 #Connexion/Inscription
 
 inscription:
@@ -44,3 +45,26 @@ connexion:
 logout:
     path: /logout
     methods: GET
+
+
+   # Emprunt
+
+empruntConsulter:
+    path: /emprunt/consulter/{id}
+    controller: App\Controller\EmpruntController::consulterEmprunt
+
+empruntLister:
+    path: /emprunt/lister/
+    controller: App\Controller\EmpruntController::listerEmprunt
+
+empruntAjouter:
+    path: /emprunt/ajouter/
+    controller: App\Controller\EmpruntController::ajouterEmprunt
+
+empruntModifier:
+    path: /emprunt/modifier/{id}
+    controller: App\Controller\EmpruntController::modifierEmprunt
+
+empruntSupprimer:
+    path: /emprunt/supprimer/{id}
+    controller: App\Controller\EmpruntController::supprimerEmprunt

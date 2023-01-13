@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\InscritRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: InscritRepository::class)]
@@ -21,6 +23,14 @@ class Inscrit
 
     #[ORM\OneToOne(mappedBy: 'inscrit', cascade: ['persist', 'remove'])]
     private ?Utilisateur $utilisateurs = null;
+
+    #[ORM\ManyToMany(targetEntity: materiel::class, inversedBy: 'emprunt')]
+    private Collection $emprunt;
+
+    public function __construct()
+    {
+        $this->emprunt = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -69,6 +79,30 @@ class Inscrit
         }
 
         $this->utilisateurs = $utilisateurs;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, materiel>
+     */
+    public function getEmprunt(): Collection
+    {
+        return $this->emprunt;
+    }
+
+    public function addEmprunt(materiel $emprunt): self
+    {
+        if (!$this->emprunt->contains($emprunt)) {
+            $this->emprunt->add($emprunt);
+        }
+
+        return $this;
+    }
+
+    public function removeEmprunt(materiel $emprunt): self
+    {
+        $this->emprunt->removeElement($emprunt);
 
         return $this;
     }
