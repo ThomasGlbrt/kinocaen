@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+{% block title %}Profil {{ inscrit.prenom }} {{inscrit.nom|upper}} {% endblock %}
+{% block contenu %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <h2>{{ inscrit.prenom }} {{inscrit.nom|upper}}</h2>
+            <p>Poste: {{inscrit.poste}}</p>
+            <p>Email: {{inscrit.utilisateurs.email}}</p>
+            <p>Numéro de téléphone: +33 {{inscrit.NumTel}}</p>
+            <p>Talent: {{inscrit.talent}}</p>
+            <p>Chose à dire en plus: {{inscrit.choseplus}}</p>
+        </div>
+        <div class="col-md-4">
+            <img src="{{ inscrit.image }}" alt="image de profil" class="img-fluid">
+        </div>
+    </div>
+</div>
+{% endblock %}

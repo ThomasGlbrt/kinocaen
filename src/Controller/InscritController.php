@@ -4,7 +4,10 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Entity\Inscrit;
+use Doctrine\Persistence\ManagerRegistry;
 
 class InscritController extends AbstractController
 {
@@ -42,5 +45,20 @@ class InscritController extends AbstractController
             'registrationForm' => $form->createView(),
         ]);
     }
+
+    public function consulterInscrit(ManagerRegistry $doctrine, int $id){
+
+		$inscrit= $doctrine->getRepository(Inscrit::class)->find($id);
+
+		if (!$inscrit) {
+			throw $this->createNotFoundException(
+            'Aucun inscrit trouvé avec le numéro '.$id
+			);
+		}
+
+		//return new Response('Inscrit : '.$inscrit->getNom());
+		return $this->render('inscrit/consulter.html.twig', [
+            'inscrit' => $inscrit,]);
+	}
 
 }
