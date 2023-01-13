@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+{% block contenu %}   
+
+<h5>PAGE DE CONSULTATION D'UN EMPRUNT</h5>
+ <p>
+  <table >
+     <tr><td>Matériel : </td><td>{{ path('objetModifier',{ 'id': objet.id }) }}</td></tr>
+	<tr><td>Description : </td><td>{{materiel.description}}</td></tr>
+	
+ </table>
+
+ <br><a href="{{ path('materielLister') }}" type="button">Retour</button></a>
+   
+
+  </table>
+{% endblock %}
