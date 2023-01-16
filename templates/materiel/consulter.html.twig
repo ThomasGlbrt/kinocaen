@@ -1,17 +1,41 @@
-{% extends 'base.html.twig' %}
-{% block title %}{{materiel.intitule}}{% endblock %}
-{% block contenu %}   
+  {% block contenu %}
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<h5>PAGE DE CONSULTATION D'UN MATERIEL</h5>
- <p>
-  <table >
-     <tr><td>Nom : </td><td>{{materiel.intitule}}</td></tr>
-	<tr><td>Description : </td><td>{{materiel.description}}</td></tr>
-	
- </table>
+  <!-- Bootstrap JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"></script>
 
- <br><a href="{{ path('materielLister') }}" type="button">Retour</button></a>
-   
-
-  </table>
-{% endblock %}
+  <!-- Modal -->{% for e in pMateriels %}
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">{{e.intitule}}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p><table>
+            <tr>
+                <td rowspan="8" class="imgMat">
+                    {% set photo = 'start/img/materiel/'~ e.id ~'.jpg' %}
+                    <img src="{{ asset(photo | trans )}}" width=250px title="{{ e.intitule }}" alt="{{ e.intitule }}"/>
+                </td>
+            </tr>
+            {% if e.description != '' %}
+                <tr>
+                    <td>Description : {{ e.description }}</td>
+                </tr>
+            {% else %}{% endif %}
+        </table></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+          <button type="button" class="btn btn-primary">Emprunter</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+  {% endblock %}
