@@ -27,9 +27,13 @@ class Inscrit
     #[ORM\ManyToMany(targetEntity: materiel::class, inversedBy: 'emprunt')]
     private Collection $emprunt;
 
+    #[ORM\ManyToMany(targetEntity: Emprunt::class, mappedBy: 'inscrit')]
+    private Collection $emprunts;
+
     public function __construct()
     {
         $this->emprunt = new ArrayCollection();
+        $this->emprunts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -105,5 +109,13 @@ class Inscrit
         $this->emprunt->removeElement($emprunt);
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, Emprunt>
+     */
+    public function getEmprunts(): Collection
+    {
+        return $this->emprunts;
     }
 }
