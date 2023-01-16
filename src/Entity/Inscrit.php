@@ -3,6 +3,9 @@
 namespace App\Entity;
 
 use App\Repository\InscritRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: InscritRepository::class)]
@@ -21,6 +24,33 @@ class Inscrit
 
     #[ORM\OneToOne(mappedBy: 'inscrit', cascade: ['persist', 'remove'])]
     private ?Utilisateur $utilisateurs = null;
+
+    #[ORM\Column(length: 40, nullable: true)]
+    private ?string $poste = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $numTel = null;
+
+    #[ORM\Column(length: 100, nullable: true)]
+    private ?string $Talent = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $ChosePlus = null;
+
+    #[ORM\ManyToMany(targetEntity: metier::class, inversedBy: 'metier_id')]
+    private Collection $inscrit_metier;
+
+    #[ORM\Column(length: 250, nullable: true)]
+    private ?string $image = null;
+
+    #[ORM\ManyToMany(targetEntity: metier::class, inversedBy: 'inscrit_metier')]
+    private Collection $metier;
+
+    public function __construct()
+    {
+        $this->inscrit_metier = new ArrayCollection();
+        $this->metier = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -69,6 +99,114 @@ class Inscrit
         }
 
         $this->utilisateurs = $utilisateurs;
+
+        return $this;
+    }
+
+    public function getPoste(): ?string
+    {
+        return $this->poste;
+    }
+
+    public function setPoste(?string $poste): self
+    {
+        $this->poste = $poste;
+
+        return $this;
+    }
+
+    public function getNumTel(): ?int
+    {
+        return $this->numTel;
+    }
+
+    public function setNumTel(?int $numTel): self
+    {
+        $this->numTel = $numTel;
+
+        return $this;
+    }
+
+    public function getTalent(): ?string
+    {
+        return $this->Talent;
+    }
+
+    public function setTalent(?string $Talent): self
+    {
+        $this->Talent = $Talent;
+
+        return $this;
+    }
+
+    public function getChosePlus(): ?string
+    {
+        return $this->ChosePlus;
+    }
+
+    public function setChosePlus(?string $ChosePlus): self
+    {
+        $this->ChosePlus = $ChosePlus;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, metier>
+     */
+    public function getInscritMetier(): Collection
+    {
+        return $this->inscrit_metier;
+    }
+
+    public function addInscritMetier(metier $inscritMetier): self
+    {
+        if (!$this->inscrit_metier->contains($inscritMetier)) {
+            $this->inscrit_metier->add($inscritMetier);
+        }
+
+        return $this;
+    }
+
+    public function removeInscritMetier(metier $inscritMetier): self
+    {
+        $this->inscrit_metier->removeElement($inscritMetier);
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): self
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, metier>
+     */
+    public function getMetier(): Collection
+    {
+        return $this->metier;
+    }
+
+    public function addMetier(metier $metier): self
+    {
+        if (!$this->metier->contains($metier)) {
+            $this->metier->add($metier);
+        }
+
+        return $this;
+    }
+
+    public function removeMetier(metier $metier): self
+    {
+        $this->metier->removeElement($metier);
 
         return $this;
     }

@@ -44,3 +44,13 @@ connexion:
 logout:
     path: /logout
     methods: GET
+
+#Inscrit
+
+consulterInscrit:
+    path: /inscrit/consulter/{id}
+    controller: App\Controller\InscritController::consulterInscrit
+
+modifierInscrit:
+    path: /inscrit/modifier/{id}
+    controller: App\Controller\InscritController::modifierInscrit

@@ -1,7 +1,4 @@
-{% block title %}Créer un compte{% endblock %}
-
 {% block contenu %}
-
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -9,7 +6,7 @@
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+    <title>Inscription</title>
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
@@ -38,12 +35,16 @@
                             {{ form_start(registrationForm) }}
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <input type="text" class="form-control form-control-user" id="exampleFirstName"
-                                            placeholder="Prénom">
+                                        {{ form_row(registrationForm.inscrit.prenom, { attr:
+                                        {'class': 'form-control form-control-user', 'placeholder': ' Prenom'} })
+                                        }}
                                     </div>
-                                    <div class="col-sm-6">
-                                        <input type="text" class="form-control form-control-user" id="exampleLastName"
-                                            placeholder="Nom">
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        {{ form_row(registrationForm.inscrit.nom, { attr:
+                                        {'class': 'form-control form-control-user', 'placeholder': ' Nom'} })
+                                        }}
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -53,7 +54,7 @@
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
                                     {{ form_row(registrationForm.plainPassword, { attr:
-                                    { 'class': 'form-control form-control-user', 'placeholder': 'Mot de Passe' } })
+                                    { 'class': 'form-control form-control-user', 'placeholder': 'Mot de passe' } })
                                     }}</div>
                                     <!--<div class="col-sm-6">
                                         <input type="password" class="form-control form-control-user"
