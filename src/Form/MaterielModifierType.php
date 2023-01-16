@@ -18,7 +18,7 @@ class MaterielModifierType extends AbstractType
     {
         $builder
             ->add('intitule', TextType::class)
-            ->add('description', TextType::class, ['required' => false])
+            ->add('description', TextType::class, )
            
             ->add('enregistrer', SubmitType::class, array('label' => 'Enregistrer'))
         ;

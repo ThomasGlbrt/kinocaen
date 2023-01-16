@@ -30,7 +30,7 @@ class InscritModifierType extends AbstractType
             ->add('ChosePlus', TextType::class, ['required' => false])
             ->add('image', FileType::class, ['required' => false])
             ->add('Utilisateurs', UtilisateurType::class, ['required' => false])
-            ->add('inscrit_metier', TextType::class, ['required' => false])
+            ->add('metier', MetierType::class, ['required' => false])
 
             ->add('enregistrer', SubmitType::class, array('label' => 'Enregistrer'))
 

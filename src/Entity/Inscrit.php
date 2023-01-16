@@ -31,11 +31,6 @@ class Inscrit
     #[ORM\ManyToMany(targetEntity: Emprunt::class, mappedBy: 'inscrit')]
     private Collection $emprunts;
 
-    public function __construct()
-    {
-        $this->emprunt = new ArrayCollection();
-        $this->emprunts = new ArrayCollection();
-
     #[ORM\Column(length: 40, nullable: true)]
     private ?string $poste = null;
 
@@ -48,21 +43,17 @@ class Inscrit
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $ChosePlus = null;
 
-    #[ORM\ManyToMany(targetEntity: metier::class, inversedBy: 'metier_id')]
-    private Collection $inscrit_metier;
-
     #[ORM\Column(length: 250, nullable: true)]
     private ?string $image = null;
 
-    #[ORM\ManyToMany(targetEntity: metier::class, inversedBy: 'inscrit_metier')]
+    #[ORM\ManyToMany(targetEntity: metier::class, inversedBy: 'inscrits')]
     private Collection $metier;
 
     public function __construct()
     {
-        $this->inscrit_metier = new ArrayCollection();
         $this->metier = new ArrayCollection();
-
     }
+
 
     public function getId(): ?int
     {
@@ -123,11 +114,6 @@ class Inscrit
         return $this->emprunt;
     }
 
-    public function addEmprunt(materiel $emprunt): self
-    {
-        if (!$this->emprunt->contains($emprunt)) {
-            $this->emprunt->add($emprunt);
-
     public function getPoste(): ?string
     {
         return $this->poste;
@@ -176,35 +162,6 @@ class Inscrit
         return $this;
     }
 
-    /**
-     * @return Collection<int, metier>
-     */
-    public function getInscritMetier(): Collection
-    {
-        return $this->inscrit_metier;
-    }
-
-    public function addInscritMetier(metier $inscritMetier): self
-    {
-        if (!$this->inscrit_metier->contains($inscritMetier)) {
-            $this->inscrit_metier->add($inscritMetier);
-
-        }
-
-        return $this;
-    }
-
-
-    public function removeEmprunt(materiel $emprunt): self
-    {
-        $this->emprunt->removeElement($emprunt);
-
-    public function removeInscritMetier(metier $inscritMetier): self
-    {
-        $this->inscrit_metier->removeElement($inscritMetier);
-
-        return $this;
-    }
 
     public function getImage(): ?string
     {
@@ -222,12 +179,6 @@ class Inscrit
     /**
 
      * @return Collection<int, Emprunt>
-     */
-    public function getEmprunts(): Collection
-    {
-        return $this->emprunts;
-
-     * @return Collection<int, metier>
      */
     public function getMetier(): Collection
     {
