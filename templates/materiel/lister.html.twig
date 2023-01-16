@@ -1,38 +1,32 @@
 {% extends 'base.html.twig' %}
 {% block title %}Liste du Matériel{% endblock %}
-{% block style %}
-.card-columns {
-  @include media-breakpoint-only(lg) {
-    column-count: 4;
-  }
-  @include media-breakpoint-only(xl) {
-    column-count: 4;
-  }
-}
-{% endblock %}
 {% block contenu %}
-	LISTE DU MATERIELS</br>
-	<div class="row">
-		{% for e in pMateriels %}
-		<div class="col-md-4">
-			<div class="card mt-4 " style="height:90%;">
-    			<div class="card-body">
-      				<h5 class="card-title"><a href="{{ path('materielConsulter', { 'id': e.id }) }}">{{ e.intitule }}</a></h5>
-					{% if e.description != '' %}
-					<div class="card-text">
-						{{ e.description }}
-					</div>
-					{% else %}{% endif %}
-				</div>
-			</div>
-		</div>
-	{% else %}
-	
-		<div>Aucun materiel n'a été trouvé.</div>
-	{% endfor %}
-	</div>
 
-
-{% endblock %}	 
-
-
+<h5>LISTE DU MATERIEL</h5></br>
+<div class="row">
+    {% for e in pMateriels %}
+    <div class="col-md-4">
+        <div class="card mt-4 " style="height:90%;">
+            <div class="card-body">
+                <h5 class="card-title"><a href="{{ path('materielConsulter', { 'id': e.id }) }}">{{ e.intitule }}</a></h5>
+                {% if e.description != '' %}
+                <div class="card-text">
+                    {{ e.description }}
+                </div>
+                {% else %}{% endif %}
+            </div>
+            <div class="card-footer">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal{{e.id}}">
+                    Voir plus
+                </button>
+                <div id="modal-container">
+                    {% include 'materiel/consulter.html.twig' %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div>Aucun materiel n'a été trouvé.</div>
+    {% endfor %}
+</div>
+{% endblock %}
