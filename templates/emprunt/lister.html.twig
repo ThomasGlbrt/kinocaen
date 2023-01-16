@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+{% block title %}Liste des Emprunts{% endblock %}
+
+{% block contenu %}
+LISTE DES EMPRUNTS</br>
+		<table>
+		{% for e in pEmprunts %}
+		<tr>
+			<td>{{ e.dateDebut|date('d/m/Y') }}</a></td>
+			<td>{{ e.dateFin|date('d/m/Y') }}</td>
+	{% else %}
+		<tr>
+		<td>Aucun emprunt en cours.</td>
+		</tr>
+	{% endfor %}
+</table>
+	
+	 
+    </body>
+</html>
+{% endblock %}	 
+
+

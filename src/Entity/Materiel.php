@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\MaterielRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -19,6 +21,14 @@ class Materiel
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $Description = null;
+
+    #[ORM\ManyToMany(targetEntity: Inscrit::class, mappedBy: 'emprunt')]
+    private Collection $emprunt;
+
+    public function __construct()
+    {
+        $this->emprunt = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -45,6 +55,33 @@ class Materiel
     public function setDescription(?string $Description): self
     {
         $this->Description = $Description;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Inscrit>
+     */
+    public function getEmprunt(): Collection
+    {
+        return $this->emprunt;
+    }
+
+    public function addEmprunt(Inscrit $emprunt): self
+    {
+        if (!$this->emprunt->contains($emprunt)) {
+            $this->emprunt->add($emprunt);
+            $emprunt->addEmprunt($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEmprunt(Inscrit $emprunt): self
+    {
+        if ($this->emprunt->removeElement($emprunt)) {
+            $emprunt->removeEmprunt($this);
+        }
 
         return $this;
     }

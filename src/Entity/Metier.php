@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\MetierRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: MetierRepository::class)]
@@ -18,6 +19,7 @@ class Metier
     #[ORM\Column(length: 50)]
     private ?string $nom = null;
 
+
     #[ORM\ManyToMany(targetEntity: Inscrit::class, mappedBy: 'inscrit_metier')]
     private Collection $metier_id;
 
@@ -29,6 +31,7 @@ class Metier
         $this->metier_id = new ArrayCollection();
         $this->inscrit_metier = new ArrayCollection();
     }
+
 
     public function getId(): ?int
     {
@@ -46,6 +49,7 @@ class Metier
 
         return $this;
     }
+
 
     /**
      * @return Collection<int, Inscrit>
@@ -100,4 +104,5 @@ class Metier
 
         return $this;
     }
+
 }

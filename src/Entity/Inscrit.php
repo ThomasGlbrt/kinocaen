@@ -25,6 +25,17 @@ class Inscrit
     #[ORM\OneToOne(mappedBy: 'inscrit', cascade: ['persist', 'remove'])]
     private ?Utilisateur $utilisateurs = null;
 
+    #[ORM\ManyToMany(targetEntity: materiel::class, inversedBy: 'emprunt')]
+    private Collection $emprunt;
+
+    #[ORM\ManyToMany(targetEntity: Emprunt::class, mappedBy: 'inscrit')]
+    private Collection $emprunts;
+
+    public function __construct()
+    {
+        $this->emprunt = new ArrayCollection();
+        $this->emprunts = new ArrayCollection();
+
     #[ORM\Column(length: 40, nullable: true)]
     private ?string $poste = null;
 
@@ -50,6 +61,7 @@ class Inscrit
     {
         $this->inscrit_metier = new ArrayCollection();
         $this->metier = new ArrayCollection();
+
     }
 
     public function getId(): ?int
@@ -102,6 +114,19 @@ class Inscrit
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, materiel>
+     */
+    public function getEmprunt(): Collection
+    {
+        return $this->emprunt;
+    }
+
+    public function addEmprunt(materiel $emprunt): self
+    {
+        if (!$this->emprunt->contains($emprunt)) {
+            $this->emprunt->add($emprunt);
 
     public function getPoste(): ?string
     {
@@ -163,10 +188,16 @@ class Inscrit
     {
         if (!$this->inscrit_metier->contains($inscritMetier)) {
             $this->inscrit_metier->add($inscritMetier);
+
         }
 
         return $this;
     }
+
+
+    public function removeEmprunt(materiel $emprunt): self
+    {
+        $this->emprunt->removeElement($emprunt);
 
     public function removeInscritMetier(metier $inscritMetier): self
     {
@@ -184,10 +215,18 @@ class Inscrit
     {
         $this->image = $image;
 
+
         return $this;
     }
 
     /**
+
+     * @return Collection<int, Emprunt>
+     */
+    public function getEmprunts(): Collection
+    {
+        return $this->emprunts;
+
      * @return Collection<int, metier>
      */
     public function getMetier(): Collection
@@ -209,5 +248,6 @@ class Inscrit
         $this->metier->removeElement($metier);
 
         return $this;
+
     }
 }
