@@ -18,37 +18,29 @@
 <!-- Bootstrap JavaScript -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"></script>
 
-
-	LISTE DU MATERIELS</br>
+<h5>LISTE DU MATERIEL</h5></br>
 	<div class="card-deck">
 		{% for e in pMateriels %}
-		<div class="card ">
-    		<div class="card-body">
-      			<h5 class="card-title"><a href="{{ path('materielConsulter', { 'id': e.id }) }}">{{ e.intitule }}</a></h5>
-			{% if e.description != '' %}
-			<div class="card-text">
-				{{ e.description }}
+			<div class="card ">
+				<div class="card-body">
+					<h5 class="card-title">{{ e.intitule }}</h5>
+					{% if e.description != '' %}
+						<div class="card-text">
+							{{ e.description }}
+						</div>
+					{% else %}{% endif %}
+				</div>
+				<div class="card-footer">
+					<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+						Voir plus
+					</button>
+					<div id="modal-container">
+						{% include 'materiel/consulter.html.twig' %}
+					</div>
+				</div>
 			</div>
-			{% else %}{% endif %}
-			<!-- Button trigger modal -->
-			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-			Launch demo modal
-			<div id="modal-container">
-				{% include 'materiel/consulter.html.twig' %}
-			</div>
-			</button>
-			</div>
-		</div>
-	{% else %}
-	
-		<div>Aucun materiel n'a été trouvé.</div>
-	{% endfor %}
+		{% else %}
+			<div>Aucun materiel n'a été trouvé.</div>
+		{% endfor %}
 	</div>
-
-
-
-
-
 {% endblock %}	 
-
-
