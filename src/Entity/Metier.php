@@ -21,9 +21,13 @@ class Metier
     #[ORM\ManyToMany(targetEntity: Inscrit::class, mappedBy: 'inscrit_metier')]
     private Collection $metier_id;
 
+    #[ORM\ManyToMany(targetEntity: Inscrit::class, mappedBy: 'metier')]
+    private Collection $inscrit_metier;
+
     public function __construct()
     {
         $this->metier_id = new ArrayCollection();
+        $this->inscrit_metier = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -65,6 +69,33 @@ class Metier
     {
         if ($this->metier_id->removeElement($metierId)) {
             $metierId->removeInscritMetier($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Inscrit>
+     */
+    public function getInscritMetier(): Collection
+    {
+        return $this->inscrit_metier;
+    }
+
+    public function addInscritMetier(Inscrit $inscritMetier): self
+    {
+        if (!$this->inscrit_metier->contains($inscritMetier)) {
+            $this->inscrit_metier->add($inscritMetier);
+            $inscritMetier->addMetier($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInscritMetier(Inscrit $inscritMetier): self
+    {
+        if ($this->inscrit_metier->removeElement($inscritMetier)) {
+            $inscritMetier->removeMetier($this);
         }
 
         return $this;

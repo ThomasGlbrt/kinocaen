@@ -43,9 +43,13 @@ class Inscrit
     #[ORM\Column(length: 250, nullable: true)]
     private ?string $image = null;
 
+    #[ORM\ManyToMany(targetEntity: metier::class, inversedBy: 'inscrit_metier')]
+    private Collection $metier;
+
     public function __construct()
     {
         $this->inscrit_metier = new ArrayCollection();
+        $this->metier = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -179,6 +183,30 @@ class Inscrit
     public function setImage(?string $image): self
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, metier>
+     */
+    public function getMetier(): Collection
+    {
+        return $this->metier;
+    }
+
+    public function addMetier(metier $metier): self
+    {
+        if (!$this->metier->contains($metier)) {
+            $this->metier->add($metier);
+        }
+
+        return $this;
+    }
+
+    public function removeMetier(metier $metier): self
+    {
+        $this->metier->removeElement($metier);
 
         return $this;
     }
