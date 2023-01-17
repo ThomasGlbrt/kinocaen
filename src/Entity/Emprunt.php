@@ -22,13 +22,11 @@ class Emprunt
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateFin = null;
 
-    #[ORM\ManyToMany(targetEntity: Inscrit::class, inversedBy: 'emprunts')]
-    private Collection $inscrit;
+    #[ORM\ManyToOne(inversedBy: 'emprunt')]
+    private ?Inscrit $inscrit = null;
 
-    public function __construct()
-    {
-        $this->inscrit = new ArrayCollection();
-    }
+    #[ORM\ManyToOne(inversedBy: 'emprunt')]
+    private ?Materiel $materiel = null;
 
     public function getId(): ?int
     {
@@ -59,26 +57,26 @@ class Emprunt
         return $this;
     }
 
-    /**
-     * @return Collection<int, Inscrit>
-     */
-    public function getInscrit(): Collection
+    public function getInscrit(): ?Inscrit
     {
         return $this->inscrit;
     }
 
-    public function addInscrit(Inscrit $inscrit): self
+    public function setInscrit(?Inscrit $inscrit): self
     {
-        if (!$this->inscrit->contains($inscrit)) {
-            $this->inscrit->add($inscrit);
-        }
+        $this->inscrit = $inscrit;
 
         return $this;
     }
 
-    public function removeInscrit(Inscrit $inscrit): self
+    public function getMateriel(): ?Materiel
     {
-        $this->inscrit->removeElement($inscrit);
+        return $this->materiel;
+    }
+
+    public function setMateriel(?Materiel $materiel): self
+    {
+        $this->materiel = $materiel;
 
         return $this;
     }

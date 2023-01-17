@@ -19,16 +19,17 @@ class Materiel
     #[ORM\Column(length: 50)]
     private ?string $Intitule = null;
 
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $Description = null;
-
-    #[ORM\ManyToMany(targetEntity: Inscrit::class, mappedBy: 'emprunt')]
+    #[ORM\OneToMany(mappedBy: 'materiel', targetEntity: Emprunt::class)]
     private Collection $emprunt;
 
     public function __construct()
     {
         $this->emprunt = new ArrayCollection();
     }
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    
+    
 
     public function getId(): ?int
     {
@@ -60,27 +61,30 @@ class Materiel
     }
 
     /**
-     * @return Collection<int, Inscrit>
+     * @return Collection<int, Emprunt>
      */
     public function getEmprunt(): Collection
     {
         return $this->emprunt;
     }
 
-    public function addEmprunt(Inscrit $emprunt): self
+    public function addEmprunt(Emprunt $emprunt): self
     {
         if (!$this->emprunt->contains($emprunt)) {
             $this->emprunt->add($emprunt);
-            $emprunt->addEmprunt($this);
+            $emprunt->setMateriel($this);
         }
 
         return $this;
     }
 
-    public function removeEmprunt(Inscrit $emprunt): self
+    public function removeEmprunt(Emprunt $emprunt): self
     {
         if ($this->emprunt->removeElement($emprunt)) {
-            $emprunt->removeEmprunt($this);
+            // set the owning side to null (unless already changed)
+            if ($emprunt->getMateriel() === $this) {
+                $emprunt->setMateriel(null);
+            }
         }
 
         return $this;

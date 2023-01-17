@@ -25,12 +25,6 @@ class Inscrit
     #[ORM\OneToOne(mappedBy: 'inscrit', cascade: ['persist', 'remove'])]
     private ?Utilisateur $utilisateurs = null;
 
-    #[ORM\ManyToMany(targetEntity: materiel::class, inversedBy: 'emprunt')]
-    private Collection $emprunt;
-
-    #[ORM\ManyToMany(targetEntity: Emprunt::class, mappedBy: 'inscrit')]
-    private Collection $emprunts;
-
     #[ORM\Column(length: 40, nullable: true)]
     private ?string $poste = null;
 
@@ -49,9 +43,17 @@ class Inscrit
     #[ORM\ManyToMany(targetEntity: metier::class, inversedBy: 'inscrits')]
     private Collection $metier;
 
+    #[ORM\OneToMany(mappedBy: 'inscrit', targetEntity: Emprunt::class)]
+    private Collection $emprunt;
+
+    #[ORM\ManyToOne(inversedBy: 'inscrit')]
+    #[ORM\JoinColumn(nullable: false)]
+    
+
     public function __construct()
     {
         $this->metier = new ArrayCollection();
+        $this->emprunt = new ArrayCollection();
     }
 
 
@@ -104,14 +106,6 @@ class Inscrit
         $this->utilisateurs = $utilisateurs;
 
         return $this;
-    }
-
-    /**
-     * @return Collection<int, materiel>
-     */
-    public function getEmprunt(): Collection
-    {
-        return $this->emprunt;
     }
 
     public function getPoste(): ?string
@@ -176,10 +170,6 @@ class Inscrit
         return $this;
     }
 
-    /**
-
-     * @return Collection<int, Emprunt>
-     */
     public function getMetier(): Collection
     {
         return $this->metier;
@@ -201,4 +191,35 @@ class Inscrit
         return $this;
 
     }
+
+    /**
+     * @return Collection<int, Emprunt>
+     */
+    public function getEmprunt(): Collection
+    {
+        return $this->emprunt;
+    }
+
+    public function addEmprunt(Emprunt $emprunt): self
+    {
+        if (!$this->emprunt->contains($emprunt)) {
+            $this->emprunt->add($emprunt);
+            $emprunt->setInscrit($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEmprunt(Emprunt $emprunt): self
+    {
+        if ($this->emprunt->removeElement($emprunt)) {
+            // set the owning side to null (unless already changed)
+            if ($emprunt->getInscrit() === $this) {
+                $emprunt->setInscrit(null);
+            }
+        }
+
+        return $this;
+    }
+
 }
