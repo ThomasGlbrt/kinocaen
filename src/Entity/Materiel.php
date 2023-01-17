@@ -22,6 +22,9 @@ class Materiel
     #[ORM\OneToMany(mappedBy: 'materiel', targetEntity: Emprunt::class)]
     private Collection $emprunt;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $Description = null;
+
     public function __construct()
     {
         $this->emprunt = new ArrayCollection();
@@ -44,18 +47,6 @@ class Materiel
     public function setIntitule(string $Intitule): self
     {
         $this->Intitule = $Intitule;
-
-        return $this;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->Description;
-    }
-
-    public function setDescription(?string $Description): self
-    {
-        $this->Description = $Description;
 
         return $this;
     }
@@ -86,6 +77,18 @@ class Materiel
                 $emprunt->setMateriel(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->Description;
+    }
+
+    public function setDescription(?string $Description): self
+    {
+        $this->Description = $Description;
 
         return $this;
     }
