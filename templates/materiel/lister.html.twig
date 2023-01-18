@@ -8,7 +8,7 @@
     <div class="col-md-4">
         <div class="card mt-4 " style="height:90%;">
             <div class="card-body">
-                <h5 class="card-title"><a href="{{ path('materielConsulter', { 'id': e.id }) }}">{{ e.intitule }}</a></h5>
+                <h5 class="card-title">{{ e.intitule }}</h5>
                 {% if e.description != '' %}
                 <div class="card-text">
                     {{ e.description }}
@@ -16,12 +16,9 @@
                 {% else %}{% endif %}
             </div>
             <div class="card-footer">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal{{e.id}}">
+                <a href="{{ path('materielConsulter', { 'id': e.id }) }}"><button type="button" class="btn btn-primary">
                     Voir plus
-                </button>
-                <div id="modal-container">
-                    {% include 'materiel/consulter.html.twig' %}
-                </div>
+                </button></a>
             </div>
         </div>
     </div>

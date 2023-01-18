@@ -1,41 +1,21 @@
-  {% block contenu %}
-  <!-- jQuery -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+{% extends 'base.html.twig' %}
 
-  <!-- Bootstrap JavaScript -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"></script>
+{% block title %}
+    {{materiel.intitule}}
+{% endblock %}
 
-  <!-- Modal -->{% for e in pMateriels %}
-  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">{{e.intitule}}</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <p><table>
-            <tr>
-                <td rowspan="8" class="imgMat">
-                    {% set photo = 'start/img/materiel/'~ e.id ~'.jpg' %}
-                    <img src="{{ asset(photo | trans )}}" width=250px title="{{ e.intitule }}" alt="{{ e.intitule }}"/>
-                </td>
-            </tr>
-            {% if e.description != '' %}
-                <tr>
-                    <td>Description : {{ e.description }}</td>
-                </tr>
-            {% else %}{% endif %}
-        </table></p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-          <button type="button" class="btn btn-primary">Emprunter</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  {% endfor %}
-  {% endblock %}
+{% block contenu %}
+        <h5>{{materiel.intitule}}</h5>
+        <table>
+            <tr><td>Description : {{materiel.description}}</td></tr>
+        </table></br>
+        <a href="{{ path('materielLister') }}"><button class="btn btn-primary">Fermer</button></a>&nbsp;&nbsp;
+            {% if is_granted ('ROLE_ADMIN') %}
+            <a href="{{ path('materielModifier',{ 'id': materiel.id }) }}">
+                <button type="button" class="btn btn-warning">Modifier</button>
+            </a>
+            <a href="{{ path('materielSupprimer', { 'id': materiel.id }) }}">
+                <button type="button" class="btn btn-danger">Supprimer</button>
+            </a>
+            {% endif %}
+{% endblock %}

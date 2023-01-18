@@ -33,7 +33,7 @@ class MaterielController extends AbstractController
 
 		//return new Response('Materiel : '.$materiel->getNom());
 		return $this->render('materiel/consulter.html.twig', [
-            'pMateriels' => $materiel,]);
+            'materiel' => $materiel,]);
 	}
 
 
