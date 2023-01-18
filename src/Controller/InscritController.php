@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Inscrit;
+use App\Entity\Metier;
 use App\Entity\UtilisateurType;
 use App\Form\InscritModifierType;
 use Doctrine\Persistence\ManagerRegistry;
@@ -63,35 +64,49 @@ class InscritController extends AbstractController
             'inscrit' => $inscrit,]);
 	}
 
-    public function modifierInscrit(ManagerRegistry $doctrine,int $id, Request $request){
- 
-        //récupération du matériel dont l'id est passé en paramètre
-        $inscrit = $doctrine
-            ->getRepository(Inscrit::class)
-            ->find($id);
-     
-        if (!$inscrit) {
-            throw $this->createNotFoundException('Aucun Inscrit trouvé avec le numéro '.$id);
-        }
-        else
-        {
-                $form = $this->createForm(InscritModifierType::class, $inscrit);
-                $form->handleRequest($request);
-     
-                if ($form->isSubmitted() && $form->isValid()) {
-     
-                     $inscrit = $form->getData();
-                     $entityManager = $doctrine->getManager();
-                     $entityManager->persist($inscrit);
-                     $entityManager->flush();
-                     return $this->render('inscrit/consulter.html.twig', ['inscrit' => $inscrit,]);
+    public function modifierInscrit(ManagerRegistry $doctrine,int $id, Request $request)
+{
+    // récupération de l'inscrit dont l'id est passé en paramètre
+    $inscrit = $doctrine->getRepository(Inscrit::class)->find($id);
+    $metiers = $doctrine->getRepository(Metier::class)->findAll();
 
-                     return $this->redirectToRoute('accueil');
-               }
-               else{
-                    return $this->render('inscrit/modifier.html.twig', array('form' => $form->createView(),));
-               }
+    if (!$inscrit) {
+        throw $this->createNotFoundException('Aucun Inscrit trouvé avec le numéro '.$id);
+    }
+    else
+    {
+        $form = $this->createForm(InscritModifierType::class, $inscrit);
+        $form->get('metier')->setData($metiers);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var UploadedFile $file */
+            $file = $form->get('image')->getData();
+            $nom = $form->get('nom')->getData();
+            $prenom = $form->get('prenom')->getData();
+            if ($file) {
+                $filename = $nom.$prenom.'.'.$file->guessExtension();
+                try {
+                    $file->move(
+                        $this->getParameter('images_directory'),
+                        $filename
+                    );
+                } catch (FileException $e) {
+                    // ... gérer l'exception si l'upload a échoué
+                }
+                $inscrit->setImage($filename);
             }
-     }
+
+            $entityManager = $doctrine->getManager();
+            $entityManager->persist($inscrit);
+            $entityManager->flush();
+            return $this->redirectToRoute('accueil');
+        }
+        else{
+            return $this->render('inscrit/modifier.html.twig', array('form' => $form->createView(),));
+        }
+    }
+}
+
 
 }

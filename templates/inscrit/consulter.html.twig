@@ -1,18 +1,81 @@
 {% extends 'base.html.twig' %}
+
 {% block title %}Profil {{ inscrit.prenom }} {{inscrit.nom|upper}} {% endblock %}
+
 {% block contenu %}
 <div class="container">
     <div class="row">
         <div class="col-md-8">
-            <h2>{{ inscrit.prenom }} {{inscrit.nom|upper}}</h2>
-            <p>Poste: {{inscrit.poste}}</p>
-            <p>Email: {{inscrit.utilisateurs.email}}</p>
-            <p>Numéro de téléphone: +33 {{inscrit.NumTel}}</p>
-            <p>Talent: {{inscrit.talent}}</p>
-            <p>Chose à dire en plus: {{inscrit.choseplus}}</p>
+            <h2 class="mb-4">{{ inscrit.prenom }} {{inscrit.nom|upper}}</h2>
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <p class="card-title font-weight-bold">Poste</p>
+                        </div>
+                        <div class="col-md-8">
+                            <p class="card-text">{{inscrit.poste}}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <p class="card-title font-weight-bold">Email</p>
+                        </div>
+                        <div class="col-md-8">
+                            <p class="card-text">{{inscrit.utilisateurs.email}}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <p class="card-title font-weight-bold">Numéro de téléphone</p>
+                        </div>
+                        <div class="col-md-8">
+                            <p class="card-text">{{inscrit.numTel}}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <p class="card-title font-weight-bold">Talent</p>
+                        </div>
+                        <div class="col-md-8">
+                            <p class="card-text">{{inscrit.talent}}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <p class="card-title font-weight-bold">Chose à dire en plus</p>
+                        </div>
+                        <div class="col-md-8">
+                            <p class="card-text">{{inscrit.choseplus}}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <p class="card-title font-weight-bold">Métiers</p>
+                        </div>
+                        <div class="col-md-8">
+                            <ul class="list-unstyled">
+                            {% for m in inscrit.metier %}
+                                <li>{{m.nom}}</li>
+                            {% else %}
+                                <li>Pas de métier défini</li>
+                            {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="col-md-4">
-            <img src="{{ inscrit.image }}" alt="image de profil" class="img-fluid">
+            <img src='{{asset('images/' ~ inscrit.image) }}' alt="image de profil" class="img-fluid rounded">
+        </div>
+        <div class="row my-3">
+            <div class="col-md-6">
+                <a href="{{path('modifierInscrit', {'id': inscrit.id})}}" class="btn btn-warning">Modifier</a>
+            </div>
+            <div class="col-md-6">
+                <a href="#{#{{path('supprimerInscrit', {'id': inscrit.id})}}#}" class="btn btn-danger">Supprimer</a>
+            </div>
         </div>
     </div>
 </div>
