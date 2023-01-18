@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 {% block contenu %}   
     <div>
-        <h5>PAGE DE CONSULTATION D'UN EMPRUNT</h5>
+        <h5>CONSULTATION DE L'EMPRUNT</h5>
         <p>
             <table >
                 <tr>
@@ -16,9 +16,16 @@
                 <tr>
                     <td>Matériel : {{ emprunt.materiel.intitule }}</td>
                 </tr>
-            </table>
-            <br>
-            <a href="{{ path('empruntLister') }}"><button class="btn btn-primary">Fermer</button></a>
+            </table></br>
+            <a href="{{ path('empruntLister') }}"><button class="btn btn-primary">Fermer</button></a>&nbsp;&nbsp;
+            {% if is_granted ('ROLE_ADMIN') %}
+            <a href="{{ path('empruntModifier',{ 'id': emprunt.id }) }}">
+                <button type="button" class="btn btn-warning">Modifier</button>
+            </a>
+            <a href="{{ path('empruntSupprimer', { 'id': emprunt.id }) }}">
+                <button type="button" class="btn btn-danger">Supprimer</button>
+            </a>
+            {% endif %}
         </p>
     </div>
 {% endblock %}
