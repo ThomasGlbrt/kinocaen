@@ -38,14 +38,13 @@ class InscritModifierType extends AbstractType
                 },
                 'multiple' => true,
                 'expanded' => true,
-                'attr' => ['class' => 'form-check-input'],
+                'attr' => ['class' => 'form-input'],
                 ])
             
-            ->add('image', FileType::class, array('data_class' => null), [
+            ->add('image', FileType::class, array('data_class' => null), ['required' => false,
                 'constraints' => 
                 new File([
-                    'maxSize' => '1024k']),
-                'required' => false])  
+                    'maxSize' => '1024k'])])  
 
         ;
     }
