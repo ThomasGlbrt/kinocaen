@@ -2,22 +2,19 @@
 {% block title %}Liste des Emprunts{% endblock %}
 
 {% block contenu %}
-LISTE DES EMPRUNTS</br>
-		<table>
-		{% for e in pEmprunts %}
-		<tr>
-			<td>{{ e.dateDebut|date('d/m/Y') }}</a></td>
-			<td>{{ e.dateFin|date('d/m/Y') }}</td>
-	{% else %}
-		<tr>
-		<td>Aucun emprunt en cours.</td>
-		</tr>
-	{% endfor %}
-</table>
-	
-	 
-    </body>
-</html>
-{% endblock %}	 
-
-
+    <div>
+        LISTE DES EMPRUNTS</br>
+        <table>
+            {% for e in pEmprunts %}
+            <tr>
+                <td><a href="{{ path('empruntConsulter', { 'id': e.id }) }}">{{ e.inscrit.nom }}, {{ e.inscrit.prenom }}</a>&nbsp;&nbsp;</td>
+                <td>{{ e.materiel.intitule }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td>Aucun emprunt en cours.</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}
