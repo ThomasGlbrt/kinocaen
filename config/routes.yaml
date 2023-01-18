@@ -80,3 +80,6 @@ modifierInscrit:
     path: /inscrit/modifier/{id}
     controller: App\Controller\InscritController::modifierInscrit
 
+supprimerInscrit:
+    path: /inscrit/supprimer/{id}
+    controller: App\Controller\InscritController::supprimerInscrit

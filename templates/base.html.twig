@@ -143,8 +143,10 @@
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">{% if is_granted('IS_AUTHENTICATED_FULLY') %}{{ app.user.email }}{% endif %}</span>
-                                <img class="img-profile rounded-circle"
-                                    src="start/img/undraw_profile.svg">
+                                {% if is_granted('IS_AUTHENTICATED_FULLY') %}{% if app.user.inscrit.image != '' %}<img class="img-profile rounded-circle"
+                                    src="{{asset('images/' ~ app.user.inscrit.image) }}">{% else %}<img class="img-profile rounded-circle"
+                                    src="start/img/undraw_profile.svg">{% endif %}{% else %}<img class="img-profile rounded-circle"
+                                    src="start/img/undraw_profile.svg">{% endif %}
                             </a>
                             <!-- Dropdown - User Information -->
                             
