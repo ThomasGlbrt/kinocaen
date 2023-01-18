@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Emprunter un matériel{% endblock %}
+
+{% block contenu %}
+<h4>Emprunter un matériel</h4>
+</br>
+{# templates/emprunt/ajouter.html.twig #}
+{{ form_start(form) }}
+{{ form_widget(form) }}
+{{ form_end(form) }}
+{% endblock %}

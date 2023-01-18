@@ -28,7 +28,7 @@ class Materiel
     }
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    
+    private ?string $Description = null;
     
 
     public function getId(): ?int
