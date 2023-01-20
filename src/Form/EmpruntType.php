@@ -12,16 +12,15 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 class EmpruntType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('inscrit', EntityType::class, [
-                'class' => 'App\Entity\Inscrit',
-                'choice_label' => 'nom',
-            ])
+            ->add('inscrit', HiddenType::class)
+
             ->add('dateDebut', DateType::class, [
                 'widget' => 'single_text',
                 'format' => 'yyyy-MM-dd',

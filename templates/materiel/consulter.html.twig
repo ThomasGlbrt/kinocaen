@@ -7,9 +7,16 @@
 {% block contenu %}
         <h5>{{materiel.intitule}}</h5>
         <table>
+            <tr><td rowspan="8" class="imgInst">
+				{% set photo = 'start/img/materiel/'~ materiel.id ~'.jpg' %}
+				<span class="zoom"><img src="{{ asset(photo | trans )}}" width=300px title="{{ materiel.intitule }}" alt="{{ materiel.intitule }}"/></span>
+            </td></tr>
             <tr><td>Description : {{materiel.description}}</td></tr>
         </table></br>
-        <a href="{{ path('materielLister') }}"><button class="btn btn-primary">Fermer</button></a>&nbsp;&nbsp;
+            <a href="{{ path('materielLister') }}">
+                <button class="btn btn-primary">Fermer</button></a>
+            <a href="{{ path('empruntAjouter') }}">
+                <button class="btn btn-primary">Emprunter</button></a>&nbsp;&nbsp;
             {% if is_granted ('ROLE_ADMIN') %}
             <a href="{{ path('materielModifier',{ 'id': materiel.id }) }}">
                 <button type="button" class="btn btn-warning">Modifier</button>

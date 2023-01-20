@@ -3,10 +3,22 @@
 {% block title %}Emprunter un matériel{% endblock %}
 
 {% block contenu %}
-<h4>Emprunter un matériel</h4>
-</br>
-{# templates/emprunt/ajouter.html.twig #}
-{{ form_start(form) }}
-{{ form_widget(form) }}
-{{ form_end(form) }}
+    <h4>Emprunter un matériel</h4>
+    </br>
+    {# templates/emprunt/ajouter.html.twig #}
+    {{ form_start(form) }}
+    <div class="col-sm-6 mb-3 mb-sm-0">
+        {{ form_widget(form.dateDebut, {'attr': {'class': 'form-control', 'placeholder': ' Date de Début'}}) }}
+    </div></br>
+    <div class="col-sm-6 mb-3 mb-sm-0">
+        {{ form_widget(form.dateFin, {'attr': {'class': 'form-control', 'placeholder': ' Date de Fin'}}) }}
+    </div></br>
+    <div class="col-sm-6 mb-3 mb-sm-0">
+        {{ form_widget(form.inscrit, {'attr': {'class': 'form-control'}}) }}
+    </div></br>
+    <div class="col-sm-6 mb-3 mb-sm-0">
+        {{ form_widget(form.materiel, {'attr': {'class': 'form-control'}}) }}
+    </div></br>
+    <button type="submit" class="btn btn-primary">Enregistrer</button>
+    {{ form_end(form) }}
 {% endblock %}
