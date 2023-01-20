@@ -3,27 +3,56 @@
 {% block contenu %}
 
 <h5>LISTE DU MATERIEL</h5></br>
+
+<div class="input-group">
+    <div class="form-outline">
+      <input type="search-input" id="searchInput" class="form-control" />
+    </div>
+    <button type="button" class="btn btn-primary">
+      <i class="fas fa-search"></i>
+    </button>
+  </div>
+
 <div class="row">
     {% for e in pMateriels %}
-    <div class="col-md-4">
+    <div class="col-md-4" id="{{ e.id }}">
         <div class="card mt-4 " style="height:90%;">
             <div class="card-body">
-                <h5 class="card-title">{{ e.intitule }}</h5>
+                <h5 class="card-title">{{e.intitule }}</h5>
                 {% if e.description != '' %}
                 <div class="card-text">
-                    {{ e.description }}
+                {{ e.description[:60] }}...
                 </div>
                 {% else %}{% endif %}
-            </div>
-            <div class="card-footer">
+                </div>
+                <div class="card-footer">
                 <a href="{{ path('materielConsulter', { 'id': e.id }) }}"><button type="button" class="btn btn-primary">
-                    Voir plus
+                Voir plus
                 </button></a>
-            </div>
-        </div>
-    </div>
-    {% else %}
-    <div>Aucun materiel n'a été trouvé.</div>
-    {% endfor %}
-</div>
-{% endblock %}
+                </div>
+                </div>
+                </div>
+                {% endfor %}
+                
+                </div>
+                <script>
+                document.getElementById("searchInput").addEventListener("keyup", function(){
+                    filterResults();
+                });
+                
+                function filterResults() {
+    var input = document.getElementById("searchInput").value.toLowerCase();
+    var cards = document.getElementsByClassName("col-md-4");
+    for (var i = 0; i < cards.length; i++) {
+        var card = cards[i];
+        var title = card.getElementsByClassName("card-title")[0].innerHTML.toLowerCase();
+        var description = card.getElementsByClassName("card-text")[0].innerHTML.toLowerCase();
+        if (title.indexOf(input) > -1 || description.indexOf(input) > -1) {
+            card.style.display = "block";
+        } else {
+            card.style.display = "none";
+        }
+    }
+}
+                </script>
+                {% endblock %}
