@@ -83,3 +83,11 @@ modifierInscrit:
 supprimerInscrit:
     path: /inscrit/supprimer/{id}
     controller: App\Controller\InscritController::supprimerInscrit
+
+listerInscrit:
+    path: /inscrit/trombi/
+    controller: App\Controller\InscritController::listerInscrit
+
+telechargerInscritPdf:
+    path: /inscrit/pdf/{id}
+    controller: App\Controller\InscritController::telechargerInscritPdf  

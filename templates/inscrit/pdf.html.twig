@@ -1,22 +1,23 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}Profil {{ inscrit.prenom }} {{inscrit.nom|upper}} {% endblock %}
-{% block style %}
-.pdf-logo {
-    width: 30px;
-    height: 30px;
-}
-{% endblock %}
-{% block contenu %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Fiche de l'inscrit</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+</head>
+<body>
 <div class="container">
     <div class="row">
+        <div class="col-md-4">
+            <img class="img-fluid" src='{{ '../public /images/' ~ inscrit.image }}' alt="image de profil">
+        </div>
         <div class="col-md-8">
-            <h2 class="mb-4">{{ inscrit.prenom }} {{inscrit.nom|upper}}</h2>
-            <div class="card mb-4">
+            <div class="card">
                 <div class="card-body">
+                    <h2 class="card-title">{{ inscrit.prenom }} {{inscrit.nom|upper}}</h2>
                     <div class="row">
                         <div class="col-md-4">
-                            <p class="card-title font-weight-bold">Poste</p>
+                            <p class="card-title">Poste :</p>
                         </div>
                         <div class="col-md-8">
                             <p class="card-text">{{inscrit.poste}}</p>
@@ -24,7 +25,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-4">
-                            <p class="card-title font-weight-bold">Email</p>
+                            <p class="card-title">Email :</p>
                         </div>
                         <div class="col-md-8">
                             <p class="card-text">{{inscrit.utilisateurs.email}}</p>
@@ -32,7 +33,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-4">
-                            <p class="card-title font-weight-bold">Numéro de téléphone</p>
+                            <p class="card-title">Numéro de téléphone :</p>
                         </div>
                         <div class="col-md-8">
                             <p class="card-text">{{inscrit.numTel}}</p>
@@ -40,7 +41,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-4">
-                            <p class="card-title font-weight-bold">Talent</p>
+                            <p class="card-title">Talent :</p>
                         </div>
                         <div class="col-md-8">
                             <p class="card-text">{{inscrit.talent}}</p>
@@ -48,7 +49,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-4">
-                            <p class="card-title font-weight-bold">Chose à dire en plus</p>
+                            <p class="card-title">Chose à dire en plus :</p>
                         </div>
                         <div class="col-md-8">
                             <p class="card-text">{{inscrit.choseplus}}</p>
@@ -56,10 +57,10 @@
                     </div>
                     <div class="row">
                         <div class="col-md-4">
-                            <p class="card-title font-weight-bold">Métiers</p>
+                            <p class="card-title">Métiers :</p>
                         </div>
                         <div class="col-md-8">
-                            <ul class="list-unstyled">
+                            <ul>
                             {% for m in inscrit.metier %}
                                 <li>{{m.nom}}</li>
                             {% else %}
@@ -71,22 +72,5 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <img src='{{asset('images/' ~ inscrit.image) }}' alt="image de profil" class="img-fluid rounded">
-        </div>
-        <div class="row my-3">
-            <div class="col-md-4">
-                <a href="{{path('modifierInscrit', {'id': inscrit.id})}}" class="btn btn-warning">Modifier</a>
-            </div>
-            <div class="col-md-4">
-                <a href="#{#{{path('supprimerInscrit', {'id': inscrit.id})}}#}" class="btn btn-danger">Supprimer</a>
-            </div>
-            <div class="col-md-4">&nbsp;
-                <a href="{{path('telechargerInscritPdf', {'id': inscrit.id})}}" class="">
-                    <img src='{{asset('images/pdf-logo.png')}}' class="pdf-logo">
-                </a>
-            </div>
-        </div>
     </div>
 </div>
-{% endblock %}

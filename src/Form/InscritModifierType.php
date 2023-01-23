@@ -34,18 +34,24 @@ class InscritModifierType extends AbstractType
             ->add('metier', EntityType::class, [
                 'class' => Metier::class,
                 'choice_label' => function ($metier) {
-                    return $metier->getNom();
+                return $metier->getNom();
                 },
                 'multiple' => true,
                 'expanded' => true,
                 'attr' => ['class' => 'form-check-input'],
+                'data' => [],
                 ])
             
-            ->add('image', FileType::class, array('data_class' => null), [
-                'constraints' => 
-                new File([
-                    'maxSize' => '1024k']),
-                'required' => false])  
+            ->add('image', FileType::class, [
+                'required' => false,
+                'data_class' => null,
+                'constraints' => [
+                    new File([
+                        'maxSize' => '4000k'
+                    ])
+                ]
+                ])
+     
 
         ;
     }

@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+{% block title %}Trombinoscope {% endblock %}
+{% block contenu %}
+<div class="container">
+    <div class="row">
+        {% for i in inscrits %}
+        <div class="col-md-6">
+            <div class="card mb-4" style="height:95%;">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h2 class="mb-4" style="font-size: 1rem;">{{ i.prenom }} {{i.nom|upper}}</h2>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <p class="card-title font-weight-bold" style="font-size: 0.8rem;">Poste</p>
+                                </div>
+                                <div class="col-md-8">
+                                    <p class="card-text" style="font-size: 0.8rem;">{{i.poste}}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <p class="card-title font-weight-bold" style="font-size: 0.8rem;">Email</p>
+                                </div>
+                                <div class="col-md-8">
+                                    <p class="card-text" style="font-size: 0.8rem;">{{i.utilisateurs.email}}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <p class="card-title font-weight-bold" style="font-size: 0.8rem;">Numéro de téléphone</p>
+                                </div>
+                                <div class="col-md-8">
+                                    <p class="card-text" style="font-size: 0.8rem;">{% if i.numTel != '' %}0{{i.numTel}}{% else %} Pas de numéro de téléphone enregistré {% endif %}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <p class="card-title font-weight-bold" style="font-size: 0.8rem;">Talent</p>
+                                </div>
+                                <div class="col-md-8">
+                                    <p class="card-text" style="font-size: 0.8rem;">{{i.talent}}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <p class="card-title font-weight-bold" style="font-size: 0.8rem;">Chose à dire en plus</p>
+                                </div>
+                                <div class="col-md-8">
+                                    <p class="card-text" style="font-size: 0.8rem;">{{i.choseplus}}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <p class="card-title font-weight-bold" style="font-size: 0.8rem;">Métiers</p>
+                                </div>
+                                <div class="col-md-8">
+                                    <ul class="list-unstyled" style="font-size: 0.8rem;">
+                                        {% for m in i.metier %}
+                                        <li>{{m.nom}}</li>
+                                        {% else %}
+                                        <li>Pas de métier défini</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4" style="text-align: center; display: flex; align-items: center;">
+                        <img src='{{asset('images/' ~ i.image) }}' alt="image de profil" class="img-fluid mx-auto">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

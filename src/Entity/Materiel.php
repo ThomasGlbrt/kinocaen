@@ -29,9 +29,6 @@ class Materiel
     {
         $this->emprunt = new ArrayCollection();
     }
-
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $Description = null;
     
 
     public function getId(): ?int
