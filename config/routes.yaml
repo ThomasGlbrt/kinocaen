@@ -91,3 +91,7 @@ listerInscrit:
 telechargerInscritPdf:
     path: /inscrit/pdf/{id}
     controller: App\Controller\InscritController::telechargerInscritPdf  
+
+telechargerTrombiPdf:
+    path: /inscrit/trombi/pdf
+    controller: App\Controller\InscritController::telechargerTrombiPdf  

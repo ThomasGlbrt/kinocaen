@@ -180,4 +180,49 @@ public function telechargerInscritPdf(ManagerRegistry $doctrine, int $id)
     return $response;
 }
 
+public function telechargerTrombiPdf(ManagerRegistry $doctrine)
+{
+    $inscrits = $doctrine->getRepository(Inscrit::class)->findAll();
+
+    if (!$inscrits) {
+        throw $this->createNotFoundException(
+            'Aucun inscrits'
+        );
+    }
+
+    $html = $this->renderView('inscrit/pdfTrombi.html.twig', [
+        'inscrits' => $inscrits,
+    ]);
+
+    // Configure DOMPDF according to your needs
+    $dompdf = new Dompdf();
+    $dompdf->loadHtml($html);
+    $dompdf->set_option('defaultMediaType', 'all');
+    $dompdf->set_option('isHtml5ParserEnabled', true);
+    $dompdf->set_option('isRemoteEnabled', true);
+    $dompdf->set_option('enable_remote', true);
+    $dompdf->set_option('enable_css_float', true);
+    $dompdf->set_option('enable_html5_parser', true);
+    $dompdf->set_option('enable_javascript', true);
+    $dompdf->set_option('enable_smart_shrinking', true);
+    $dompdf->set_option('enable_remote', true);
+    $dompdf->set_option('defaultFont', 'Arial');
+    $dompdf->set_option('enable_remote', true);
+    $dompdf->set_option('enable_css_float', true);
+    $dompdf->set_option('enable_html5_parser', true);
+    $dompdf->set_option('enable_javascript', true);
+    $dompdf->set_option('enable_smart_shrinking', true);
+    $dompdf->set_option('defaultFont', 'Arial');
+    $dompdf->set_paper('A4', 'portrait', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '');
+    $dompdf->render();
+
+
+    $response = new Response($dompdf->output());
+    $response->headers->set('Content-Type', 'application/pdf');
+    $response->headers->set('Content-Disposition', 'attachment; filename="trombinoscope.pdf"');
+
+    return $response;
+}
+
+
 }
