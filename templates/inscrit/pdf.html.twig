@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Fiche de l'inscrit</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <h3 class="mb-4" style="font-size:1.2rem;">{{ inscrit.prenom }} {{inscrit.nom|upper}}</h3>
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <p class="card-title text-muted" style="font-size:1rem;">Poste</p>
+                                </div>
+                                <div class="col-md-8">
+                                    <p class="card-text" style="font-size:1rem;">{{inscrit.poste}}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <p class="card-title text-muted" style="font-size:1rem;">Email</p>
+                                </div>
+                                <div class="col-md-8">
+                                    <p class="card-text" style="font-size:1rem;">{{inscrit.utilisateurs.email}}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <p class="card-title text-muted" style="font-size:1rem;">Numéro de téléphone</p>
+                                </div>
+                                <div class="col-md-8">
+                                    <p class="card-text" style="font-size:1rem;">{{inscrit.numTel}}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <p class="card-title text-muted" style="font-size:1rem;">Talent</p>
+                                </div>
+                                <div class="col-md-8">
+                                    <p class="card-text" style="font-size:1rem;">{{inscrit.talent}}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <p class="card-title text-muted" style="font-size:1rem;">Chose à dire en plus</p>
+                                </div>
+                                <div class="col-md-8">
+                                    <p class="card-text" style="font-size:1rem;">{{inscrit.choseplus}}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <p class="card-title text-muted" style="font-size:1rem;">Métiers</p>
+                                </div>
+                                <div class="col-md-8">
+                                    <ul class="list-unstyled" style="font-size:1rem;">
+                                        {% for m in inscrit.metier %}
+                                            <li>{{m.nom}}</li>
+                                        {% else %}
+                                            <li>Pas de métier défini</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <img src='http://localhost/kinocaen/public/images/{{inscrit.image}}' alt="image de profil" class="img-fluid rounded" style="width:150px; height:150px;">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

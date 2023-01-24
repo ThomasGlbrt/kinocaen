@@ -1,7 +1,12 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Profil {{ inscrit.prenom }} {{inscrit.nom|upper}} {% endblock %}
-
+{% block style %}
+.pdf-logo {
+    width: 30px;
+    height: 30px;
+}
+{% endblock %}
 {% block contenu %}
 <div class="container">
     <div class="row">
@@ -70,11 +75,16 @@
             <img src='{{asset('images/' ~ inscrit.image) }}' alt="image de profil" class="img-fluid rounded">
         </div>
         <div class="row my-3">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <a href="{{path('modifierInscrit', {'id': inscrit.id})}}" class="btn btn-warning">Modifier</a>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <a href="#{#{{path('supprimerInscrit', {'id': inscrit.id})}}#}" class="btn btn-danger">Supprimer</a>
+            </div>
+            <div class="col-md-4">&nbsp;
+                <a href="{{path('telechargerInscritPdf', {'id': inscrit.id})}}" class="">
+                    <img src='{{asset('images/pdf-logo.png')}}' class="pdf-logo">
+                </a>
             </div>
         </div>
     </div>
