@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Emprunt;
+use App\Entity\Inscrit;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -19,8 +20,14 @@ class EmpruntType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('inscrit', HiddenType::class)
-
+            ->add('inscrit', EntityType::class, [
+                'class' => Inscrit::class,
+                'choice_label' => 'nom',
+                'required' => false,
+                'attr' => [
+                    'style' => 'display:none;',
+                ],
+            ])
             ->add('dateDebut', DateType::class, [
                 'widget' => 'single_text',
                 'format' => 'yyyy-MM-dd',

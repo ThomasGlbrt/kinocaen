@@ -14,9 +14,7 @@
             <tr><td>Description : {{materiel.description}}</td></tr>
         </table></br>
             <a href="{{ path('materielLister') }}">
-                <button class="btn btn-primary">Fermer</button></a>
-            <a href="{{ path('empruntAjouter') }}">
-                <button class="btn btn-primary">Emprunter</button></a>&nbsp;&nbsp;
+                <button class="btn btn-primary">Fermer</button></a>&nbsp;&nbsp;
             {% if is_granted ('ROLE_ADMIN') %}
             <a href="{{ path('materielModifier',{ 'id': materiel.id }) }}">
                 <button type="button" class="btn btn-warning">Modifier</button>

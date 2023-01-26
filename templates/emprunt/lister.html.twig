@@ -2,19 +2,77 @@
 {% block title %}Liste des Emprunts{% endblock %}
 
 {% block contenu %}
+
+<div class="input-group">
+    <div class="form-outline">
+      <input type="search-input" id="searchInput" class="form-control" placeholder="Rechercher un nom ou un matériel" />
+    </div>&nbsp;&nbsp;
+    {% if is_granted ('ROLE_ADMIN') %}
+    <a href="{{ path('empruntAjouter') }}">
+        <button class="btn btn-primary">Nouvel Emprunt</button></a>
+    {% endif %}
+  </div>
     <div>
-        LISTE DES EMPRUNTS</br>
-        <table>
+        <br>LISTE DES EMPRUNTS</br>
+        <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Participant</th>
+                <th scope="col">Date de Début</th>
+                <th scope="col">Date de Fin</th>
+                <th scope="col">Matériel</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
             {% for e in pEmprunts %}
-            <tr>
-                <td><a href="{{ path('empruntConsulter', { 'id': e.id }) }}">{{ e.inscrit.nom }}, {{ e.inscrit.prenom }}</a>&nbsp;&nbsp;</td>
+              <tr class="emprunt-row">
+                <td>{{ e.inscrit.prenom }} {{ e.inscrit.nom | upper }}</td>
+                <td>{{ e.dateDebut|date('d/m H:i') }}</td>
+                <td>{{ e.dateFin|date('d/m H:i') }}</td>
                 <td>{{ e.materiel.intitule }}</td>
-            </tr>
+                <td>{% if is_granted ('ROLE_ADMIN') %}
+                    <a href="{{ path('empruntModifier',{ 'id': e.id }) }}">
+                        <button type="button" class="btn btn-warning">Modifier</button>
+                    </a>
+                <td>
+                    <a href="{{ path('empruntSupprimer', { 'id': e.id }) }}">
+                        <button type="button" class="btn btn-danger">Supprimer</button>
+                    </a>
+                </td>
+                    {% endif %}
+              </tr>
             {% else %}
-            <tr>
+              <tr>
                 <td>Aucun emprunt en cours.</td>
-            </tr>
+              </tr>
             {% endfor %}
+            </tbody>
         </table>
     </div>
+
+    <script>
+        document.getElementById("searchInput").addEventListener("keyup", function(){
+            filterResults();
+        });
+        
+        function filterResults() {
+            var input = document.getElementById("searchInput").value.toLowerCase();
+            var rows = document.getElementsByClassName("emprunt-row");
+            for (var i = 0; i < rows.length; i++) {
+                var row = rows[i];
+                var name = row.getElementsByTagName("td")[0].innerHTML.toLowerCase();
+                var material = row.getElementsByTagName("td")[3].innerHTML.toLowerCase();
+                var dateStart = row.getElementsByTagName("td")[1].innerHTML.toLowerCase();
+                var dateEnd = row.getElementsByTagName("td")[2].innerHTML.toLowerCase();
+                if (name.indexOf(input) > -1 || material.indexOf(input) > -1 || dateStart.indexOf(input) > -1 || dateEnd.indexOf(input) > -1) {
+                    row.style.display = "table-row";
+                } else {
+                    row.style.display = "none";
+                }
+            }
+        }
+    </script>
+    
+
 {% endblock %}
