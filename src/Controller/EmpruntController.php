@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Emprunt;
+use App\Entity\Inscrit;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Form\EmpruntType;
 use App\Form\EmpruntModifierType;
@@ -54,8 +55,16 @@ class EmpruntController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $idInscrit = $form->get('inscrit')->getData();
             $emprunt = $form->getData();
-
+            if ($idInscrit){
+                $inscrit = $doctrine->getRepository(Inscrit::class)->find($idInscrit);
+                if(!is_null($inscrit)){
+                    $emprunt->setInscrit($inscrit);
+                } else {
+                    return $this->render('materiel/lister.html.twig');
+                }
+            }
             $entityManager = $doctrine->getManager();
             $entityManager->persist($emprunt);
             $entityManager->flush();
