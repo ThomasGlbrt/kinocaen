@@ -75,7 +75,11 @@
                 <div id="collapseThree" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">                       
-                        <a class="collapse-item" href="{{ path('listerInscrit') }}">Trombinoscope</a>                       
+                        <a class="collapse-item" href="{{ path('trombiInscrit') }}">Trombinoscope</a>                       
+                    {% if is_granted('ROLE_ADMIN') %}                    
+                        <a class="collapse-item" href="{{ path('listerInscrit') }}">Liste des inscrits</a>                       
+                    
+                    {% endif %}
                     </div>
                 </div>
             </li>

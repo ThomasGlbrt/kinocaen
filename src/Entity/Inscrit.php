@@ -46,6 +46,9 @@ class Inscrit
     #[ORM\OneToMany(mappedBy: 'inscrit', targetEntity: Emprunt::class)]
     private Collection $emprunt;
 
+    #[ORM\ManyToOne(inversedBy: 'inscritId')]
+    private ?typePaiement $Paiement = null;
+
     #[ORM\ManyToOne(inversedBy: 'inscrit')]
     #[ORM\JoinColumn(nullable: false)]
     
@@ -222,4 +225,15 @@ class Inscrit
         return $this;
     }
 
+    public function getPaiement(): ?typePaiement
+    {
+        return $this->Paiement;
+    }
+
+    public function setPaiement(?typePaiement $Paiement): self
+    {
+        $this->Paiement = $Paiement;
+
+        return $this;
+    }
 }

@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+{% block title %}Liste des inscrits {% endblock %}
+{% block contenu %}
+<form>
+    <input type="text" id="searchInput" onkeyup="searchFunction()" placeholder="Rechercher par nom, prénom ou numéro de téléphone">
+</form>
+<table class="table table-hover table-striped" id="inscritsTable">
+    <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Prenom</th>
+                <th>Email</th>
+                <th>téléphone</th>
+                <th>Paiement</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in inscrits %}
+                <tr>
+                    <td>{{i.nom}}</td>
+                    <td>{{i.prenom}}</td>
+                    <td>{{i.utilisateurs.email}}</td>
+                    <td>{{ "0" ~ i.numTel }}</td>
+                    <td>{{i.Paiement.montant}}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+</table>
+<script>
+    function searchFunction() {
+      // Déclaration de variables
+      var input, filter, table, tr, td, i, txtValue;
+      input = document.getElementById("searchInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("inscritsTable");
+      tr = table.getElementsByTagName("tr");
+
+      // Boucle à travers toutes les lignes
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        for (var j = 0; j < td.length; j++) {
+            if (td) {
+                txtValue = td[j].textContent || td[j].innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                    break;
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }       
+        }
+      }
+    }
+</script>
+
+{% endblock %}

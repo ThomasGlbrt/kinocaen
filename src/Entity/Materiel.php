@@ -30,7 +30,6 @@ class Materiel
         $this->emprunt = new ArrayCollection();
     }
     
-
     public function getId(): ?int
     {
         return $this->id;

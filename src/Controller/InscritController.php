@@ -8,12 +8,15 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Inscrit;
+use App\Entity\TypePaiement;
 use App\Entity\Metier;
 use App\Entity\UtilisateurType;
 use App\Form\InscritModifierType;
+use App\Service\FileUploader;
 use Knp\Snappy\Pdf;
 use Dompdf\Dompdf;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Twig\FormatTelephoneExtension;
 
 class InscritController extends AbstractController
 {
@@ -69,63 +72,51 @@ class InscritController extends AbstractController
             'inscrit' => $inscrit,]);
 	}
 
-    public function modifierInscrit(ManagerRegistry $doctrine,int $id, Request $request)
+    public function modifierInscrit(ManagerRegistry $doctrine,int $id, Request $request, FileUploader $fileUploader)
+{
+    // récupération de l'inscrit dont l'id est passé en paramètre
+    $inscrit = $doctrine->getRepository(Inscrit::class)->find($id);
+    $metiers = $doctrine->getRepository(Metier::class)->findAll();
+
+    if (!$inscrit) {
+        throw $this->createNotFoundException('Aucun Inscrit trouvé avec le numéro '.$id);
+    }
+    else
     {
-        // récupération de l'inscrit dont l'id est passé en paramètre
-        $inscrit = $doctrine->getRepository(Inscrit::class)->find($id);
-        $metiers = $doctrine->getRepository(Metier::class)->findAll();
+        // stocker l'image actuelle
+        $imageActuelle = $inscrit->getImage();
 
-        if (!$inscrit) {
-            throw $this->createNotFoundException('Aucun Inscrit trouvé avec le numéro '.$id);
-        }
-        else
-        {
-            // stocker l'image actuelle
-            $imageActuelle = $inscrit->getImage();
+        $form = $this->createForm(InscritModifierType::class, $inscrit);
+        $form->get('metier')->setData($metiers);
+        $form->handleRequest($request);
 
-            $form = $this->createForm(InscritModifierType::class, $inscrit);
-            $form->get('metier')->setData($metiers);
-            $form->handleRequest($request);
-
-            if ($form->isSubmitted() && $form->isValid()) {
-                /** @var UploadedFile $file */
-                $file = $form->get('image')->getData();
-                $nom = $form->get('nom')->getData();
-                $prenom = $form->get('prenom')->getData();
-                if ($file) {
-                    // vérifie si un fichier avec le même nom existe déjà
-                    $i = 1;
-                    $originalFilename = $nom.$prenom.'.'.$file->guessExtension();
-                    $filename = $originalFilename;
-                    while (file_exists($this->getParameter('images_directory') . '/' . $filename)) {
-                        $filename = $nom.$prenom.$i.'.'.$file->guessExtension();
-                        $i++;
-                    }
-                    try {
-                        $file->move(
-                            $this->getParameter('images_directory'),
-                            $filename
-                        );
-                        $inscrit->setImage($filename);
-                    } catch (FileException $e) {
-                        // ... gérer l'exception si l'upload a échoué
-                    }
-                }else{
-                    $inscrit->setImage($inscrit->getImage());
-                }
-                $entityManager = $doctrine->getManager();
-                $entityManager->persist($inscrit);
-                $entityManager->flush();
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var UploadedFile $file */
+            $file = $form->get('image')->getData();
+            $nom = $form->get('nom')->getData();
+            $prenom = $form->get('prenom')->getData();
+            if ($file) {
+                $fileName = $fileUploader->FileUploader($file,$nom.$prenom.'.'.$file->guessExtension());
+                $inscrit->setImage($fileName);
+            }else{
+                $inscrit->setImage($imageActuelle);
+            }
+            $entityManager = $doctrine->getManager();
+            $entityManager->persist($inscrit);
+            $entityManager->flush();
             return $this->redirectToRoute('accueil');
-            } else {
-                return $this->render('inscrit/modifier.html.twig', array('form' => $form->createView(),));
-                }
+        } else {
+            return $this->render('inscrit/modifier.html.twig', array('form' => $form->createView(),));
+        }
     }
-    }
+}
+
+    
+    
     
 
 
-public function listerInscrit(ManagerRegistry $doctrine){
+public function trombiInscrit(ManagerRegistry $doctrine){
 
     $repository = $doctrine->getRepository(Inscrit::class);
 
@@ -222,6 +213,16 @@ public function telechargerTrombiPdf(ManagerRegistry $doctrine)
     $response->headers->set('Content-Disposition', 'attachment; filename="trombinoscope.pdf"');
 
     return $response;
+}
+
+public function listerInscrit(ManagerRegistry $doctrine){
+
+    $repository = $doctrine->getRepository(Inscrit::class);
+
+    $inscrits= $repository->findAll();
+    return $this->render('inscrit/lister.html.twig', [
+'inscrits' => $inscrits,]);	
+
 }
 
 
