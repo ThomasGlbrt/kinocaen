@@ -58,7 +58,7 @@ empruntLister:
     controller: App\Controller\EmpruntController::listerEmprunt
 
 empruntAjouter:
-    path: /emprunt/ajouter/
+    path: /emprunt/ajouter/{id}
     controller: App\Controller\EmpruntController::ajouterEmprunt
 
 empruntModifier:

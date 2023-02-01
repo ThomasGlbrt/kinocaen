@@ -1,17 +1,15 @@
 <?php
-
 namespace App\Controller;
-
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Emprunt;
 use App\Entity\Inscrit;
+use App\Entity\Materiel;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Form\EmpruntType;
 use App\Form\EmpruntModifierType;
-
 class EmpruntController extends AbstractController
 {
     #[Route('/emprunt', name: 'app_emprunt')]
@@ -21,63 +19,54 @@ class EmpruntController extends AbstractController
             'controller_name' => 'EmpruntController',
         ]);
     }
-
     public function consulterEmprunt(ManagerRegistry $doctrine, int $id)
     {
         $emprunt = $doctrine->getRepository(Emprunt::class)->find($id);
-
         if (!$emprunt) {
             throw $this->createNotFoundException(
                 'Aucun emprunt trouvé avec le numéro '.$id
             );
         }
-
         //return new Response('Emprunt : '.$emprunt->getNom());
         return $this->render('emprunt/consulter.html.twig', [
             'emprunt' => $emprunt,
         ]);
     }
-
     public function listerEmprunt(ManagerRegistry $doctrine)
     {
         $repository = $doctrine->getRepository(Emprunt::class);
-
         $emprunt = $repository->findAll();
+        $materiel = $doctrine->getRepository(Materiel::class)->findAll();
         return $this->render('emprunt/lister.html.twig', [
-            'pEmprunts' => $emprunt,
+            'pEmprunts' => $emprunt, 'pMateriels' => $materiel,
         ]);
     }
+    public function ajouterEmprunt(ManagerRegistry $doctrine, Request $request, $id)
+{
+    $emprunt = new Emprunt();
+    $inscrit = $this->getUser()->getInscrit();
+    $materiel = $doctrine->getRepository(Materiel::class)->find($id);
+    $form = $this->createForm(EmpruntType::class, $emprunt);
+    $form->handleRequest($request);
 
-    public function ajouterEmprunt(ManagerRegistry $doctrine, Request $request)
-    {
-        $emprunt = new emprunt();
-        $form = $this->createForm(EmpruntType::class, $emprunt);
-        $form->handleRequest($request);
+    if ($form->isSubmitted() && $form->isValid()) {
+        $emprunt = $form->getData();
+        $emprunt->setInscrit($inscrit);
+        $emprunt->setMateriel($materiel);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $idInscrit = $form->get('inscrit')->getData();
-            $emprunt = $form->getData();
-            if ($idInscrit){
-                $inscrit = $doctrine->getRepository(Inscrit::class)->find($idInscrit);
-                if(!is_null($inscrit)){
-                    $emprunt->setInscrit($inscrit);
-                } else {
-                    return $this->render('materiel/lister.html.twig');
-                }
-            }
-            $entityManager = $doctrine->getManager();
-            $entityManager->persist($emprunt);
-            $entityManager->flush();
+        $entityManager = $doctrine->getManager();
+        $entityManager->persist($emprunt);
+        $entityManager->flush();
 
-            return $this->render('emprunt/consulter.html.twig', [
-                'emprunt' => $emprunt,
-            ]);
-        } else {
-            return $this->render('emprunt/ajouter.html.twig', [
-                'form' => $form->createView(),
-            ]);
-        }
+        return $this->render('emprunt/consulter.html.twig', [
+            'emprunt' => $emprunt,
+        ]);
+    } else {
+        return $this->render('emprunt/ajouter.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
+}
 
     public function modifierEmprunt(ManagerRegistry $doctrine, $id, Request $request)
     {
@@ -107,11 +96,9 @@ class EmpruntController extends AbstractController
             }
         }
     }
-
     public function supprimerEmprunt(ManagerRegistry $doctrine, int $id, Request $request)
 {
     $emprunt = $doctrine->getRepository(Emprunt::class)->find($id);
-
     if (!$emprunt){
         throw $this->createNotFoundException('Aucun emprunt trouvé avec cet id !');
     }
@@ -122,5 +109,4 @@ class EmpruntController extends AbstractController
         return $this->redirectToRoute('empruntLister');
     }
 }
-
 }

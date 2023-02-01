@@ -20,9 +20,7 @@ class EmpruntType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('inscrit', EntityType::class, [
-                'class' => Inscrit::class,
-                'choice_label' => 'nom',
+            ->add('inscrit', InscritType::class, [
                 'required' => false,
                 'attr' => [
                     'style' => 'display:none;',
@@ -39,10 +37,9 @@ class EmpruntType extends AbstractType
             ->add('materiel', EntityType::class, [
                 'class' => 'App\Entity\Materiel',
                 'choice_label' => 'intitule',
+                
             ])
-            ->add('enregistrer', SubmitType::class, [
-                'label' => 'Emprunter',
-            ])
+
         ;
     }
 

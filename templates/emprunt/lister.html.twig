@@ -1,78 +1,72 @@
 {% extends 'base.html.twig' %}
 {% block title %}Liste des Emprunts{% endblock %}
 
+{% set selectedMaterialId = 1 %}
+
 {% block contenu %}
-
 <div class="input-group">
-    <div class="form-outline">
-      <input type="search-input" id="searchInput" class="form-control" placeholder="Rechercher un nom ou un matériel" />
-    </div>&nbsp;&nbsp;
-    {% if is_granted ('ROLE_ADMIN') %}
-    <a href="{{ path('empruntAjouter') }}">
-        <button class="btn btn-primary">Nouvel Emprunt</button></a>
-    {% endif %}
-  </div>
-    <div>
-        <br>LISTE DES EMPRUNTS</br>
-        <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">Participant</th>
-                <th scope="col">Date de Début</th>
-                <th scope="col">Date de Fin</th>
-                <th scope="col">Matériel</th>
-                <th scope="col"></th>
-              </tr>
-            </thead>
-            <tbody>
-            {% for e in pEmprunts %}
-              <tr class="emprunt-row">
-                <td>{{ e.inscrit.prenom }} {{ e.inscrit.nom | upper }}</td>
-                <td>{{ e.dateDebut|date('d/m H:i') }}</td>
-                <td>{{ e.dateFin|date('d/m H:i') }}</td>
-                <td>{{ e.materiel.intitule }}</td>
-                <td>{% if is_granted ('ROLE_ADMIN') %}
-                    <a href="{{ path('empruntModifier',{ 'id': e.id }) }}">
-                        <button type="button" class="btn btn-warning">Modifier</button>
-                    </a>
-                <td>
-                    <a href="{{ path('empruntSupprimer', { 'id': e.id }) }}">
-                        <button type="button" class="btn btn-danger">Supprimer</button>
-                    </a>
-                </td>
-                    {% endif %}
-              </tr>
-            {% else %}
-              <tr>
-                <td>Aucun emprunt en cours.</td>
-              </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
-
-    <script>
-        document.getElementById("searchInput").addEventListener("keyup", function(){
-            filterResults();
-        });
-        
-        function filterResults() {
-            var input = document.getElementById("searchInput").value.toLowerCase();
-            var rows = document.getElementsByClassName("emprunt-row");
-            for (var i = 0; i < rows.length; i++) {
-                var row = rows[i];
-                var name = row.getElementsByTagName("td")[0].innerHTML.toLowerCase();
-                var material = row.getElementsByTagName("td")[3].innerHTML.toLowerCase();
-                var dateStart = row.getElementsByTagName("td")[1].innerHTML.toLowerCase();
-                var dateEnd = row.getElementsByTagName("td")[2].innerHTML.toLowerCase();
-                if (name.indexOf(input) > -1 || material.indexOf(input) > -1 || dateStart.indexOf(input) > -1 || dateEnd.indexOf(input) > -1) {
-                    row.style.display = "table-row";
-                } else {
-                    row.style.display = "none";
-                }
-            }
-        }
-    </script>
+  <div class="form-outline">
+    <input type="search-input" id="searchInput" class="form-control" placeholder="Rechercher un nom ou un matériel">
+  </div>&nbsp;&nbsp;
+  {% if is_granted ('ROLE_ADMIN') %}
+      <button id="newLoanButton" class="btn btn-primary">Nouvel Emprunt</button>
+      <a href="{{ path('empruntAjouter', {'id': selectedMaterialId}) }}" id="addLoanButton" class="btn btn-primary" style="display:none;">Ajouter Emprunt</a>
+  {% endif %}
+</div>
+<div>
+  <br><h4>LISTE DES EMPRUNTS</h4></br>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Participant</th>
+        <th scope="col">Date de Début</th>
+        <th scope="col">Date de Fin</th>
+        <th scope="col">Matériel</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody id="empruntsTable">
+      {% for e in pEmprunts %}
+        <tr class="emprunt-row">
+          <td>{{ e.inscrit.prenom }} {{ e.inscrit.nom | upper }}</td>
+          <td>{{ e.dateDebut|date('d/m H:i') }}</td>
+          <td>{{ e.dateFin|date('d/m H:i') }}</td>
+          <td>{{ e.materiel.intitule }}</td>
+          <td>
+            {% if is_granted ('ROLE_ADMIN') %}
+              <a href="{{ path('empruntModifier',{ 'id': e.id}) }}" class="btn btn-sm btn-primary">Modifier</a>
+              <a href="{{ path('empruntSupprimer',{ 'id': e.id}) }}" class="btn btn-sm btn-danger">Supprimer</a>
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+  <script>
+    var selectedMaterialId = {{ selectedMaterialId }};
+    var isLoanButtonClicked = false;
     
+    document.getElementById("newLoanButton").addEventListener("click", function() {
+  document.getElementById("materialSelect").style.display = "none";
+  document.getElementById("addLoanButton").style.display = "inline-block";
+  document.getElementById("newLoanButton").style.display = "none";
+});
 
+document.getElementById("materialSelect").addEventListener("change", function() {
+  selectedMaterialId = this.value;
+});
+
+document.getElementById("addLoanButton").addEventListener("click", function() {
+  if (selectedMaterialId === null) {
+    alert("Veuillez sélectionner un matériel à emprunter.");
+    return;
+  }
+  document.getElementById("materialSelect").style.display = "inline-block";
+  document.getElementById("addLoanButton").style.display = "none";
+  document.getElementById("newLoanButton").style.display = "inline-block";
+  window.location = this.getAttribute("href").replace("0", selectedMaterialId);
+});
+
+    </script>
 {% endblock %}
