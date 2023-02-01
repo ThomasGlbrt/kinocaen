@@ -150,14 +150,9 @@ public function telechargerInscritPdf(ManagerRegistry $doctrine, int $id)
     $dompdf->set_option('enable_html5_parser', true);
     $dompdf->set_option('enable_javascript', true);
     $dompdf->set_option('enable_smart_shrinking', true);
-    $dompdf->set_option('enable_remote', true);
     $dompdf->set_option('defaultFont', 'Arial');
-    $dompdf->set_option('enable_remote', true);
-    $dompdf->set_option('enable_css_float', true);
-    $dompdf->set_option('enable_html5_parser', true);
     $dompdf->set_option('enable_javascript', true);
     $dompdf->set_option('enable_smart_shrinking', true);
-    $dompdf->set_option('defaultFont', 'Arial');
     $dompdf->set_paper('A4', 'portrait', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '');
     $dompdf->render();
 
@@ -196,14 +191,11 @@ public function telechargerTrombiPdf(ManagerRegistry $doctrine)
     $dompdf->set_option('enable_html5_parser', true);
     $dompdf->set_option('enable_javascript', true);
     $dompdf->set_option('enable_smart_shrinking', true);
-    $dompdf->set_option('enable_remote', true);
     $dompdf->set_option('defaultFont', 'Arial');
-    $dompdf->set_option('enable_remote', true);
     $dompdf->set_option('enable_css_float', true);
     $dompdf->set_option('enable_html5_parser', true);
     $dompdf->set_option('enable_javascript', true);
     $dompdf->set_option('enable_smart_shrinking', true);
-    $dompdf->set_option('defaultFont', 'Arial');
     $dompdf->set_paper('A4', 'portrait', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '');
     $dompdf->render();
 
