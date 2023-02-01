@@ -1,90 +1,68 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
+    <!-- déclaration de l'encodage des caractères -->
     <meta charset="UTF-8">
+    <!-- Titre de la page -->
     <title>Trombinoscope</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-</head>
-<body>
-<div class="container">
-    <div class="row">
-        {% for i in inscrits %}
-            <div class="col-md-3">
-                <div class="card mb-4" style="height:95%;">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <h2 class="mb-4" style="font-size: 1rem;">{{ i.prenom }} {{i.nom|upper}}</h2>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <p class="card-title font-weight-bold" style="font-size: 0.8rem;">Poste</p>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <p class="card-text" style="font-size: 0.8rem;">{{i.poste}}</p>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <p class="card-title font-weight-bold" style="font-size: 0.8rem;">Email</p>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <p class="card-text" style="font-size: 0.8rem;">{{i.utilisateurs.email}}</p>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <p class="card-title font-weight-bold" style="font-size: 0.8rem;">Numéro de téléphone</p>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <p class="card-text" style="font-size: 0.8rem;">{% if i.numTel != '' %}0{{i.numTel}}{% else %} Pas de numéro de téléphone enregistré {% endif %}</p>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <p class="card-title font-weight-bold" style="font-size: 0.8rem;">Talent</p>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <p class="card-text" style="font-size: 0.8rem;">{{i.talent}}</p>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <p class="card-title font-weight-bold" style="font-size: 0.8rem;">Chose à dire en plus</p>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <p class="card-text" style="font-size: 0.8rem;">{{i.choseplus}}</p>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <p class="card-title font-weight-bold" style="font-size: 0.8rem;">Métiers</p>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <ul class="list-unstyled" style="font-size: 0.8rem;">
-                                        {% for m in i.metier %}
-                                            <li>{{m.nom}}</li>
-                                        {% else %}
-                                            <li>Pas de métier défini</li>
-                                        {% endfor %}
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <img src='http://localhost/kinocaen/public/images/{{i.image}}' alt="image de profil" class="img-fluid rounded" style="width:50%;">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% if loop.index % 4 == 0 %}
-                </div>
-                <div class="row">
-            {% endif %}
-        {% endfor %}
-    </div>
+    <!-- Importation de la feuille de style Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" 
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <!-- Définition d'un style pour l'arrière-plan -->
+    <style>
+      .background-image {
+        background-image: url("http://localhost/kinocaen/public/images/Temoin.jpg");
+        height: 100vh; /* Prend toute la hauteur de la fenêtre */
+        background-size: cover; /* Étend l'image de fond pour couvrir tout l'espace */
+        background-position: center; /* Centre l'image de fond */
+      }
+    </style>
+  </head>
+  <!-- Corps de la page, avec la classe pour l'arrière-plan -->
+  <body class="background-image">
+    <!-- Container Bootstrap pour la mise en page -->
+    <div class="container">
+      <!-- Tableau pour l'affichage des informations -->
+      <table class="table table-bordered">
+        <tbody>
+          <!-- Boucle pour afficher les informations pour chaque inscrit -->
+          {% for i in inscrits %}
+            <tr>
+              <td>
+                <center>
+                  <!-- Affichage du poste -->
+                  <p class="font-weight-bold" style="font-size: 1rem;">{{i.poste}}</p>
+                  <!-- Affichage de l'image de profil -->
+                  <img src='http://localhost/kinocaen/public/images/{{i.image}}' alt="image de profil" 
+                       class="img-fluid rounded" style="width:150px; height:150px; max-height: 100%;">
+                  <!-- Affichage du nom et prénom -->
+                  <h2 class="mb-4" style="font-size: 1rem;">{{ i.prenom }} {{i.nom|upper}}</h2>
+                  <!-- Boucle pour afficher les métiers de chaque inscrit -->
+                  <p class="font-weight-bold" style="font-size: 0.8rem;">Autres capacités : 
+                  {% for m in i.metier %}
+                    <li>{{m.nom}}</li>
+    </p>
+    {% else %}
+        <!-- Message d'affichage si aucun métier n'est défini -->
+        <p><li>Pas de métier défini</li></p>
+    {% endfor %}
+    <!-- Affichage de l'email de l'utilisateur -->
+    <p class="font-weight-bold" style="font-size: 0.9rem;">{{i.utilisateurs.email}}</p>
+    <!-- Affichage du numéro de téléphone de l'utilisateur si celui-ci a été enregistré -->
+    <p class="font-weight-bold" style="font-size: 0.9rem;">
+        {% if i.numTel != '' %}
+            0{{i.numTel}}
+        {% else %}
+            Pas de numéro de téléphone enregistré
+        {% endif %}
+    </p>
+</td>
+</center>
+</tr>
+{% endfor %}
+</tbody>
+</table>
 </div>
-
-                
-
-
+<!-- Fermeture du conteneur Bootstrap -->
+</body>
+</html>
