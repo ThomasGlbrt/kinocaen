@@ -1,18 +1,28 @@
+{# Fichier templates/matériel/ajouter.html.twig #}
+
 {% extends 'base.html.twig' %}
 
+{# Définition du titre de la page #}
 {% block title %}Ajouter un matériel{% endblock %}
 
+{# Définition du contenu de la page #}
 {% block contenu %}
     <h4>Ajouter un matériel</h4>
     </br>
-    {# templates/matériel/ajouter.html.twig #}
+    {# Formulaire pour ajouter un matériel #}
     {{ form_start(form) }}
+
+    {# Champ intitulé du matériel #}
     <div class="col-sm-6 mb-3 mb-sm-0">
-        {{ form_widget(form.intitule, {'attr': {'class': 'form-control', 'placeholder': ' Intitule'}}) }}
+        {{ form_widget(form.intitule, {'attr': {'class': 'form-control', 'placeholder': 'Intitulé'}}) }}
     </div></br>
+
+    {# Champ description du matériel #}
     <div class="col-sm-6 mb-3 mb-sm-0">
-        {{ form_widget(form.description, {'attr': {'class': 'form-control', 'placeholder': ' Description'}}) }}
+        {{ form_widget(form.description, {'attr': {'class': 'form-control', 'placeholder': 'Description'}}) }}
     </div></br>
+
+    {# Bouton pour soumettre le formulaire #}
     <button type="submit" class="btn btn-primary">Enregistrer</button>
+    {{ form_end(form) }}
 {% endblock %}
-    
