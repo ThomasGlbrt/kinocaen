@@ -10,11 +10,14 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Inscrit;
 use App\Entity\TypePaiement;
 use App\Entity\Metier;
+use App\Entity\Logement;
+use App\Entity\TypeCompetences;
 use App\Entity\UtilisateurType;
 use App\Form\InscritModifierType;
 use App\Service\FileUploader;
 use Knp\Snappy\Pdf;
 use Dompdf\Dompdf;
+use Imagick;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Twig\FormatTelephoneExtension;
 
@@ -30,9 +33,11 @@ class InscritController extends AbstractController
         ]);
     }
 
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+    public function register(ManagerRegistry $doctrine,Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
         $user = new Inscrit();
+        $logement = new Logement();
+        $competences = $doctrine->getRepository(TypeCompetences::class)->findAll();
         $form = $this->createForm(InscritType::class, $user);
         $form->handleRequest($request);
 
@@ -45,11 +50,35 @@ class InscritController extends AbstractController
                 )
             );
 
+            $file = $form->get('image')->getData();
+            $nom = $form->get('nom')->getData();
+            $prenom = $form->get('prenom')->getData();
+            if ($file) {
+                if ($file->guessExtension() == 'png' || $file->guessExtension() == 'jpg')
+                    $fileName = $fileUploader->FileUploader($file,$nom.$prenom.'.'.$file->guessExtension());
+                else {
+                    $fileName = $fileUploader->FileUploader($file,$nom.$prenom.'.'.'png');
+                }
+                $image = new Imagick($filename);
+                $image->resizeImage(1080, 1350, Imagick::FILTER_LANCZOS, 1);
+                $inscrit->setImage($image);
+            }else{
+                $inscrit->setImage($imageActuelle);
+            }
+
+            $essai = $form->get('Essai')->getData();
+            $inscrit->setTypeCompetence()->setEssai($essai);
+
+            $logement->setLogement($form->get('logement')->getData());
+            $session = new Session();
+            $session->setPorterProjet($form->get('porterProjet')->getData());
+            $entityManager->persist($logement);
+            $entityManager->persist($session);
             $entityManager->persist($user);
             $entityManager->flush();
             // do anything else you need here, like send an email
 
-            return $this->redirectToRoute('accueil');
+            return $this->redirectToRoute('last_page');
         }
 
         return $this->render('registration/register.html.twig', [
@@ -73,7 +102,7 @@ class InscritController extends AbstractController
 	}
 
     public function modifierInscrit(ManagerRegistry $doctrine,int $id, Request $request, FileUploader $fileUploader)
-{
+    {
     // récupération de l'inscrit dont l'id est passé en paramètre
     $inscrit = $doctrine->getRepository(Inscrit::class)->find($id);
     $metiers = $doctrine->getRepository(Metier::class)->findAll();

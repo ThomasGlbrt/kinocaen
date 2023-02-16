@@ -49,6 +49,36 @@ class Inscrit
     #[ORM\ManyToOne(inversedBy: 'inscritId')]
     private ?typePaiement $Paiement = null;
 
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $facebook = null;
+
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $pays = null;
+
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $ville = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $premierKabaret = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $matosDispo = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $permis = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $vehicule = null;
+
+    #[ORM\OneToOne(inversedBy: 'inscrit', cascade: ['persist', 'remove'])]
+    private ?logement $logementId = null;
+
+    #[ORM\ManyToMany(targetEntity: typeCompetences::class, inversedBy: 'inscrits')]
+    private Collection $competences;
+
+    #[ORM\ManyToMany(targetEntity: session::class, inversedBy: 'inscrits')]
+    private Collection $Session;
+
     #[ORM\ManyToOne(inversedBy: 'inscrit')]
     #[ORM\JoinColumn(nullable: false)]
     
@@ -57,6 +87,8 @@ class Inscrit
     {
         $this->metier = new ArrayCollection();
         $this->emprunt = new ArrayCollection();
+        $this->competences = new ArrayCollection();
+        $this->Session = new ArrayCollection();
     }
 
 
@@ -233,6 +265,150 @@ class Inscrit
     public function setPaiement(?typePaiement $Paiement): self
     {
         $this->Paiement = $Paiement;
+
+        return $this;
+    }
+
+    public function getFacebook(): ?string
+    {
+        return $this->facebook;
+    }
+
+    public function setFacebook(?string $facebook): self
+    {
+        $this->facebook = $facebook;
+
+        return $this;
+    }
+
+    public function getPays(): ?string
+    {
+        return $this->pays;
+    }
+
+    public function setPays(?string $pays): self
+    {
+        $this->pays = $pays;
+
+        return $this;
+    }
+
+    public function getVille(): ?string
+    {
+        return $this->ville;
+    }
+
+    public function setVille(?string $ville): self
+    {
+        $this->ville = $ville;
+
+        return $this;
+    }
+
+    public function getPremierKabaret(): ?int
+    {
+        return $this->premierKabaret;
+    }
+
+    public function setPremierKabaret(?int $premierKabaret): self
+    {
+        $this->premierKabaret = $premierKabaret;
+
+        return $this;
+    }
+
+    public function getMatosDispo(): ?string
+    {
+        return $this->matosDispo;
+    }
+
+    public function setMatosDispo(?string $matosDispo): self
+    {
+        $this->matosDispo = $matosDispo;
+
+        return $this;
+    }
+
+    public function getPermis(): ?int
+    {
+        return $this->permis;
+    }
+
+    public function setPermis(?int $permis): self
+    {
+        $this->permis = $permis;
+
+        return $this;
+    }
+
+    public function getVehicule(): ?int
+    {
+        return $this->vehicule;
+    }
+
+    public function setVehicule(?int $vehicule): self
+    {
+        $this->vehicule = $vehicule;
+
+        return $this;
+    }
+
+    public function getLogementId(): ?logement
+    {
+        return $this->logementId;
+    }
+
+    public function setLogementId(?logement $logementId): self
+    {
+        $this->logementId = $logementId;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, typeCompetences>
+     */
+    public function getCompetences(): Collection
+    {
+        return $this->competences;
+    }
+
+    public function addCompetence(typeCompetences $competence): self
+    {
+        if (!$this->competences->contains($competence)) {
+            $this->competences->add($competence);
+        }
+
+        return $this;
+    }
+
+    public function removeCompetence(typeCompetences $competence): self
+    {
+        $this->competences->removeElement($competence);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, session>
+     */
+    public function getSession(): Collection
+    {
+        return $this->Session;
+    }
+
+    public function addSession(session $session): self
+    {
+        if (!$this->Session->contains($session)) {
+            $this->Session->add($session);
+        }
+
+        return $this;
+    }
+
+    public function removeSession(session $session): self
+    {
+        $this->Session->removeElement($session);
 
         return $this;
     }

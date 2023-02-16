@@ -8,85 +8,267 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Inscription</title>
     <!-- Custom fonts for this template-->
-    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
+   <!-- Styles -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+<!-- Or for RTL support -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.rtl.min.css" />
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.0/dist/jquery.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- jQuery easing -->
+
+
     <!-- Custom styles for this template-->
     <link href="..\public\start\css\sb-admin-2.min.css" rel="stylesheet">
 
+ <style> 
+ .my-checkbox-class {
+    display: grid;
+    grid-template-columns: 25px auto;
+}
+.my-checkbox-class label {
+    vertical-align: middle;
+}
+.my-checkbox-class input[type="checkbox"]{
+  max-width:50%;
+  height:25px;
+}
+</style>
+
 </head>
-
+ 
 <body class="bg-gradient-primary">
+  <div class="container">
+    <div class="card o-hidden border-0 shadow-lg my-5">
+      <div class="card-body p-0">
+        <div class="row">
+          <div>
+            <div class="p-5">
+              <div class="text-center">
+                <h1 class="h4 text-gray-900 mb-4">Inscription</h1>
+              </div>
+              {{ form_start(registrationForm) }}
+              <div class="form-group row">
+                <div class="col-sm-6 mb-3 mb-sm-0">
+                  <div class="form-group">
+                    {{ form_widget(registrationForm.inscrit.nom, {'attr': {'class': 'form-control', 'placeholder': 'Nom'}}) }}
+                  </div>
+                  <div class="form-group">
+                  {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control', 'placeholder': 'Email'}}) }}
+                  </div>
+                  <div class="form-group">
+                  {{ form_widget(registrationForm.inscrit.numTel, {'attr': {'class': 'form-control', 'placeholder': 'Téléphone'}}) }}
+                  </div>
+                  <div class="form-group">
+                  {{ form_row(registrationForm.inscrit.Ville, { 'attr': {'class': 'form-control form-control-user', 'placeholder': 'Ville'}}) }}
+                  </div>
+                  <div class="form-group row">
+                      <div class="col-sm-4 mb-3">
+                          Premier kabaret ?
+                      </div>
+                      <div class="col-sm-8 mb-3">
+                          <div class="form-check form-check-inline align-self-center">
+                              {{ form_widget(registrationForm.inscrit.PremierKabaret.0, {'label': 'Oui', 'attr': {'class': 'form-check-input'}}) }}
+                              {{ form_label(registrationForm.inscrit.PremierKabaret.0) }}
+                          </div>
+                          <div class="form-check form-check-inline align-self-center">
+                              {{ form_widget(registrationForm.inscrit.PremierKabaret.1, {'label': 'Non', 'attr': {'class': 'form-check-input'}}) }}
+                              {{ form_label(registrationForm.inscrit.PremierKabaret.1) }}
+                          </div>
+                      </div>
+                  </div>
 
-    <div class="container">
-
-        <div class="card o-hidden border-0 shadow-lg my-5">
-            <div class="card-body p-0">
-                <!-- Nested Row within Card Body -->
-                <div class="row">
-                    <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
-                    <div class="col-lg-7">
-                        <div class="p-5">
-                            <div class="text-center">
-                                <h1 class="h4 text-gray-900 mb-4">Créer un compte</h1>
-                            </div>
-                            {{ form_start(registrationForm) }}
-                                <div class="form-group row">
-                                    <div class="col-sm-6 mb-3 mb-sm-0">
-                                        {{ form_row(registrationForm.inscrit.prenom, { attr:
-                                        {'class': 'form-control form-control-user', 'placeholder': ' Prenom'} })
-                                        }}
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-sm-6 mb-3 mb-sm-0">
-                                        {{ form_row(registrationForm.inscrit.nom, { attr:
-                                        {'class': 'form-control form-control-user', 'placeholder': ' Nom'} })
-                                        }}
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    {{ form_row(registrationForm.email, { attr:
-                                    { 'class': 'form-control form-control-user', 'placeholder': 'Adresse Mail' } })
-                                    }}</div>
-                                <div class="form-group row">
-                                    <div class="col-sm-6 mb-3 mb-sm-0">
-                                    {{ form_row(registrationForm.plainPassword, { attr:
-                                    { 'class': 'form-control form-control-user', 'placeholder': 'Mot de passe' } })
-                                    }}</div>
-                                    <!--<div class="col-sm-6">
-                                        <input type="password" class="form-control form-control-user"
-                                            id="exampleRepeatPassword" placeholder="Repeat Password">
-                                    </div>-->
-                                </div>
-                                <button type="submit" class="btn btn-primary btn-user btn-block">
-                                    S'inscrire
-                                </button>
-                                <hr>
-                            {{ form_end(registrationForm) }}
-
-                            <div class="text-center">
-                                <a class="small" href="{{ path('connexion') }}">Vous avez déjà un compte ? Connectez-vous !</a>
-                            </div>
-                        </div>
+                  <div class="form-group">
+                  {{ form_row(registrationForm.inscrit.image, { 'attr': {'class': 'form-control form-control-user'},'label': 'Photo '}) }}
+                  <small>*Au format png ou jpg.</small>
+                  </div>
+                  <div class="form-group row">
+                    <div class="col-sm-7 mb-3 d-flex align-items-center">
+                    Avez vous besoin d'un logement ?
                     </div>
+                    <div class="col-sm-5 mb-3" style="height: 2.5em;">
+                    {{ form_widget(registrationForm.inscrit.LogementId.besoin, { 'attr': {'class': 'form-control form-control-user '}}) }}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                  {{ form_row(registrationForm.inscrit.LogementId.descriptif, { 'attr': {'class': 'form-control'}}) }}
+                  </div>
+                  <div class="form-group">
+                  {{ form_row(registrationForm.inscrit.Competences) }}
+                  </div>
                 </div>
+                <div class="col-sm-6">
+                <div class="form-group">
+                  {{ form_widget(registrationForm.inscrit.prenom, {'attr': {'class': 'form-control', 'placeholder': 'Prénom'}}) }}
+                  </div>
+                  <div class="form-group">
+                  {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'form-control', 'placeholder': 'Mot de passe'}}) }}
+                  </div>
+                  <div class="form-group">
+                  {{ form_widget(registrationForm.inscrit.facebook, {'attr': {'class': 'form-control', 'placeholder': 'Nom d\'utilisateur Facebook'}}) }}
+                  </div>
+                  <div class="form-group">
+                  {{ form_widget(registrationForm.inscrit.Pays, {'attr': {'class': 'form-control', 'placeholder': 'Pays'}}) }}
+                  </div>
+                  <div class="form-group">
+                  {{ form_row(registrationForm.inscrit.MatosDispo, { 'attr': {'class': 'form-control form-control-user', 'placeholder': 'Avez vous du matos de disponible ?'}}) }}
+                  </div>
+                  <div class="form-group row d-flex align-items-center">
+                    <div class="col-sm-7 mb-3">
+                      {{ form_label(registrationForm.inscrit.Permis)}}
+                    </div>
+                    <div class="col-sm-5 mb-3" style="height: 2.5em;">
+                      {{ form_widget(registrationForm.inscrit.Permis, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                  </div>
+                  <div id="vehicule-container" style="display:none;">
+                    <div class="form-group row d-flex align-items-center">
+                      <div class="col-sm-7 mb-3">
+                        {{ form_label(registrationForm.inscrit.Vehicule)}}
+                      </div>
+                      <div class="col-sm-5 mb-3" style="height: 2.5em;">
+                        {{ form_widget(registrationForm.inscrit.Vehicule, {'attr': {'class': 'form-control'}}) }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    {{ form_row(registrationForm.inscrit.Essai) }}
+                  </div>
+                  <div class="form-group">
+                      {{ form_row(registrationForm.inscrit.Session.intitule) }}
+                  </div>
+                  <div class="form-group row d-flex align-items-center">
+                    <div class="col-sm-7 mb-3">
+                      {{ form_label(registrationForm.inscrit.Session.porterProjet)}}
+                    </div>
+                    <div class="col-sm-5 mb-3" style="height: 2.5em;">
+                      {{ form_widget(registrationForm.inscrit.Session.porterProjet, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                    <div id="porterProjet-container" style="display: none;">
+                      <div class="form-group row">
+                        <div class="col-sm-5 mb-3">
+                          A quelles sessions ?
+                        </div>
+                        <div class="col-sm-7 mb-3 align-self-center">
+                          <div class="form-check form-check-inline">
+                            {{ form_widget(registrationForm.inscrit.Session2, {'label': 'Session 2', 'attr': {'class': 'form-check-input'}}) }}
+                            {{ form_label(registrationForm.inscrit.Session2) }}
+                          </div>
+                          <div class="form-check form-check-inline">
+                            {{ form_widget(registrationForm.inscrit.Session3, {'label': 'Session 3', 'attr': {'class': 'form-check-input'}}) }}
+                            {{ form_label(registrationForm.inscrit.Session3) }}
+                          </div>
+                        </div>
+                      </div>
+                      <small>*Si une session n'est plus accessible, c'est que celle-ci est déjà pleine !</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group row align-items-center">
+                  <div class="col-sm-12 mb-3 text-center">
+                      J'accepte les <a href="{{ path('accueil') }}" target="_blank">conditions générales</a>
+                    {{ form_widget(registrationForm.inscrit.agreeTerm, {'label_attr': {'class': 'mb-0'}, 'attr': {'class': 'form-check-input ml-2'}}) }}
+                  </div>
+                </div>
+                <input type="submit" value="S'inscrire" class="btn btn-primary btn-user btn-block">
+                  {{ form_end(registrationForm) }}
+                
+                <div class="text-center small"><hr>
+                  Vous avez un compte ? <a href="{{ path('connexion') }}">Connectez Vous</a>
+                </div>
+              </div>
             </div>
-        </div>
-
-    </div>
-
-    <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+          </div>
+      </div>
+  </div>
+</body>
 
     <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
+
+    <script src="{{ asset('https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js')}}"></script>
+
+    <script type="text/javascript">
+      $('.competences').select2({
+    theme: "bootstrap-5",
+    width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+    placeholder: "Choisir une ou plusieurs comptétences",
+    multiple: true,
+    closeOnSelect:false,
+});
+
+$('.essais').select2({
+    placeholder: "Choisir une ou plusieurs comptétences que vous voulez essayer",
+    theme: "bootstrap-5",
+    width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+    multiple: true,
+    closeOnSelect:false,
+});
+
+
+  $(document).ready(function() {
+    $("#registration_form_inscrit_Session_porterProjet").change(function() {
+      if ($(this).val() == 0) {
+        $("#porterProjet-container").hide();
+      } else {
+        $("#porterProjet-container").show();
+      }
+    });
+  });
+
+  $(document).ready(function() {
+    $("#registration_form_inscrit_Permis").change(function() {
+      if ($(this).val() == 0) {
+        $("#vehicule-container").hide();
+      } else {
+        $("#vehicule-container").show();
+      }
+    });
+  });
+
+$(document).ready(function() {
+  $("#registration_form_inscrit_LogementId_besoin").change(function() {
+    if ($(this).val() == "1") {
+      $("#registration_form_inscrit_LogementId_descriptif").attr("placeholder", "Decrivez vos besoins en logement");
+    } else {
+      $("#registration_form_inscrit_LogementId_descriptif").attr("placeholder", "Peux tu heberger, combien ? ou habites tu...");
+    }
+  });
+});
+
+
+
+  </script>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="{{ asset('start/vendor/jquery/jquery.min.js') }}"></script>
+    <!-- Core plugin JavaScript-->
+    <script src="{{ asset('start/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="{{ asset('start/js/sb-admin-2.min.js') }}"></script>
+
+    <!-- Page level plugins -->
+    <script src="{{ asset('start/vendor/chart.js/Chart.min.js') }}"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="{{ asset('start/js/demo/chart-area-demo.js') }}"></script>
+    <script src="{{ asset('start/js/demo/chart-pie-demo.js') }}"></script>
+    <script src="{{asset('https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js')}}"></script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" ></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" ></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 </body>
 

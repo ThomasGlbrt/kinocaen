@@ -13,7 +13,8 @@
     <link
         href="{{ asset('https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i') }}"
         rel="stylesheet">
-
+    <link href="{{ asset('https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css')}}" rel="stylesheet" />
+    
     <!-- Custom styles for this template-->
     <link href="{{ asset('start/css/sb-admin-2.min.css') }}" rel="stylesheet">
     <link rel="icon" ype="image/png" href="{{ asset('start/img/logoKino.png') }}" />
@@ -126,15 +127,15 @@
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
-                        <!-- Nav Item - Alerts -->
+                        <!-- Nav Item - Alerts 
                         <li class="nav-item dropdown no-arrow mx-1">
                             <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-bell fa-fw"></i>
-                                <!-- Counter - Alerts -->
+                                <!-- Counter - Alerts 
                                 <span class="badge badge-danger badge-counter">3+</span>
                             </a>
-                            <!-- Dropdown - Alerts -->
+                            <!-- Dropdown - Alerts 
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="alertsDropdown">
                                 <h6 class="dropdown-header">
@@ -153,7 +154,7 @@
                                 </a>
                                 <a class="dropdown-item text-center small text-gray-500" href="#">Afficher tout</a>
                             </div>
-                        </li>
+                        </li>-->
 
                         <div class="topbar-divider d-none d-sm-block"></div>
                         <!-- Nav Item - User Information -->
@@ -240,6 +241,7 @@
     <!-- Page level custom scripts -->
     <script src="{{ asset('start/js/demo/chart-area-demo.js') }}"></script>
     <script src="{{ asset('start/js/demo/chart-pie-demo.js') }}"></script>
+    <script src="{{asset('https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js')}}"></script>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
