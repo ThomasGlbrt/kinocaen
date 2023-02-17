@@ -53,7 +53,7 @@ class InscritType extends AbstractType
             ->add('Session', SessionType::class)
             ->add('Competences', EntityType::class, [
                 'class' => TypeCompetences::class,
-                'label' => false,
+                'label' => 'J\'ai les compétences pour :',
                 'multiple' => true,
                 'expanded' => false,
                 'choice_label' => 'intitule',
@@ -62,7 +62,7 @@ class InscritType extends AbstractType
 
             ->add('Essai', EntityType::class, [
                 'class' => TypeCompetences::class,
-                'label' => false,
+                'label' => 'J\'aimerais essayer :',
                 'multiple' => true,
                 'expanded' => false,
                 'choice_label' => 'intitule',

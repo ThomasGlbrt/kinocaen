@@ -19,7 +19,7 @@ class SessionType extends AbstractType
             'multiple' => true,
             'expanded' => true,
             'choices' => [
-                'Session 1 - 11 au 12 mai ' => 1,
+                'Session 1 - 12 mai ' => 1,
                 'Session 2 - 13 au 15 mai ' => 2,
                 'Session 3 - 16 au 18 mai ' => 3,
             ],
@@ -29,7 +29,7 @@ class SessionType extends AbstractType
         ])
         
         
-        ->add('porterProjet', ChoiceType::class, [ 
+        ->add('porteurProjet', ChoiceType::class, [ 
             'label' => "Es tu porteur de projet ?",
             'placeholder' => '--',
             'mapped' => false,

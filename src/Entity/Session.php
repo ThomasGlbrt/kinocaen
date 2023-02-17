@@ -6,6 +6,7 @@ use App\Repository\SessionRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SessionRepository::class)]
+
 class Session
 {
     #[ORM\Id]
@@ -15,6 +16,9 @@ class Session
 
     #[ORM\Column]
     private ?string $intitule = null;
+
+    #[ORM\ManyToMany(targetEntity: Inscrit::class, mappedBy: 'Session')]
+    private Collection $inscrits;
 
     public function getId(): ?int
     {
@@ -28,14 +32,37 @@ class Session
 
     public function setIntitule($intitule)
     {
-    if (is_array($intitule)) {
-        $this->intitule = implode(',', $intitule);
-    } else {
+
         $this->intitule = $intitule;
+
+        return $this;
     }
 
-    return $this;
-}
+    /**
+     * @return Collection<int, Inscrit>
+     */
+    public function getInscrits(): Collection
+    {
+        return $this->inscrits;
+    }
 
+    public function addInscrit(Inscrit $inscrit): self
+    {
+        if (!$this->inscrits->contains($inscrit)) {
+            $this->inscrits->add($inscrit);
+            $inscrit->addCompetence($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInscrit(Inscrit $inscrit): self
+    {
+        if ($this->inscrits->removeElement($inscrit)) {
+            $inscrit->removeCompetence($this);
+        }
+
+        return $this;
+    }
 
 }

@@ -33,14 +33,18 @@ class InscritController extends AbstractController
         ]);
     }
 
-    public function register(ManagerRegistry $doctrine,Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
-    {
+    public function register(
+        ManagerRegistry $doctrine,
+        Request $request,
+        UserPasswordHasherInterface $userPasswordHasher,
+        EntityManagerInterface $entityManager
+    ): Response {
         $user = new Inscrit();
         $logement = new Logement();
         $competences = $doctrine->getRepository(TypeCompetences::class)->findAll();
         $form = $this->createForm(InscritType::class, $user);
         $form->handleRequest($request);
-
+    
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
             $user->setPassword(
@@ -49,42 +53,47 @@ class InscritController extends AbstractController
                     $form->get('plainPassword')->getData()
                 )
             );
-
+    
+            // Add user to sessions
+            $sessions = $form->get('Session')->getData();
+            
+            $sessionPorteurProjet = $form->get('Session2')->getData();
+            $sessionPorteurProjet2 = $form->get('Session3')->getData();
+            print_r($sessions.$sessionPorteurProjet.$sessionPorteurProjet2);
+            $user->addSessions($sessions);
+    
             $file = $form->get('image')->getData();
             $nom = $form->get('nom')->getData();
             $prenom = $form->get('prenom')->getData();
             if ($file) {
-                if ($file->guessExtension() == 'png' || $file->guessExtension() == 'jpg')
-                    $fileName = $fileUploader->FileUploader($file,$nom.$prenom.'.'.$file->guessExtension());
-                else {
-                    $fileName = $fileUploader->FileUploader($file,$nom.$prenom.'.'.'png');
+                if ($file->guessExtension() == 'png' || $file->guessExtension() == 'jpg') {
+                    $fileName = $fileUploader->FileUploader($file, $nom.$prenom.'.'.$file->guessExtension());
+                } else {
+                    $fileName = $fileUploader->FileUploader($file, $nom.$prenom.'.'.'png');
                 }
                 $image = new Imagick($filename);
                 $image->resizeImage(1080, 1350, Imagick::FILTER_LANCZOS, 1);
                 $inscrit->setImage($image);
-            }else{
+            } else {
                 $inscrit->setImage($imageActuelle);
             }
-
+    
             $essai = $form->get('Essai')->getData();
             $inscrit->setTypeCompetence()->setEssai($essai);
-
+    
             $logement->setLogement($form->get('logement')->getData());
-            $session = new Session();
-            $session->setPorterProjet($form->get('porterProjet')->getData());
             $entityManager->persist($logement);
-            $entityManager->persist($session);
             $entityManager->persist($user);
             $entityManager->flush();
-            // do anything else you need here, like send an email
-
+    
             return $this->redirectToRoute('last_page');
         }
-
+    
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
         ]);
     }
+    
 
     public function consulterInscrit(ManagerRegistry $doctrine, int $id){
 
