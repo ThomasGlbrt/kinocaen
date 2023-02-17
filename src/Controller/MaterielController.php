@@ -10,6 +10,7 @@ use App\Entity\Materiel;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Form\MaterielType;
 use App\Form\MaterielModifierType;
+use App\Entity\Categorie;
 
 class MaterielController extends AbstractController
 {
@@ -37,37 +38,54 @@ class MaterielController extends AbstractController
 	}
 
 
-    public function listerMateriel(ManagerRegistry $doctrine){
+    public function listerMateriel(ManagerRegistry $doctrine)
+{
+    $repository = $doctrine->getRepository(Materiel::class);
+    $materiels = $repository->findAll();
+    $categorieMateriels = [];
 
-        $repository = $doctrine->getRepository(Materiel::class);
-
-        $materiel= $repository->findAll();
-        return $this->render('materiel/lister.html.twig', [
-    'pMateriels' => $materiel,]);	
-    
+    foreach ($materiels as $materiel) {
+        $categorie = $materiel->getCategorie()->getLibelle();
+        if (!array_key_exists($categorie, $categorieMateriels)) {
+            $categorieMateriels[$categorie] = [];
+        }
+        $categorieMateriels[$categorie][] = $materiel;
     }
 
+    return $this->render('materiel/lister.html.twig', [
+        'categorieMateriels' => $categorieMateriels,
+    ]);
+}
+
+
+
     
-    public function ajouterMateriel(ManagerRegistry $doctrine,Request $request){
-        $materiel = new materiel();
-	$form = $this->createForm(MaterielType::class, $materiel);
-	$form->handleRequest($request);
- 
-	if ($form->isSubmitted() && $form->isValid()) {
- 
-            $materiel = $form->getData();
- 
-            $entityManager = $doctrine->getManager();
-            $entityManager->persist($materiel);
-            $entityManager->flush();
- 
-	    return $this->render('materiel/consulter.html.twig', ['materiel' => $materiel,]);
-	}
-	else
-        {
-            return $this->render('materiel/ajouter.html.twig', array('form' => $form->createView(),));
-	    }
+public function ajouterMateriel(Request $request, FileUploader $fileUploader)
+{
+    $materiel = new Materiel();
+    $form = $this->createForm(MaterielType::class, $materiel);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        // Gérer l'upload de l'image
+        $imageFile = $form->get('imageFile')->getData();
+
+        if ($imageFile) {
+            $imageFileName = $fileUploader->upload($imageFile);
+            $materiel->setImage($imageFileName);
+        }
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($materiel);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('materielLister');
     }
+
+    return $this->render('materiel/ajouter.html.twig', [
+        'form' => $form->createView(),
+    ]);
+}
 
 
     public function modifierMateriel(ManagerRegistry $doctrine, $id, Request $request){

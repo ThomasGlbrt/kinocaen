@@ -11,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class MaterielType extends AbstractType
 {
@@ -18,9 +19,8 @@ class MaterielType extends AbstractType
     {
         $builder
             ->add('intitule', TextType::class)
-            ->add('description', TextType::class, ['required' => false])
-            
-	    ->add('enregistrer', SubmitType::class, array('label' => 'Enregistrer'))
+            ->add('description', TextareaType::class, ['required' => false])
+            ->add('categorie', EntityType::class, array('class' => 'App\Entity\Categorie','choice_label' => 'libelle' ))
         ;
     }
 

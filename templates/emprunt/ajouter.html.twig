@@ -3,22 +3,66 @@
 {% block title %}Emprunter un matériel{% endblock %}
 
 {% block contenu %}
-    <h4>Emprunter un matériel</h4>
-    </br>
-    {# templates/emprunt/ajouter.html.twig #}
-    {{ form_start(form) }}
-    <div class="col-sm-6 mb-3 mb-sm-0">
-        {{ form_widget(form.dateDebut, {'attr': {'class': 'form-control', 'placeholder': ' Date de Début'}}) }}
-    </div></br>
-    <div class="col-sm-6 mb-3 mb-sm-0">
-        {{ form_widget(form.dateFin, {'attr': {'class': 'form-control', 'placeholder': ' Date de Fin'}}) }}
-    </div></br>
-    <div class="col-sm-6 mb-3 mb-sm-0">
-        {{ form_widget(form.materiel, {'attr': {'class': 'form-control'}}) }}
-    </div></br>
-    <div class="col-sm-6 mb-3 mb-sm-0">
-        {{ form_widget(form.inscrit, {'attr': {'class': 'form-control', 'value': app.user.inscrit.id }}) }}
-    </div></br>
-    <button type="submit" class="btn btn-primary">Enregistrer</button>
-    {{ form_end(form) }}
+    <div class="row">
+        <!-- Section pour la saisie des informations sur l'emprunt -->
+        <div class="col-sm-8">
+            <h4>Emprunter un matériel</h4>
+            </br>
+            {{ form_start(form) }} <!-- Début de la construction du formulaire -->
+
+            <!-- Champs pour la date de début de l'emprunt -->
+            <div class="col-sm-6 mb-3 mb-sm-0">
+                {{ form_widget(form.dateDebut, {'attr': {'class': 'form-control', 'placeholder': ' Date de Début'}}) }}
+            </div></br>
+
+            <!-- Champs pour la date de fin de l'emprunt -->
+            <div class="col-sm-6 mb-3 mb-sm-0">
+                {{ form_widget(form.dateFin, {'attr': {'class': 'form-control', 'placeholder': ' Date de Fin'}}) }}
+            </div></br>
+
+            <!-- Champ pour le matériel à emprunter -->
+            <div class="col-sm-6 mb-3 mb-sm-0">
+                {{ form_widget(form.materiel, {'attr': {'class': 'form-control'}}) }}
+            </div></br>
+
+            <!-- Champ pour l'inscrit effectuant l'emprunt -->
+            <div class="col-sm-6 mb-3 mb-sm-0">
+                {{ form_widget(form.inscrit, {'attr': {'class': 'form-control', 'value': app.user.inscrit.id }}) }}
+            </div></br>
+
+            <!-- Bouton pour enregistrer l'emprunt -->
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+            {{ form_end(form) }} <!-- Fin de la construction du formulaire -->
+        </div>
+
+        <!-- Section pour l'affichage des informations sur les emprunts -->
+        <div>
+            <!-- Vérification si il y a des emprunts enregistrés -->
+            {% if empruntExists %}
+            <table class="table">
+                <thead>
+                  <!-- Entête de la table avec les colonnes suivantes -->
+                  <tr>
+                    <th>Date de Début</th>
+                    <th>Date de Fin</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Boucle pour afficher les informations sur chaque emprunt -->
+                  {% for e in pEmprunts %}
+                    <tr>
+                      <!-- Affichage de la date de début de l'emprunt formatée -->
+                      <td>{{ e.dateDebut|date('d/m H:i') }}</td>
+                      <!-- Affichage de la date de fin de l'emprunt formatée -->
+                      <td>{{ e.dateFin|date('d/m H:i') }}</td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+                </table>
+            {% else %}
+            <!-- Message s'il n'y a aucun emprunt en cours -->
+              <p>Aucun emprunt en cours</p>
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}
