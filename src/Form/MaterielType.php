@@ -20,6 +20,7 @@ class MaterielType extends AbstractType
         $builder
             ->add('intitule', TextType::class)
             ->add('description', TextareaType::class, ['required' => false])
+            ->add('categorie', EntityType::class, array('class' => 'App\Entity\Categorie','choice_label' => 'libelle' ))
         ;
     }
 

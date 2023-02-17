@@ -25,17 +25,8 @@ class Inscrit
     #[ORM\OneToOne(mappedBy: 'inscrit', cascade: ['persist', 'remove'])]
     private ?Utilisateur $utilisateurs = null;
 
-    #[ORM\Column(length: 40, nullable: true)]
-    private ?string $poste = null;
-
     #[ORM\Column(nullable: true)]
     private ?int $numTel = null;
-
-    #[ORM\Column(length: 100, nullable: true)]
-    private ?string $Talent = null;
-
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $ChosePlus = null;
 
     #[ORM\Column(length: 250, nullable: true)]
     private ?string $image = null;
@@ -108,18 +99,6 @@ class Inscrit
         return $this;
     }
 
-    public function getPoste(): ?string
-    {
-        return $this->poste;
-    }
-
-    public function setPoste(?string $poste): self
-    {
-        $this->poste = $poste;
-
-        return $this;
-    }
-
     public function getNumTel(): ?int
     {
         return $this->numTel;
@@ -131,31 +110,6 @@ class Inscrit
 
         return $this;
     }
-
-    public function getTalent(): ?string
-    {
-        return $this->Talent;
-    }
-
-    public function setTalent(?string $Talent): self
-    {
-        $this->Talent = $Talent;
-
-        return $this;
-    }
-
-    public function getChosePlus(): ?string
-    {
-        return $this->ChosePlus;
-    }
-
-    public function setChosePlus(?string $ChosePlus): self
-    {
-        $this->ChosePlus = $ChosePlus;
-
-        return $this;
-    }
-
 
     public function getImage(): ?string
     {

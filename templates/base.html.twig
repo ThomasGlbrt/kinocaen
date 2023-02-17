@@ -57,8 +57,7 @@
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        {% if is_granted('ROLE_ADMIN') %} 
-                        <a class="collapse-item" href="{{ path('materielAjouter') }}">Ajouter</a>
+                        {% if is_granted('ROLE_ADMIN') %}
                         <a class="collapse-item" href="{{ path('empruntLister') }}">Voir les emprunts</a>
                         {% endif %}
                         <a class="collapse-item" href="{{ path('materielLister') }}">Liste du matériel</a>
