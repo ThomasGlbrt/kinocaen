@@ -7,6 +7,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Session;
+
+
 
 #[ORM\Entity(repositoryClass: InscritRepository::class)]
 class Inscrit
@@ -25,29 +28,14 @@ class Inscrit
     #[ORM\OneToOne(mappedBy: 'inscrit', cascade: ['persist', 'remove'])]
     private ?Utilisateur $utilisateurs = null;
 
-    #[ORM\Column(length: 40, nullable: true)]
-    private ?string $poste = null;
-
     #[ORM\Column(nullable: true)]
     private ?int $numTel = null;
-
-    #[ORM\Column(length: 100, nullable: true)]
-    private ?string $Talent = null;
-
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $ChosePlus = null;
 
     #[ORM\Column(length: 250, nullable: true)]
     private ?string $image = null;
 
-    #[ORM\ManyToMany(targetEntity: metier::class, inversedBy: 'inscrits')]
-    private Collection $metier;
-
     #[ORM\OneToMany(mappedBy: 'inscrit', targetEntity: Emprunt::class)]
     private Collection $emprunt;
-
-    #[ORM\ManyToOne(inversedBy: 'inscritId')]
-    private ?typePaiement $Paiement = null;
 
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $facebook = null;
@@ -143,18 +131,6 @@ class Inscrit
         return $this;
     }
 
-    public function getPoste(): ?string
-    {
-        return $this->poste;
-    }
-
-    public function setPoste(?string $poste): self
-    {
-        $this->poste = $poste;
-
-        return $this;
-    }
-
     public function getNumTel(): ?int
     {
         return $this->numTel;
@@ -167,31 +143,6 @@ class Inscrit
         return $this;
     }
 
-    public function getTalent(): ?string
-    {
-        return $this->Talent;
-    }
-
-    public function setTalent(?string $Talent): self
-    {
-        $this->Talent = $Talent;
-
-        return $this;
-    }
-
-    public function getChosePlus(): ?string
-    {
-        return $this->ChosePlus;
-    }
-
-    public function setChosePlus(?string $ChosePlus): self
-    {
-        $this->ChosePlus = $ChosePlus;
-
-        return $this;
-    }
-
-
     public function getImage(): ?string
     {
         return $this->image;
@@ -203,28 +154,6 @@ class Inscrit
 
 
         return $this;
-    }
-
-    public function getMetier(): Collection
-    {
-        return $this->metier;
-    }
-
-    public function addMetier(metier $metier): self
-    {
-        if (!$this->metier->contains($metier)) {
-            $this->metier->add($metier);
-        }
-
-        return $this;
-    }
-
-    public function removeMetier(metier $metier): self
-    {
-        $this->metier->removeElement($metier);
-
-        return $this;
-
     }
 
     /**
@@ -253,18 +182,6 @@ class Inscrit
                 $emprunt->setInscrit(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getPaiement(): ?typePaiement
-    {
-        return $this->Paiement;
-    }
-
-    public function setPaiement(?typePaiement $Paiement): self
-    {
-        $this->Paiement = $Paiement;
 
         return $this;
     }
@@ -412,4 +329,6 @@ class Inscrit
 
         return $this;
     }
+
+
 }
