@@ -1,78 +1,89 @@
 {% extends 'base.html.twig' %}
 {% block title %}Liste des Emprunts{% endblock %}
 
+{% set selectedMaterialId = 1 %}
+
 {% block contenu %}
-
+<!-- Ajouter une barre de recherche pour trouver des emprunts -->
 <div class="input-group">
-    <div class="form-outline">
-      <input type="search-input" id="searchInput" class="form-control" placeholder="Rechercher un nom ou un matériel" />
-    </div>&nbsp;&nbsp;
-    {% if is_granted ('ROLE_ADMIN') %}
-    <a href="{{ path('empruntAjouter') }}">
-        <button class="btn btn-primary">Nouvel Emprunt</button></a>
-    {% endif %}
-  </div>
-    <div>
-        <br>LISTE DES EMPRUNTS</br>
-        <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">Participant</th>
-                <th scope="col">Date de Début</th>
-                <th scope="col">Date de Fin</th>
-                <th scope="col">Matériel</th>
-                <th scope="col"></th>
-              </tr>
-            </thead>
-            <tbody>
-            {% for e in pEmprunts %}
-              <tr class="emprunt-row">
-                <td>{{ e.inscrit.prenom }} {{ e.inscrit.nom | upper }}</td>
-                <td>{{ e.dateDebut|date('d/m H:i') }}</td>
-                <td>{{ e.dateFin|date('d/m H:i') }}</td>
-                <td>{{ e.materiel.intitule }}</td>
-                <td>{% if is_granted ('ROLE_ADMIN') %}
-                    <a href="{{ path('empruntModifier',{ 'id': e.id }) }}">
-                        <button type="button" class="btn btn-warning">Modifier</button>
-                    </a>
-                <td>
-                    <a href="{{ path('empruntSupprimer', { 'id': e.id }) }}">
-                        <button type="button" class="btn btn-danger">Supprimer</button>
-                    </a>
-                </td>
-                    {% endif %}
-              </tr>
-            {% else %}
-              <tr>
-                <td>Aucun emprunt en cours.</td>
-              </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
+  <div class="form-outline">
+    <input type="search-input" id="searchInput" class="form-control" placeholder="Rechercher un nom ou un matériel">
+  </div>&nbsp;&nbsp;
+  <!-- Si l'utilisateur est un administrateur, ajouter un bouton pour ajouter un nouvel emprunt -->
+  {% if is_granted ('ROLE_ADMIN') %}
+    <a href="{{ path('adminEmprunt') }}" class="btn btn-primary">Nouvel Emprunt</a>
+  {% endif %}
+</div>
 
-    <script>
-        document.getElementById("searchInput").addEventListener("keyup", function(){
-            filterResults();
-        });
-        
-        function filterResults() {
-            var input = document.getElementById("searchInput").value.toLowerCase();
-            var rows = document.getElementsByClassName("emprunt-row");
-            for (var i = 0; i < rows.length; i++) {
-                var row = rows[i];
-                var name = row.getElementsByTagName("td")[0].innerHTML.toLowerCase();
-                var material = row.getElementsByTagName("td")[3].innerHTML.toLowerCase();
-                var dateStart = row.getElementsByTagName("td")[1].innerHTML.toLowerCase();
-                var dateEnd = row.getElementsByTagName("td")[2].innerHTML.toLowerCase();
-                if (name.indexOf(input) > -1 || material.indexOf(input) > -1 || dateStart.indexOf(input) > -1 || dateEnd.indexOf(input) > -1) {
-                    row.style.display = "table-row";
-                } else {
-                    row.style.display = "none";
-                }
-            }
-        }
-    </script>
-    
+<!-- Affichage de la liste des emprunts -->
+<div>
+  <br><h4>LISTE DES EMPRUNTS</h4></br>
+  <table class="table">
+    <!-- En-tête de la table -->
+    <thead>
+      <tr>
+        <th scope="col">Participant</th>
+        <th scope="col">Date de Début</th>
+        <th scope="col">Date de Fin</th>
+        <th scope="col">Matériel</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <!-- Corps de la table -->
+    <tbody id="empruntsTable">
+      <!-- Boucle pour afficher les informations sur chaque emprunt -->
+      {% for e in pEmprunts %}
+        <tr class="emprunt-row">
+          <td>{{ e.inscrit.prenom }} {{ e.inscrit.nom | upper }}</td>
+          <td>{{ e.dateDebut|date('d/m H:i') }}</td>
+          <td>{{ e.dateFin|date('d/m H:i') }}</td>
+          <td>{{ e.materiel.intitule }}</td>
+          <!-- Si l'utilisateur est un administrateur, ajouter des boutons pour modifier et supprimer un emprunt -->
+          <td>
+            {% if is_granted ('ROLE_ADMIN') %}
+              <!-- Ce bouton permet de rediriger l'utilisateur vers la page de modification d'un emprunt -->
+              <a href="{{ path('empruntModifier',{ 'id': e.id}) }}" class="btn btn-sm btn-warning">Modifier</a>
+              <!-- Ce bouton permet de rediriger l'utilisateur vers la page de suppression d'un emprunt -->
+              <a href="{{ path('empruntSupprimer',{ 'id': e.id}) }}" class="btn btn-sm btn-danger" onclick="return confirm('Êtes-vous sur de vouloir supprimer cet Emprunt ?')">Supprimer</a>
+            {% endif %}
+            <!-- Fin de la condition qui vérifie si l'utilisateur actuel a le rôle d'administrateur -->
+          </td>
+        </tr>
+      {% endfor %}
+      <!-- Boucle qui affiche les emprunts dans un tableau -->
+    </tbody>
+  </table>
+  <!-- Fin du tableau des emprunts -->
+</div>
+<script>
+  // Ajout d'un écouteur d'événement "keyup" sur l'input de recherche
+  document.getElementById("searchInput").addEventListener("keyup", function() {
+  filterResults();
+});
 
+// Fonction qui filtre les résultats en fonction de la valeur entrée dans l'input de recherche
+function filterResults() {
+  // Récupération de la valeur entrée dans l'input de recherche en minuscules
+  var input = document.getElementById("searchInput").value.toLowerCase();
+  // Récupération de toutes les lignes du tableau d'emprunts
+  var tableRows = document.getElementById("empruntsTable").getElementsByTagName("tr");
+  
+  // Boucle qui parcourt toutes les lignes du tableau
+  for (var i = 0; i < tableRows.length; i++) {
+    var tableRow = tableRows[i];
+    // Récupération de toutes les cellules de la ligne actuelle
+    var cells = tableRow.getElementsByTagName("td");
+    // Récupération du contenu des cellules "participant" et "matériel" en minuscules
+    var participant = cells[0].textContent.toLowerCase();
+    var materiel = cells[3].textContent.toLowerCase();
+    // Vérification si la valeur entrée dans l'input est présente dans le nom du participant ou du matériel
+    if (participant.indexOf(input) > -1 || materiel.indexOf(input) > -1) {
+      // Affichage de la ligne si la valeur est trouvée
+      tableRow.style.display = "table-row";
+    } else {
+      tableRow.style.display = "none";
+    }
+  }
+}
+</script>
 {% endblock %}

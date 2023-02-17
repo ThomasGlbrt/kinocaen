@@ -1,58 +1,65 @@
 {% extends 'base.html.twig' %}
 {% block title %}Liste du Matériel{% endblock %}
 {% block contenu %}
-
-<h5>LISTE DU MATERIEL</h5></br>
-
-<div class="input-group">
-    <div class="form-outline">
-      <input type="search-input" id="searchInput" class="form-control" />
+    <h5>LISTE DU MATERIEL</h5></br>
+    
+    <div class="input-group">
+        <div class="form-outline">
+          <input type="search-input" id="searchInput" class="form-control" />
+        </div>
+        <button type="button" class="btn btn-primary">
+          <i class="fas fa-search"></i>
+        </button>&nbsp;&nbsp;
+        {% if is_granted ('ROLE_ADMIN') %}
+        <a href="{{ path('materielAjouter') }}" class="btn btn-primary">Nouveau Matériel</a>
+        {% endif %}
     </div>
-    <button type="button" class="btn btn-primary">
-      <i class="fas fa-search"></i>
-    </button>
-  </div>
+    
+    {% for category, materiels in categorieMateriels %}
+        <br><h5>{{ category }}</h5>
+        <div class="row">
+            {% for e in materiels %}
+                <div class="col-md-4" id="{{ e.id }}">
+                    <div class="card mt-4 " style="height:90%;">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ e.intitule }}</h5>
+                            {% if e.description != '' %}
+                                <div class="card-text">
+                                    {{ e.description[:60] }}...
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="card-footer">
+                            <a href="{{ path('materielConsulter', { 'id': e.id }) }}">
+                                <button type="button" class="btn btn-primary">
+                                    Voir plus
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+    
+    <script>
+        document.getElementById("searchInput").addEventListener("keyup", function(){
+            filterResults();
+        });
 
-<div class="row">
-    {% for e in pMateriels %}
-    <div class="col-md-4" id="{{ e.id }}">
-        <div class="card mt-4 " style="height:90%;">
-            <div class="card-body">
-                <h5 class="card-title">{{e.intitule }}</h5>
-                {% if e.description != '' %}
-                <div class="card-text">
-                {{ e.description[:60] }}...
-                </div>
-                {% else %}{% endif %}
-                </div>
-                <div class="card-footer">
-                <a href="{{ path('materielConsulter', { 'id': e.id }) }}"><button type="button" class="btn btn-primary">
-                Voir plus
-                </button></a>
-                </div>
-                </div>
-                </div>
-                {% endfor %}
-                
-                </div>
-                <script>
-                document.getElementById("searchInput").addEventListener("keyup", function(){
-                    filterResults();
-                });
-                
-                function filterResults() {
-    var input = document.getElementById("searchInput").value.toLowerCase();
-    var cards = document.getElementsByClassName("col-md-4");
-    for (var i = 0; i < cards.length; i++) {
-        var card = cards[i];
-        var title = card.getElementsByClassName("card-title")[0].innerHTML.toLowerCase();
-        var description = card.getElementsByClassName("card-text")[0].innerHTML.toLowerCase();
-        if (title.indexOf(input) > -1 || description.indexOf(input) > -1) {
-            card.style.display = "block";
-        } else {
-            card.style.display = "none";
+        function filterResults() {
+            var input = document.getElementById("searchInput").value.toLowerCase();
+            var cards = document.getElementsByClassName("col-md-4");
+            for (var i = 0; i < cards.length; i++) {
+                var card = cards[i];
+                var title = card.getElementsByClassName("card-title")[0].innerHTML.toLowerCase();
+                var description = card.getElementsByClassName("card-text")[0].innerHTML.toLowerCase();
+                if (title.indexOf(input) > -1 || description.indexOf(input) > -1) {
+                    card.style.display = "block";
+                } else {
+                    card.style.display = "none";
+                }
+            }
         }
-    }
-}
-                </script>
-                {% endblock %}
+    </script>
+{% endblock %}

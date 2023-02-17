@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block contenu %}
+    <!-- Contenu de la page -->
+    <div>
+        <h5>Mes emprunts en cours</h5>
+        <p>
+            <!-- Tableau des emprunts en cours -->
+            <table class="table">
+                {% for e in pEmprunts %}
+                <!-- En-tête de la table -->
+                <thead>
+                    <tr>
+                        <th scope="col">Date de Début</th>
+                        <th scope="col">Date de Fin</th>
+                        <th scope="col">Matériel</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Ligne pour chaque emprunt -->
+                    <tr>
+                        <td>{{ e.dateDebut|date('d/m/Y H:i') }}&nbsp;&nbsp;</td>
+                        <td>{{ e.dateFin|date('d/m/Y H:i') }}&nbsp;&nbsp;</td>
+                        <td>{{ e.materiel.intitule }}</td>
+                    </tr>
+                </tbody>
+                {% endfor %}
+                <!-- Fin du tableau des emprunts -->
+            </table></br>
+            <!-- Bouton pour fermer la page -->
+            <a href="{{ path('accueil') }}"><button class="btn btn-primary">Fermer</button></a>&nbsp;&nbsp;
+        </p>
+    </div>
+{% endblock %}

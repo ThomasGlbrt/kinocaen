@@ -58,7 +58,7 @@ empruntLister:
     controller: App\Controller\EmpruntController::listerEmprunt
 
 empruntAjouter:
-    path: /emprunt/ajouter/
+    path: /emprunt/ajouter/{id}
     controller: App\Controller\EmpruntController::ajouterEmprunt
 
 empruntModifier:
@@ -68,6 +68,14 @@ empruntModifier:
 empruntSupprimer:
     path: /emprunt/supprimer/{id}
     controller: App\Controller\EmpruntController::supprimerEmprunt
+
+adminEmprunt:
+    path: /emprunt/ajouter/
+    controller: App\Controller\EmpruntController::adminEmprunt
+
+empruntConsulterPerso:
+    path: /emprunt/consulterPerso/{id}
+    controller: App\Controller\EmpruntController::consulterEmpruntsPerso
 
 
 #Inscrit

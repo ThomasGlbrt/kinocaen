@@ -23,7 +23,7 @@
                 <button type="button" class="btn btn-warning">Modifier</button>
             </a>
             <a href="{{ path('empruntSupprimer', { 'id': emprunt.id }) }}">
-                <button type="button" class="btn btn-danger">Supprimer</button>
+                <button type="button" class="btn btn-danger" onclick="return confirm('Êtes-vous sur de vouloir supprimer cet Emprunt ?')">Supprimer</button>
             </a>
             {% endif %}
         </p>

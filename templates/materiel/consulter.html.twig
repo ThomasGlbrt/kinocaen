@@ -15,12 +15,14 @@
         </table></br>
             <a href="{{ path('materielLister') }}">
                 <button class="btn btn-primary">Fermer</button></a>&nbsp;&nbsp;
+            <a href="{{ path('empruntAjouter', { 'id': materiel.id }) }}">
+                <button class="btn btn-primary">Emprunter</button></a>
             {% if is_granted ('ROLE_ADMIN') %}
             <a href="{{ path('materielModifier',{ 'id': materiel.id }) }}">
                 <button type="button" class="btn btn-warning">Modifier</button>
             </a>
             <a href="{{ path('materielSupprimer', { 'id': materiel.id }) }}">
-                <button type="button" class="btn btn-danger">Supprimer</button>
+                <button type="button" class="btn btn-danger" onclick="return confirm('Êtes-vous sur de vouloir supprimer ce matériel ?')">Supprimer</button>
             </a>
             {% endif %}
 {% endblock %}

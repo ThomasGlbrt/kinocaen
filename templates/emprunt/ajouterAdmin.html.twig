@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Emprunter un matériel{% endblock %}
+
+{% block contenu %}
+    <div class="row">
+        <div class="col-sm-8">
+            <!-- Affichage du titre de la page -->
+            <h4>Emprunter un matériel</h4>
+            </br>
+
+            <!-- Début du formulaire -->
+            {{ form_start(form) }}
+
+            <!-- Affichage du champ pour la date de début -->
+            <div class="col-sm-6 mb-3 mb-sm-0">
+                {{ form_widget(form.dateDebut, {'attr': {'class': 'form-control', 'placeholder': ' Date de Début'}}) }}
+            </div></br>
+
+            <!-- Affichage du champ pour la date de fin -->
+            <div class="col-sm-6 mb-3 mb-sm-0">
+                {{ form_widget(form.dateFin, {'attr': {'class': 'form-control', 'placeholder': ' Date de Fin'}}) }}
+            </div></br>
+
+            <!-- Affichage du champ pour le matériel à emprunter -->
+            <div class="col-sm-6 mb-3 mb-sm-0">
+                {{ form_widget(form.materiel, {'attr': {'class': 'form-control'}}) }}
+            </div></br>
+
+            <!-- Affichage du champ pour l'utilisateur inscrit -->
+            <div class="col-sm-6 mb-3 mb-sm-0">
+                {{ form_widget(form.inscrit, {'attr': {'class': 'form-control', 'value': app.user.inscrit.id }}) }}
+            </div></br>
+
+            <!-- Bouton pour soumettre le formulaire -->
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+
+            <!-- Fin du formulaire -->
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}
