@@ -25,10 +25,15 @@ security:
                 path: logout
 
     access_control:
-        - { path: ^/admin, roles: ROLE_ADMIN }
-        - { path: ^/profil, roles: ROLE_USER }
+        #- { path: ^/inscription, roles: PUBLIC_ACCESS }
+        #- { path: ^/connexion, roles: PUBLIC_ACCESS }
+        #- { path: ^/, roles: ROLE_USER }
+        #- { path: ^/^/modifier, roles: ROLE_ADMIN }
+        #- { path: ^/^/ajouter, roles: ROLE_ADMIN }
+        
 
     role_hierarchy:
+        ROLE_USER:        PUBLIC_ACCESS
         ROLE_MAG_ADMIN:   ROLE_USER
         ROLE_LAB_ADMIN:   ROLE_USER
         ROLE_ADMIN:       [ROLE_USER, ROLE_MAG_ADMIN, ROLE_LAB_ADMIN]

@@ -4,3 +4,11 @@ twig:
 when@test:
     twig:
         strict_variables: true
+
+easy_admin:
+    entities:
+        Inscrit:
+            class: App\Entity\Inscrit
+            form:
+                fields:
+                    - { property: 'Competences', type: 'easyadmin_autocomplete', multiple: true, class: App\Entity\TypeCompetences, choice_label: 'intitule' }

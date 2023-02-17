@@ -2,44 +2,38 @@
 
 namespace App\Entity;
 
-use App\Repository\MetierRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-
+use App\Repository\SessionRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: MetierRepository::class)]
-class Metier
+#[ORM\Entity(repositoryClass: SessionRepository::class)]
+
+class Session
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 50)]
-    private ?string $nom = null;
+    #[ORM\Column]
+    private ?string $intitule = null;
 
-    #[ORM\ManyToMany(targetEntity: Inscrit::class, mappedBy: 'metier')]
+    #[ORM\ManyToMany(targetEntity: Inscrit::class, mappedBy: 'Session')]
     private Collection $inscrits;
-
-    public function __construct()
-    {
-        $this->inscrits = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getNom(): ?string
+    public function getIntitule(): ?string
     {
-        return $this->nom;
+        return $this->intitule;
     }
 
-    public function setNom(string $nom): self
+    public function setIntitule($intitule)
     {
-        $this->nom = $nom;
+
+        $this->intitule = $intitule;
 
         return $this;
     }
@@ -56,7 +50,7 @@ class Metier
     {
         if (!$this->inscrits->contains($inscrit)) {
             $this->inscrits->add($inscrit);
-            $inscrit->addMetier($this);
+            $inscrit->addCompetence($this);
         }
 
         return $this;
@@ -65,7 +59,7 @@ class Metier
     public function removeInscrit(Inscrit $inscrit): self
     {
         if ($this->inscrits->removeElement($inscrit)) {
-            $inscrit->removeMetier($this);
+            $inscrit->removeCompetence($this);
         }
 
         return $this;
