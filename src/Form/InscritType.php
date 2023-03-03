@@ -14,6 +14,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\RadioType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 
 class InscritType extends AbstractType
@@ -23,7 +24,7 @@ class InscritType extends AbstractType
         $builder
             ->add('nom', TextType::class, ['label' => false])
             ->add('prenom', TextType::class, [ 'label' => false])
-            ->add('numTel', TextType::class, [ 'label' => false])
+            ->add('numTel', TextType::class, [ 'label' => false, 'attr' => ['maxlength' =>10 ]])
             ->add('facebook', TextType::class, [ 'label' => false ,'required' => false])
             ->add('Pays', TextType::class, [ 'label' => false])
             ->add('Ville', TextType::class, [ 'label' => false])
@@ -36,7 +37,7 @@ class InscritType extends AbstractType
                 'expanded' => true,
                 'multiple' => false,
                 'required' => true,
-                'data' => 0, // La valeur par défaut est 0 pour "Non"
+                'data' => 0,
             ])
             
             ->add('image', FileType::class, [
@@ -69,7 +70,7 @@ class InscritType extends AbstractType
                 'mapped' => false,
                 'attr' => ['class' => 'essais']
             ])             
-            ->add('MatosDispo', TextType::class, ['label' => false])
+            ->add('MatosDispo', TextareaType::class, ['label' => false])
             ->add('Permis', ChoiceType::class,[ 
                 'label' => "Avez vous le premis ?",
                 'attr' => ['class' => 'permis'],
@@ -78,22 +79,17 @@ class InscritType extends AbstractType
                        'Oui' => 1,
                        'Non' => 0,
                    ],])
-            ->add('Vehicule', ChoiceType::class,[ 
-                'label' => "Avez vous un vehicule ?",
-                'required' => false,
-                'placeholder' => '--',
-                'choices'  => [
-                       'Oui' => 1,
-                       'Non' => 0,
-                   ],])
+            ->add('Vehicule', VehiculeType::class)
             ->add('Session2', CheckboxType::class, [
                     'label' =>'Session 2',
                     'required' => false,
+                    'mapped' => false,
                     'value' => 1
                 ])
             ->add('Session3', CheckboxType::class, [
                     'label' => 'Session 3',
                     'required' => false,
+                    'mapped' => false,
                     'value' => 2
                 ])
             ->add('agreeTerm', CheckboxType::class, [
