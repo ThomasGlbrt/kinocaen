@@ -11,6 +11,8 @@ use Doctrine\Persistence\ManagerRegistry;
 use App\Form\MaterielType;
 use App\Form\MaterielModifierType;
 use App\Entity\Categorie;
+use App\Service\FileUploader;
+use Symfony\Component\Form\Extension\Core\DataTransformer\StringToUploadedFileTransformer;
 
 class MaterielController extends AbstractController
 {
@@ -58,28 +60,32 @@ class MaterielController extends AbstractController
 }
 
 
-
-    
-public function ajouterMateriel(Request $request, FileUploader $fileUploader)
+public function ajouterMateriel(Request $request, FileUploader $fileUploader, ManagerRegistry $doctrine)
 {
     $materiel = new Materiel();
     $form = $this->createForm(MaterielType::class, $materiel);
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
-        // Gérer l'upload de l'image
-        $imageFile = $form->get('imageFile')->getData();
+        $imageFile = $form->get('image')->getData();
+if ($imageFile) {
+    $intitule = $materiel->getIntitule();
+    $imageFileName = $fileUploader->FileUploader($imageFile, $intitule . '.' . $imageFile->guessExtension());
+    $materiel->setImage($imageFileName);
+}
 
-        if ($imageFile) {
-            $imageFileName = $fileUploader->upload($imageFile);
-            $materiel->setImage($imageFileName);
-        }
-
-        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager = $doctrine->getManager();
         $entityManager->persist($materiel);
         $entityManager->flush();
 
-        return $this->redirectToRoute('materielLister');
+        $materielId = $materiel->getId();
+
+        return $this->redirectToRoute('materielConsulter', ['id' => $materiel->getId()]);
+
+        if ($file) {
+            $fileName = $fileUploader->FileUploader($file, $intitle.'.'.$file->guessExtension());
+            $materiel->setImage($imageActuelle);
+        }
     }
 
     return $this->render('materiel/ajouter.html.twig', [
@@ -88,34 +94,53 @@ public function ajouterMateriel(Request $request, FileUploader $fileUploader)
 }
 
 
-    public function modifierMateriel(ManagerRegistry $doctrine, $id, Request $request){
+
+
+public function modifierMateriel(ManagerRegistry $doctrine, $id, Request $request){
  
-        //récupération du matériel dont l'id est passé en paramètre
-        $materiel = $doctrine
-            ->getRepository(Materiel::class)
-            ->find($id);
-     
-        if (!$materiel) {
-            throw $this->createNotFoundException('Aucun Materiel trouvé avec le numéro '.$id);
-        }
-        else
-        {
-                $form = $this->createForm(MaterielModifierType::class, $materiel);
-                $form->handleRequest($request);
-     
-                if ($form->isSubmitted() && $form->isValid()) {
-     
-                     $materiel = $form->getData();
-                     $entityManager = $doctrine->getManager();
-                     $entityManager->persist($materiel);
-                     $entityManager->flush();
-                     return $this->render('materiel/consulter.html.twig', ['materiel' => $materiel,]);
-               }
-               else{
-                    return $this->render('materiel/ajouter.html.twig', array('form' => $form->createView(),));
-               }
+    //récupération du matériel dont l'id est passé en paramètre
+    $materiel = $doctrine
+        ->getRepository(Materiel::class)
+        ->find($id);
+ 
+    if (!$materiel) {
+        throw $this->createNotFoundException('Aucun Materiel trouvé avec le numéro '.$id);
+    }
+
+    $form = $this->createForm(MaterielModifierType::class, $materiel);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+
+        $materiel = $form->getData();
+
+        $imageFile = $form->get('image')->getData();
+
+        if ($imageFile) {
+            $newFilename = uniqid().'.'.$imageFile->guessExtension();
+
+            try {
+                $imageFile->move(
+                    $this->getParameter('materiel_images_directory'),
+                    $newFilename
+                );
+            } catch (FileException $e) {
+                // handle exception if something happens during file upload
             }
-     }
+
+            $materiel->setImage($newFilename);
+        }
+
+        $entityManager = $doctrine->getManager();
+        $entityManager->flush();
+
+        return $this->redirectToRoute('materiel_consulter', ['id' => $materiel->getId()]);
+
+    } else {
+        return $this->render('materiel/ajouter.html.twig', array('form' => $form->createView(),));
+    }
+}
+
 
 
      public function supprimerMateriel(ManagerRegistry $doctrine, int $id, Request $request){

@@ -27,6 +27,11 @@
         {{ form_widget(form.categorie, {'attr': {'class': 'form-control', 'placeholder': 'Catégorie'}}) }}
     </div></br>
 
+    {# Champ image du matériel #}
+    <div class="col-sm-6 mb-3 mb-sm-0">
+        {{ form_row(form.image) }}
+    </div></br>
+
     {# Bouton pour soumettre le formulaire #}
     <a href="{{ path('materielLister') }}" class="btn btn-primary">Retour</a>
     <button type="submit" class="btn btn-primary">Enregistrer</button>
