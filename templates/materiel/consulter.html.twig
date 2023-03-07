@@ -23,17 +23,17 @@
         </tr>
         <tr><td>Description : {{ materiel.description }}</td></tr> {# Affiche la description du matériel #}
     </table></br>
-    <a href="{{ path('materielLister') }}"> {# Lien pour retourner à la liste des matériels #}
-        <button class="btn btn-primary">Fermer</button>
+    <a href="{{ path('materielLister') }}" class="btn btn-primary"> {# Lien pour retourner à la liste des matériels #}
+        Fermer
     </a>&nbsp;&nbsp;
-    <a href="{{ path('empruntAjouter', { 'id': materiel.id }) }}"> {# Lien pour emprunter le matériel #}
-        <button class="btn btn-primary">Emprunter</button>
+    <a href="{{ path('empruntAjouter', { 'id': materiel.id }) }}" class="btn btn-primary"> {# Lien pour emprunter le matériel #}
+        Emprunter
     </a>
     {% if is_granted ('ROLE_ADMIN') %} {# Affiche les boutons de modification et suppression pour les utilisateurs ayant le rôle admin #}
-    <a href="{{ path('materielModifier', { 'id': materiel.id }) }}">
-        <button type="button" class="btn btn-warning">Modifier</button>
+    <a href="{{ path('materielModifier', { 'id': materiel.id }) }}" class="btn btn-warning">
+        Modifier
     </a>
-    <a href="{{ path('materielSupprimer', { 'id': materiel.id }) }}" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce matériel ?')">
+    <a href="{{ path('materielSupprimer', { 'id': materiel.id }) }}" class="text-decoration-none" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce matériel ?')">
         <button type="button" class="btn btn-danger">Supprimer</button>
     </a>
     {% endif %}

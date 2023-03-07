@@ -35,6 +35,7 @@ class MaterielType extends AbstractType
         // Le champ n'est pas obligatoire
         ->add('image', FileType::class, [
             'required' => false,
+            'empty_data' => 'No_image_available.png',
         ]);
     }
 

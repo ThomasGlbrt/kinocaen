@@ -13,6 +13,11 @@ use App\Form\MaterielModifierType;
 use App\Entity\Categorie;
 use App\Service\FileUploader;
 use Symfony\Component\Form\Extension\Core\DataTransformer\StringToUploadedFileTransformer;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+
 
 class MaterielController extends AbstractController
 {
@@ -94,56 +99,54 @@ if ($imageFile) {
 }
 
 
+public function modifierMateriel(ManagerRegistry $doctrine, int $id, Request $request, FileUploader $fileUploader): Response
+    {
+        // Récupération du matériel à modifier depuis la base de données
+        $entityManager = $doctrine->getManager();
+        $materiel = $entityManager->getRepository(Materiel::class)->find($id);
 
-
-public function modifierMateriel(ManagerRegistry $doctrine, $id, Request $request){
- 
-    //récupération du matériel dont l'id est passé en paramètre
-    $materiel = $doctrine
-        ->getRepository(Materiel::class)
-        ->find($id);
- 
-    if (!$materiel) {
-        throw $this->createNotFoundException('Aucun Materiel trouvé avec le numéro '.$id);
-    }
-
-    $form = $this->createForm(MaterielModifierType::class, $materiel);
-    $form->handleRequest($request);
-
-    if ($form->isSubmitted() && $form->isValid()) {
-
-        $materiel = $form->getData();
-
-        $imageFile = $form->get('image')->getData();
-
-        if ($imageFile) {
-            $newFilename = uniqid().'.'.$imageFile->guessExtension();
-
-            try {
-                $imageFile->move(
-                    $this->getParameter('materiel_images_directory'),
-                    $newFilename
-                );
-            } catch (FileException $e) {
-                // handle exception if something happens during file upload
-            }
-
-            $materiel->setImage($newFilename);
+        if (!$materiel) {
+            throw $this->createNotFoundException('Aucun matériel trouvé pour l\'id '.$id);
         }
 
-        $entityManager = $doctrine->getManager();
-        $entityManager->flush();
+        // Stockage de l'image actuelle du matériel
+        $imageActuelle = $materiel->getImage();
 
-        return $this->redirectToRoute('materiel_consulter', ['id' => $materiel->getId()]);
+        // Création d'un formulaire pour la modification du matériel
+        $form = $this->createForm(MaterielModifierType::class, $materiel);
+        $form->handleRequest($request);
 
-    } else {
-        return $this->render('materiel/ajouter.html.twig', array('form' => $form->createView(),));
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var UploadedFile|null $imageFile */
+            $imageFile = $form->get('image')->getData();
+
+            if ($imageFile) {
+                // Suppression de l'ancienne image du matériel si elle existe
+                if ($imageActuelle && file_exists($this->getParameter('images_directory').'/'.$imageActuelle)) {
+                    unlink($this->getParameter('images_directory').'/'.$imageActuelle);
+                }
+
+                // Enregistrement de la nouvelle image du matériel
+                $fileName = $fileUploader->upload($imageFile);
+                $materiel->setImage($fileName);
+            } else {
+                $materiel->setImage($imageActuelle);
+            }
+
+            // Enregistrement des modifications du matériel dans la base de données
+            $entityManager->flush();
+
+            return $this->redirectToRoute('accueil');
+        }
+
+        return $this->render('materiel/ajouter.html.twig', [
+            'form' => $form->createView(),
+            'materiel' => $materiel,
+        ]);
     }
-}
 
 
-
-     public function supprimerMateriel(ManagerRegistry $doctrine, int $id, Request $request){
+    public function supprimerMateriel(ManagerRegistry $doctrine, int $id, Request $request){
 
         $materiel= $doctrine->getRepository(Materiel::class)->find($id);
     

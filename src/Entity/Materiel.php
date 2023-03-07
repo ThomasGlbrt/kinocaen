@@ -7,11 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\HttpFoundation\File\File;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: MaterielRepository::class)]
-#[Vich\Uploadable]
 class Materiel
 {
     #[ORM\Id]
@@ -32,13 +29,6 @@ class Materiel
     #[ORM\JoinColumn(nullable: false)]
     private ?Categorie $categorie = null;
 
-    /**
-     * @Vich\UploadableField(mapping="materiel_images", fileNameProperty="image")
-     *
-     * @var File|null
-     */
-    private ?File $imageFile = null;
-
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
 
@@ -46,7 +36,7 @@ class Materiel
     {
         $this->emprunt = new ArrayCollection();
     }
-
+    
     public function getId(): ?int
     {
         return $this->id;
@@ -118,15 +108,15 @@ class Materiel
         return $this;
     }
 
-    public function getImageFile(): ?File
+    public function getImage(): ?string
     {
-        return $this->imageFile;
+        return $this->image;
     }
 
-    public function setImageFile(?File $imageFile = null): self
+    public function setImage(?string $image): self
     {
-        $this->imageFile = $imageFile;
+        $this->image = $image;
 
         return $this;
     }
-}
+}   
