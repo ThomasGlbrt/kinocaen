@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -20,12 +19,13 @@ class InscriptionSession
     #[ORM\Column]
     private ?int $id = null;
 
-   
-    #[ORM\ManyToOne(targetEntity: Inscrit::class, mappedBy: 'inscrits')]
-    private Collection $inscrits;
+    #[ORM\ManyToOne(targetEntity: Inscrit::class, inversedBy: 'inscriptionSessions')]
+    #[ORM\JoinColumn(name: 'inscrit_id', referencedColumnName: 'id')]
+    private ?Inscrit $inscrit = null;
 
-    #[ORM\ManyToOne(targetEntity: Inscrit::class, mappedBy: 'sessions')]
-    private Collection $sessions;
+    #[ORM\ManyToOne(targetEntity: Session::class, inversedBy: 'inscriptionSessions')]
+    #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id')]
+    private ?Session $session = null;
 
     #[ORM\Column(nullable: true)]
     private ?int $porteurProjet = null;

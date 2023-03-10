@@ -11,15 +11,20 @@ use App\Entity\Inscrit;
 use App\Entity\TypePaiement;
 use App\Entity\Metier;
 use App\Entity\Logement;
+use App\Entity\Utilisateur;
 use App\Entity\TypeCompetences;
 use App\Entity\UtilisateurType;
 use App\Form\InscritModifierType;
+use App\Form\InscritType;
 use App\Service\FileUploader;
 use Knp\Snappy\Pdf;
 use Dompdf\Dompdf;
 use Imagick;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Twig\FormatTelephoneExtension;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Doctrine\ORM\EntityManagerInterface;
 
 class InscritController extends AbstractController
 {
@@ -33,35 +38,41 @@ class InscritController extends AbstractController
         ]);
     }
 
-    public function register(
-        ManagerRegistry $doctrine,
-        Request $request,
-        UserPasswordHasherInterface $userPasswordHasher,
-        EntityManagerInterface $entityManager
-    ): Response {
+    public function register(ManagerRegistry $doctrine,Request $request,UserPasswordHasherInterface $userPasswordHasher,EntityManagerInterface $entityManager,FileUploader $fileUploader): Response {
+        // Créer de nouveaux objets pour les différentes entités
         $user = new Inscrit();
         $logement = new Logement();
+        $utilisateurs = new Utilisateur();
+    
+        // Récupérer toutes les compétences de la base de données
         $competences = $doctrine->getRepository(TypeCompetences::class)->findAll();
+    
+        // Créer un formulaire pour l'inscription d'un utilisateur
         $form = $this->createForm(InscritType::class, $user);
         $form->handleRequest($request);
     
         if ($form->isSubmitted() && $form->isValid()) {
-            // encode the plain password
-            $user->setPassword(
+            // encoder le mot de passe en clair
+            $utilisateurs->setPassword(
                 $userPasswordHasher->hashPassword(
-                    $user,
-                    $form->get('plainPassword')->getData()
+                    $utilisateurs,
+                    $form->get('utilisateurs')->get('plainPassword')->getData()
                 )
             );
     
-            // Add user to sessions
-            $sessions = $form->get('Session')->getData();
-            
+            // Ajouter l'utilisateur aux sessions
+            $session = $form->get('Session')->getData();
             $sessionPorteurProjet = $form->get('Session2')->getData();
             $sessionPorteurProjet2 = $form->get('Session3')->getData();
-            print_r($sessions.$sessionPorteurProjet.$sessionPorteurProjet2);
-            $user->addSessions($sessions);
+            echo($session);
+            $sessionCollection = $form->get('Session')->getData();
+            /*foreach ($sessionCollection as $session) {
+                if ($session instanceof Session) {
+                    $user->addSession($session);
+                }
+            }*/
     
+            // Ajouter une image de profil pour l'utilisateur
             $file = $form->get('image')->getData();
             $nom = $form->get('nom')->getData();
             $prenom = $form->get('prenom')->getData();
@@ -71,24 +82,38 @@ class InscritController extends AbstractController
                 } else {
                     $fileName = $fileUploader->FileUploader($file, $nom.$prenom.'.'.'png');
                 }
-                $image = new Imagick($filename);
-                $image->resizeImage(1080, 1350, Imagick::FILTER_LANCZOS, 1);
-                $inscrit->setImage($image);
+                $user->setImage($file);
             } else {
-                $inscrit->setImage($imageActuelle);
+                $user->setImage($imageActuelle);
             }
     
-            $essai = $form->get('Essai')->getData();
-            $inscrit->setTypeCompetence()->setEssai($essai);
+            // Ajouter les compétences sélectionnées pour l'utilisateur
+            $competencesCollection = $form->get('Competences')->getData();
+            /*foreach ($competencesCollection as $competence) {
+                if ($competence instanceof Session) {
+                    $user->addCompetence($competence);
+                }
+            }*/
     
-            $logement->setLogement($form->get('logement')->getData());
-            $entityManager->persist($logement);
+            // Ajouter les essais sélectionnées pour l'utilisateur
+            $essaiCollection = $form->get('Essai')->getData();
+            /*foreach ($essaiCollection as $essai) {
+                if ($essai instanceof Session) {
+                    $user->addEssai($essai);
+                }
+            }*/
+    
+            // Ajouter l'id de logement sélectionné pour l'utilisateur
+            $formLogement = $form->get('LogementId')->getData();
+            $user->setLogementId($formLogement);
             $entityManager->persist($user);
             $entityManager->flush();
     
+            // Rediriger l'utilisateur vers la dernière page
             return $this->redirectToRoute('last_page');
         }
     
+        // Afficher la vue pour le formulaire d'inscription
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
         ]);
@@ -96,56 +121,75 @@ class InscritController extends AbstractController
     
 
     public function consulterInscrit(ManagerRegistry $doctrine, int $id){
-
-		$inscrit= $doctrine->getRepository(Inscrit::class)->find($id);
-
-		if (!$inscrit) {
-			throw $this->createNotFoundException(
+        // Récupération de l'objet Inscrit avec l'id passé en paramètre
+        $inscrit= $doctrine->getRepository(Inscrit::class)->find($id);
+    
+        // Si l'objet n'existe pas, renvoyer une exception avec un message d'erreur
+        if (!$inscrit) {
+            throw $this->createNotFoundException(
             'Aucun inscrit trouvé avec le numéro '.$id
-			);
-		}
-
-		//return new Response('Inscrit : '.$inscrit->getNom());
-		return $this->render('inscrit/consulter.html.twig', [
-            'inscrit' => $inscrit,]);
-	}
-
+            );
+        }
+    
+        // Rendu de la vue 'inscrit/consulter.html.twig' avec l'objet Inscrit passé en paramètre
+        return $this->render('inscrit/consulter.html.twig', [
+            'inscrit' => $inscrit,
+        ]);
+    }
+    
     public function modifierInscrit(ManagerRegistry $doctrine,int $id, Request $request, FileUploader $fileUploader)
     {
-    // récupération de l'inscrit dont l'id est passé en paramètre
-    $inscrit = $doctrine->getRepository(Inscrit::class)->find($id);
-    $metiers = $doctrine->getRepository(Metier::class)->findAll();
-
-    if (!$inscrit) {
-        throw $this->createNotFoundException('Aucun Inscrit trouvé avec le numéro '.$id);
-    }
-    else
-    {
-        // stocker l'image actuelle
-        $imageActuelle = $inscrit->getImage();
-
-        $form = $this->createForm(InscritModifierType::class, $inscrit);
-        $form->get('metier')->setData($metiers);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            /** @var UploadedFile $file */
-            $file = $form->get('image')->getData();
-            $nom = $form->get('nom')->getData();
-            $prenom = $form->get('prenom')->getData();
-            if ($file) {
-                $fileName = $fileUploader->FileUploader($file,$nom.$prenom.'.'.$file->guessExtension());
-                $inscrit->setImage($fileName);
-            }else{
-                $inscrit->setImage($imageActuelle);
-            }
-            $entityManager = $doctrine->getManager();
-            $entityManager->persist($inscrit);
-            $entityManager->flush();
-            return $this->redirectToRoute('accueil');
-        } else {
-            return $this->render('inscrit/modifier.html.twig', array('form' => $form->createView(),));
+        // Récupération de l'objet Inscrit avec l'id passé en paramètre
+        $inscrit = $doctrine->getRepository(Inscrit::class)->find($id);
+        // Récupération de tous les objets Metier de la base de données
+        $metiers = $doctrine->getRepository(Metier::class)->findAll();
+    
+        // Si l'objet Inscrit n'existe pas, renvoyer une exception avec un message d'erreur
+        if (!$inscrit) {
+            throw $this->createNotFoundException('Aucun Inscrit trouvé avec le numéro '.$id);
         }
+        else
+        {
+            // Stockage de l'image actuelle de l'objet Inscrit
+            $imageActuelle = $inscrit->getImage();
+    
+            // Création du formulaire de modification à partir de la classe InscritModifierType
+            $form = $this->createForm(InscritModifierType::class, $inscrit);
+            // Passage des objets Metier au formulaire
+            $form->get('metier')->setData($metiers);
+            $form->handleRequest($request);
+    
+            // Si le formulaire est soumis et valide
+            if ($form->isSubmitted() && $form->isValid()) {
+                /** @var UploadedFile $file */
+                $file = $form->get('image')->getData();
+                $nom = $form->get('nom')->getData();
+                $prenom = $form->get('prenom')->getData();
+    
+                // Si un fichier est téléchargé
+                if ($file) {
+                    // Enregistrement du fichier et récupération du nom de fichier
+                    $fileName = $fileUploader->FileUploader($file,$nom.$prenom.'.'.$file->guessExtension());
+                    // Stockage du nom de fichier dans l'objet Inscrit
+                    $inscrit->setImage($fileName);
+                }else{
+                    // Sinon, restauration de l'image précédente
+                    $inscrit->setImage($imageActuelle);
+                }
+    
+                // Récupération de l'EntityManager
+                $entityManager = $doctrine->getManager();
+                // Persistance de l'objet Inscrit modifié
+                $entityManager->persist($inscrit);
+                // Sauvegarde des modifications en base de données
+                $entityManager->flush();
+                // Redirection vers la page d'accueil
+                return $this->redirectToRoute('accueil');
+            } else {
+                // Rendu de la vue 'inscrit/modifier.html.twig' avec le formulaire de modification
+                return $this->render('inscrit/modifier.html.twig', array('form' => $form->createView(),));
+            }
+    
     }
 }
 
@@ -154,30 +198,40 @@ class InscritController extends AbstractController
     
 
 
+// Cette fonction récupère tous les inscrits enregistrés en base de données et les affiche sur la page 'trombi.html.twig'
 public function trombiInscrit(ManagerRegistry $doctrine){
 
+    // Récupération du repository pour l'entité 'Inscrit'
     $repository = $doctrine->getRepository(Inscrit::class);
 
+    // Récupération de tous les inscrits enregistrés en base de données
     $inscrits= $repository->findAll();
-    return $this->render('inscrit/trombi.html.twig', [
-'inscrits' => $inscrits,]);	
 
+    // Renvoi des inscrits à la vue 'trombi.html.twig'
+    return $this->render('inscrit/trombi.html.twig', [
+        'inscrits' => $inscrits,
+    ]);	
 }
+
+// Cette fonction génère un PDF contenant les informations d'un inscrit donné en paramètre
 public function telechargerInscritPdf(ManagerRegistry $doctrine, int $id)
 {
+    // Récupération de l'inscrit correspondant à l'identifiant $id
     $inscrit = $doctrine->getRepository(Inscrit::class)->find($id);
 
+    // Si aucun inscrit n'a été trouvé avec l'identifiant $id, une exception est levée
     if (!$inscrit) {
         throw $this->createNotFoundException(
             'Aucun inscrit trouvé avec le numéro '.$id
         );
     }
 
+    // Génération de la vue 'pdf.html.twig' en utilisant les informations de l'inscrit récupéré
     $html = $this->renderView('inscrit/pdf.html.twig', [
         'inscrit' => $inscrit,
     ]);
 
-    // Configure DOMPDF according to your needs
+    // Configuration de DOMPDF en fonction des besoins
     $dompdf = new Dompdf();
     $dompdf->loadHtml($html);
     $dompdf->set_option('defaultMediaType', 'all');
@@ -194,31 +248,37 @@ public function telechargerInscritPdf(ManagerRegistry $doctrine, int $id)
     $dompdf->set_paper('A4', 'portrait', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '');
     $dompdf->render();
 
+    // Récupération du nom et du prénom de l'inscrit pour nommer le fichier PDF généré
     $nom = $inscrit->getNom();
     $prenom = $inscrit->getPrenom();
 
+    // Création d'une réponse HTTP contenant le PDF généré, avec le bon type MIME et le nom de fichier approprié
     $response = new Response($dompdf->output());
     $response->headers->set('Content-Type', 'application/pdf');
     $response->headers->set('Content-Disposition', 'attachment; filename="'.$nom.'-'.$prenom.'.pdf"');
 
+    // Renvoi de la réponse HTTP
     return $response;
 }
 
 public function telechargerTrombiPdf(ManagerRegistry $doctrine)
 {
+    // Récupération de tous les inscrits
     $inscrits = $doctrine->getRepository(Inscrit::class)->findAll();
 
+    // Si aucun inscrit trouvé, une exception est lancée
     if (!$inscrits) {
         throw $this->createNotFoundException(
             'Aucun inscrits'
         );
     }
 
+    // Génération du HTML à partir d'un template Twig
     $html = $this->renderView('inscrit/pdfTrombi.html.twig', [
         'inscrits' => $inscrits,
     ]);
 
-    // Configure DOMPDF according to your needs
+    // Configuration de DOMPDF selon vos besoins
     $dompdf = new Dompdf();
     $dompdf->loadHtml($html);
     $dompdf->set_option('defaultMediaType', 'all');
@@ -237,7 +297,7 @@ public function telechargerTrombiPdf(ManagerRegistry $doctrine)
     $dompdf->set_paper('A4', 'portrait', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '');
     $dompdf->render();
 
-
+    // Création de la réponse HTTP avec le contenu PDF généré par DOMPDF
     $response = new Response($dompdf->output());
     $response->headers->set('Content-Type', 'application/pdf');
     $response->headers->set('Content-Disposition', 'attachment; filename="trombinoscope.pdf"');
@@ -247,13 +307,14 @@ public function telechargerTrombiPdf(ManagerRegistry $doctrine)
 
 public function listerInscrit(ManagerRegistry $doctrine){
 
+    // Récupération de tous les inscrits
     $repository = $doctrine->getRepository(Inscrit::class);
-
     $inscrits= $repository->findAll();
+
+    // Renvoie d'une réponse HTTP avec le template Twig "lister.html.twig" et la liste des inscrits récupérés
     return $this->render('inscrit/lister.html.twig', [
-'inscrits' => $inscrits,]);	
-
+        'inscrits' => $inscrits,
+    ]);
 }
-
 
 }

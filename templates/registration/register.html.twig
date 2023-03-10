@@ -48,120 +48,163 @@
 
 </head>
 <body class="bg-gradient-primary">
+
+<!-- Show any form errors -->
+{{ form_errors(registrationForm) }}
+
 <div class="container">
   <div class="card o-hidden border-0 shadow-lg my-5 p-5">
     <div class="card-body p-0">
       <div class="row">
         <div>
               <div class="text-center">
+              <!-- Start the registration form -->
+              {{ form_start(registrationForm) }}
                 <h1 class="h4 text-gray-900 mb-4">Finalisation de l'inscription</h1>
               </div>
+
+        <!-- Left column -->
         <div class="col-md-12">
+        <!-- Partie Identité -->
           <div class="card">
             <div class="card-header">
               <h4>Identité</h4>
             </div>
             <div class="card-body row">
               <div class="col-sm-6 ">
+                  <!-- Champ nom -->
                   <div class="form-group">
-                      {{ form_widget(registrationForm.inscrit.nom, {'attr': {'class': 'form-control', 'placeholder': 'Nom'}}) }}
+                      {{ form_widget(registrationForm.nom, {'attr': {'class': 'form-control', 'placeholder': 'Nom'}}) }}
                   </div>
+
+                  <!-- Champ Email -->
                   <div class="form-group">
-                      {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control', 'placeholder': 'Email'}}) }}
+                      {{ form_widget(registrationForm.utilisateurs.email, {'attr': {'class': 'form-control', 'placeholder': 'Email'}}) }}
                   </div>
+
+                  <!-- Champ Numero de téléphone -->
                   <div class="form-group">
-                      {{ form_widget(registrationForm.inscrit.numTel, {'attr': {'class': 'form-control', 'placeholder': 'Téléphone'}}) }}
+                      {{ form_widget(registrationForm.numTel, {'attr': {'class': 'form-control', 'placeholder': 'Téléphone'}}) }}
                   </div>
+
+                  <!-- Champ ville -->
                   <div class="form-group">
-                      {{ form_row(registrationForm.inscrit.Ville, { 'attr': {'class': 'form-control form-control-user', 'placeholder': 'Ville'}}) }}
+                      {{ form_row(registrationForm.Ville, { 'attr': {'class': 'form-control form-control-user', 'placeholder': 'Ville'}}) }}
                   </div>
+
+                  <!-- Champ Premier Kabaret -->
                   <div class="form-group row">
                       <div class="col-sm-4 mb-3">
                           Premier kabaret ?
                       </div>
                       <div class="col-sm-8 mb-3">
                           <div class="form-check form-check-inline align-self-center">
-                              {{ form_widget(registrationForm.inscrit.PremierKabaret.0, {'label': 'Oui', 'attr': {'class': 'form-check-input'}}) }}
-                              {{ form_label(registrationForm.inscrit.PremierKabaret.0) }}
+                              {{ form_widget(registrationForm.PremierKabaret.0, {'label': 'Oui', 'attr': {'class': 'form-check-input'}}) }}
+                              {{ form_label(registrationForm.PremierKabaret.0) }}
                           </div>
                           <div class="form-check form-check-inline align-self-center">
-                              {{ form_widget(registrationForm.inscrit.PremierKabaret.1, {'label': 'Non', 'attr': {'class': 'form-check-input'}}) }}
-                              {{ form_label(registrationForm.inscrit.PremierKabaret.1) }}
+                              {{ form_widget(registrationForm.PremierKabaret.1, {'label': 'Non', 'attr': {'class': 'form-check-input'}}) }}
+                              {{ form_label(registrationForm.PremierKabaret.1) }}
                           </div>
                       </div>
                   </div>
+
+                  <!-- Champ Logement -->
                   <div class="form-group row">
                       <div class="col-sm-7 mb-3 d-flex align-items-center">
                           Avez vous besoin d'un logement ?
                       </div>
                       <div class="col-sm-5 mb-3" style="height: 2.5em;">
-                          {{ form_widget(registrationForm.inscrit.LogementId.besoin, { 'attr': {'class': 'form-control form-control-user '}}) }}
+                          {{ form_widget(registrationForm.LogementId.besoin, { 'attr': {'class': 'form-control form-control-user '}}) }}
                       </div>
                   </div>
+                  <!-- Champ logement textarea -->
                   <div class="form-group">
-                      {{ form_row(registrationForm.inscrit.LogementId.descriptif, { 'attr': {'class': 'form-control'}}) }}
+                      {{ form_row(registrationForm.LogementId.descriptif, { 'attr': {'class': 'form-control'}}) }}
                   </div>
               </div>
+
+              <!-- Right column -->
               <div class="col-sm-6 ">
-                  <div class="form-group">
-                      {{ form_widget(registrationForm.inscrit.prenom, {'attr': {'class': 'form-control', 'placeholder': 'Prénom'}}) }}
+                  <!-- Champ Prenom -->
+              <div class="form-group">
+                  {{ form_widget(registrationForm.prenom, {'attr': {'class': 'form-control', 'placeholder': 'Prénom'}}) }}
+              </div>
+
+              <!-- Champ Mot de passe -->
+              <div class="form-group">
+                  {{ form_widget(registrationForm.utilisateurs.plainPassword, {'attr': {'class': 'form-control', 'placeholder': 'Mot de passe'}}) }}
+              </div>
+
+              <!-- Champ Facebook -->
+              <div class="form-group">
+                  {{ form_widget(registrationForm.facebook, {'attr': {'class': 'form-control', 'placeholder': 'Nom d\'utilisateur Facebook'}}) }}
+              </div>
+
+              <!-- Champ Pays -->
+              <div class="form-group">
+                  {{ form_widget(registrationForm.Pays, {'attr': {'class': 'form-control', 'placeholder': 'Pays'}}) }}
+              </div>
+
+              <!-- Champ matériel disponible -> Selection -->
+              <div class="form-group row">
+                  <div class="col-sm-7 mb-3 d-flex align-items-center">
+                      Avez vous du matos disponible ?
                   </div>
-                  <div class="form-group">
-                      {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'form-control', 'placeholder': 'Mot de passe'}}) }}
-                  </div>
-                  <div class="form-group">
-                      {{ form_widget(registrationForm.inscrit.facebook, {'attr': {'class': 'form-control', 'placeholder': 'Nom d\'utilisateur Facebook'}}) }}
-                  </div>
-                  <div class="form-group">
-                    {{ form_widget(registrationForm.inscrit.Pays, {'attr': {'class': 'form-control', 'placeholder': 'Pays'}}) }}
-                    </div>
-                    <div class="form-group row">
-                      <div class="col-sm-7 mb-3 d-flex align-items-center">
-                          Avez vous du matos disponible ?
-                      </div>
-                      <div class="col-sm-5 mb-3" style="height: 2.5em;" >
-                          <select id="matos" name="matos" required="required" class="form-control form-control-user ">
+                  <div class="col-sm-5 mb-3" style="height: 2.5em;" >
+                      <select id="matos" name="matos" required="required" class="form-control form-control-user ">
                           <option value="" selected="selected">--</option>
-                          <option value="1">Oui</option>
-                          <option value="0">Non</option>
-                          </select>
-                      </div>
+                          <option value="Oui">Oui</option>
+                          <option value="Non">Non</option>
+                      </select>
                   </div>
-                    <div class="form-group" id="matos-textarea" style="display: none;">
-                    {{ form_row(registrationForm.inscrit.MatosDispo, { 'attr': {'class': 'form-control form-control-user', 'placeholder': 'Décrivez ce que vous avez comme matériel'}}) }}
-                    </div>
-                  <div class="form-group">
-                      {{ form_row(registrationForm.inscrit.image, { 'attr': {'class': 'form-control form-control-user'},'label': 'Photo de vous reconnaissable'}) }}
-                      <small>*Au format png ou jpg.</small>
+              </div>
+
+              <!-- Champ matériel disponible (celui la uniquement est envoyé en base) -->
+              <div class="form-group" id="matos-textarea" style="display: none;">
+                  {{ form_row(registrationForm.MatosDispo, { 'attr': {'class': 'form-control form-control-user', 'placeholder': 'Décrivez ce que vous avez comme matériel'}}) }}
+              </div>
+
+              <!-- Champ photo -->
+              <div class="form-group">
+                  {{ form_row(registrationForm.image, { 'attr': {'class': 'form-control form-control-user'},'label': 'Photo de vous reconnaissable'}) }}
+                  <small>*Au format png ou jpg.</small>
+              </div>
+
+              <!-- Champs permis -->
+              <div class="form-group row d-flex align-items-center">
+                  <div class="col-sm-7 mb-3">
+                      {{ form_label(registrationForm.Permis)}}
                   </div>
-                    <div class="form-group row d-flex align-items-center">
-                      <div class="col-sm-7 mb-3">
-                        {{ form_label(registrationForm.inscrit.Permis)}}
-                      </div>
-                      <div class="col-sm-5 mb-3" style="height: 2.5em;">
-                        {{ form_widget(registrationForm.inscrit.Permis, {'attr': {'class': 'form-control'}}) }}
-                      </div>
-                    </div>
-                    <div id="vehicule-container" style="display:none;">
-                      <div class="form-group row d-flex align-items-center">
-                        <div class="col-sm-7 mb-3" style="height: 2.5em;">
+                  <div class="col-sm-5 mb-3" style="height: 2.5em;">
+                      {{ form_widget(registrationForm.Permis, {'attr': {'class': 'form-control'}}) }}
+                  </div>
+              </div>
+
+              <!-- Champs vehicule qui s'affiche que si le permis est sur OUI -->
+              <div id="vehicule-container" style="display:none;">
+                  <div class="form-group row d-flex align-items-center">
+                      <div class="col-sm-7 mb-3" style="height: 2.5em;">
                           Avez vous une voiture ?
-                        </div>
-                        <div class="col-sm-5 mb-3" style="height: 2.5em;" >
-                            <select id="voiture" name="voiture" required="required" class="form-control form-control-user ">
+                      </div>
+                      <!-- Champ de séléction si on a une voiture -->
+                      <div class="col-sm-5 mb-3" style="height: 2.5em;" >
+                          <select id="voiture" name="voiture" required="required" class="form-control form-control-user ">
                               <option value="" selected="selected">--</option>
                               <option value="1">Oui</option>
                               <option value="0">Non</option>
-                            </select>
+                          </select>
                         </div>
                       </div>
+                        <!-- Champ  Information sur les vehicules qui s'affiche que si le champs voiture est sur OUI -->
                         <div id="vehicule-info" style="display:none;">
                           <div class="form-group row d-flex align-items-center">
                               <div class="col-sm-8 mb-3" style="height: 2.5em;">
                                 Nombre de place de votre voiture :
                               </div>
+                              <!-- Champ Nombre de place dans la voiture -->
                               <div class="col-sm-4 mb-3" style="height: 2.5em;">
-                                {{ form_widget(registrationForm.inscrit.Vehicule.places, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_widget(registrationForm.Vehicule.places, {'attr': {'class': 'form-control'}}) }}
                               </div>
                           </div>
                         </div>
@@ -169,14 +212,15 @@
                           <div class="col-sm-8 mb-3" style="height: 2.5em;">
                             Avez vous le permis depuis plus de 3ans ?
                           </div>
+                          <!-- Champ qui demande si on a le permis depuis plus de 3 ans  -->
                           <div class="col-sm-4 mb-3" style="height: 2.5em;">
                             <div class="form-check form-check-inline align-self-center">
-                              {{ form_widget(registrationForm.inscrit.Vehicule.permis.0, {'label': 'Oui', 'attr': {'class': 'form-check-input'}}) }}
-                              {{ form_label(registrationForm.inscrit.Vehicule.permis.0) }}
+                              {{ form_widget(registrationForm.Vehicule.permis.0, {'label': 'Oui', 'attr': {'class': 'form-check-input'}}) }}
+                              {{ form_label(registrationForm.Vehicule.permis.0) }}
                             </div>
                             <div class="form-check form-check-inline align-self-center">
-                              {{ form_widget(registrationForm.inscrit.Vehicule.permis.1, {'label': 'Non', 'attr': {'class': 'form-check-input'}}) }}
-                              {{ form_label(registrationForm.inscrit.Vehicule.permis.1) }}
+                              {{ form_widget(registrationForm.Vehicule.permis.1, {'label': 'Non', 'attr': {'class': 'form-check-input'}}) }}
+                              {{ form_label(registrationForm.Vehicule.permis.1) }}
                             </div>
                           </div>
                         </div>
@@ -186,7 +230,9 @@
             </div>
           </div>
         </div>
+        
       <div class="col-md-12 mt-3">
+      <!-- Partie Session -->
     <div class="card">
         <div class="card-header">
             <h4>Session</h4>
@@ -194,18 +240,21 @@
         <div class="card-body row">
           <div class="col-sm-6 ">
             <div class="form-group">
-                {{ form_row(registrationForm.inscrit.Session.intitule) }}
+            <!-- Champ qui liste les sessions -->
+                {{ form_row(registrationForm.Session.intitule) }}
             </div>
           </div>
           <div class="col-sm-6 ">
+          <!-- Champ Porteur de projet -->
             <div class="form-group row align-items-center">
                 <div class="col-sm-5">
-                    {{ form_label(registrationForm.inscrit.Session.porteurProjet) }}
+                    {{ form_label(registrationForm.Session.porteurProjet) }}
                 </div>
                 <div class="col-sm-7">
-                    {{ form_widget(registrationForm.inscrit.Session.porteurProjet, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_widget(registrationForm.Session.porteurProjet, {'attr': {'class': 'form-control'}}) }}
                 </div>
             </div>
+            <!-- Champ Porteur de projet sur quel session -->
             <div id="porterProjet-container" style="display: none;">
                 <div class="form-group row">
                     <div class="col-sm-5">
@@ -213,12 +262,10 @@
                     </div>
                     <div class="col-sm-7 align-self-center">
                         <div class="form-check form-check-inline">
-                            {{ form_widget(registrationForm.inscrit.Session2, {'label': 'Session 2', 'attr': {'class': 'form-check-input'}}) }}
-                            {{ form_label(registrationForm.inscrit.Session2) }}
+                            {{ form_widget(registrationForm.Session.porteurProjetSession2, {'label': 'Session 2', 'attr': {'class': 'form-check-input'}}) }}
                         </div>
                         <div class="form-check form-check-inline">
-                            {{ form_widget(registrationForm.inscrit.Session3, {'label': 'Session 3', 'attr': {'class': 'form-check-input'}}) }}
-                            {{ form_label(registrationForm.inscrit.Session3) }}
+                            {{ form_widget(registrationForm.Session.porteurProjetSession3, {'label': 'Session 3', 'attr': {'class': 'form-check-input'}}) }}
                         </div>
                     </div>
                 </div>
@@ -230,18 +277,21 @@
         </div>
         </div>
       </div>
-
+        
         <div class="col-md-12 mt-3">
+        <!-- Partie Compétence -->
           <div class="card">
             <div class="card-header">
               <h4>Compétences</h4>
             </div>
             <div class="card-body">
+            <!-- Champs Compétence -->
               <div class="form-group">
-                  {{ form_row(registrationForm.inscrit.Competences) }}
+                  {{ form_row(registrationForm.Competences) }}
               </div>
+              <!-- Champs Compétence qu'on veut essayer -->
               <div class="form-group">
-                    {{ form_row(registrationForm.inscrit.Essai) }}
+                    {{ form_row(registrationForm.Essai) }}
               </div>
             </div>
           </div>
@@ -250,15 +300,18 @@
       <div class="mt-3">
       </div>
         <div class="form-group row align-items-center">
+        <!-- Conditions générales -->
           <div class="col-sm-12 mb-3 text-center">
               J'accepte les <a href="{{ path('accueil') }}" target="_blank">conditions générales</a>
-            {{ form_widget(registrationForm.inscrit.agreeTerm, {'label_attr': {'class': 'mb-0'}, 'attr': {'class': 'form-check-input ml-2'}}) }}
+              <!-- Champs Acceptation des termes -->
+            {{ form_widget(registrationForm.agreeTerm, {'label_attr': {'class': 'mb-0'}, 'attr': {'class': 'form-check-input ml-2'}}) }}
           </div>
         </div>
-        <input type="submit" value="S'inscrire" class="btn btn-primary btn-user btn-block">
+        <!-- Envoie du formulaire -->
+        <input type="submit" value="S'inscrire" action="{{ path('inscription')}}" class="btn btn-primary btn-user btn-block" />
           {{ form_end(registrationForm) }}
-        
         <div class="text-center small"><hr>
+        <!-- lien vers la page de connexion -->
           Vous avez un compte ? <a href="{{ path('connexion') }}">Connectez Vous</a>
         </div>
       </div>
@@ -269,8 +322,10 @@
 </body>
 
     <!-- Custom scripts for all pages-->
-
+    <!-- Ajout du widjet Select2 pour des listes avec recherche pour compétences et essai -->
     <script src="{{ asset('https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js')}}"></script>
+
+    <!-- Utilisation de Select2 pour le champ competences -->
 
     <script type="text/javascript">
       $('.competences').select2({
@@ -281,6 +336,8 @@
     closeOnSelect:false,
 });
 
+    /* Utilisation de Select2 pour le champ essai */
+
 $('.essais').select2({
     placeholder: "Choisir une ou plusieurs comptétences que vous voulez essayer",
     theme: "bootstrap-5",
@@ -289,10 +346,11 @@ $('.essais').select2({
     closeOnSelect:false,
 });
 
+/*Ces codes suivant sont pour afficher et cacher les parties Matos, voiture, porteur de projet, permis et changer le placeholder du champs logement*/
 
 $(document).ready(function() {
     $("#matos").change(function() {
-      if ($(this).val() == 0) {
+      if ($(this).val() == "Oui") {
         $("#matos-textarea").hide();
       } else {
         $("#matos-textarea").show();
@@ -311,7 +369,7 @@ $(document).ready(function() {
   });
 
   $(document).ready(function() {
-    $("#registration_form_inscrit_Session_porteurProjet").change(function() {
+    $("#inscrit_Session_porteurProjet").change(function() {
       if ($(this).val() == 0) {
         $("#porterProjet-container").hide();
       } else {
@@ -321,7 +379,7 @@ $(document).ready(function() {
   });
 
   $(document).ready(function() {
-    $("#registration_form_inscrit_Permis").change(function() {
+    $("#inscrit_Permis").change(function() {
       if ($(this).val() == 0) {
         $("#vehicule-container").hide();
       } else {
@@ -331,11 +389,11 @@ $(document).ready(function() {
   });
 
 $(document).ready(function() {
-  $("#registration_form_inscrit_LogementId_besoin").change(function() {
+  $("#inscrit_LogementId_besoin").change(function() {
     if ($(this).val() == "1") {
-      $("#registration_form_inscrit_LogementId_descriptif").attr("placeholder", "Decrivez vos besoins en logement");
+      $("#inscrit_LogementId_descriptif").attr("placeholder", "Decrivez vos besoins en logement");
     } else {
-      $("#registration_form_inscrit_LogementId_descriptif").attr("placeholder", "Peux tu heberger, combien ? ou habites tu...");
+      $("#inscrit_LogementId_descriptif").attr("placeholder", "Peux tu heberger, combien ? ou habites tu...");
     }
   });
 });
