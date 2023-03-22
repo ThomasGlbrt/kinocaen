@@ -25,6 +25,7 @@ use App\Twig\FormatTelephoneExtension;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\Emprunt;
 
 class InscritController extends AbstractController
 {
@@ -268,19 +269,24 @@ public function supprimerInscrit(ManagerRegistry $doctrine, int $id, Request $re
         throw $this->createNotFoundException('Aucun inscrit trouvé avec cet id !');
     }
 
-    $emprunts = $inscrit->getEmprunts();
+    // Vérifier si l'inscrit a des emprunts
+    $emprunts = $doctrine->getRepository(Emprunt::class)->findBy(['inscrit' => $inscrit]);
 
-    if (count($emprunts) > 0) {
-        $this->addFlash('error', 'Cet utilisateur a des emprunts en cours.');
-        return $this->redirectToRoute('consulterEmpruntsInscrit', ['id' => $inscrit->getId()]);
+if (!empty($emprunts)) {
+        // Si l'inscrit a des emprunts, afficher un message d'erreur
+        $this->addFlash('error', 'Cet utilisateur a des emprunts en cours !');
+        return $this->redirectToRoute('empruntLister');
     }
 
+    // Si l'inscrit n'a pas d'emprunts, le supprimer
     $entityManager = $doctrine->getManager();
     $entityManager->remove($inscrit);
     $entityManager->flush();
 
+    $this->addFlash('success', 'L\'utilisateur a été supprimé avec succès !');
     return $this->redirectToRoute('listerInscrit');
 }
+
 
 
 
