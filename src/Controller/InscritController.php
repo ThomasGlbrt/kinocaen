@@ -11,15 +11,20 @@ use App\Entity\Inscrit;
 use App\Entity\TypePaiement;
 use App\Entity\Metier;
 use App\Entity\Logement;
+use App\Entity\Utilisateur;
 use App\Entity\TypeCompetences;
 use App\Entity\UtilisateurType;
 use App\Form\InscritModifierType;
+use App\Form\InscritType;
 use App\Service\FileUploader;
 use Knp\Snappy\Pdf;
 use Dompdf\Dompdf;
 use Imagick;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Twig\FormatTelephoneExtension;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Doctrine\ORM\EntityManagerInterface;
 
 class InscritController extends AbstractController
 {
@@ -41,13 +46,14 @@ class InscritController extends AbstractController
     ): Response {
         $user = new Inscrit();
         $logement = new Logement();
+        $utilisateurs = new Utilisateur();
         $competences = $doctrine->getRepository(TypeCompetences::class)->findAll();
         $form = $this->createForm(InscritType::class, $user);
         $form->handleRequest($request);
     
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
-            $user->setPassword(
+            $utilisateurs->setPassword(
                 $userPasswordHasher->hashPassword(
                     $user,
                     $form->get('plainPassword')->getData()
@@ -252,8 +258,30 @@ public function listerInscrit(ManagerRegistry $doctrine){
     $inscrits= $repository->findAll();
     return $this->render('inscrit/lister.html.twig', [
 'inscrits' => $inscrits,]);	
-
 }
+
+public function supprimerInscrit(ManagerRegistry $doctrine, int $id, Request $request)
+{
+    $inscrit = $doctrine->getRepository(Inscrit::class)->find($id);
+
+    if (!$inscrit) {
+        throw $this->createNotFoundException('Aucun inscrit trouvé avec cet id !');
+    }
+
+    $emprunts = $inscrit->getEmprunts();
+
+    if (count($emprunts) > 0) {
+        $this->addFlash('error', 'Cet utilisateur a des emprunts en cours.');
+        return $this->redirectToRoute('consulterEmpruntsInscrit', ['id' => $inscrit->getId()]);
+    }
+
+    $entityManager = $doctrine->getManager();
+    $entityManager->remove($inscrit);
+    $entityManager->flush();
+
+    return $this->redirectToRoute('listerInscrit');
+}
+
 
 
 }

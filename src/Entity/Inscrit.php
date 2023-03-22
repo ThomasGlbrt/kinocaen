@@ -55,9 +55,6 @@ class Inscrit
     #[ORM\Column(nullable: true)]
     private ?int $permis = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $vehicule = null;
-
     #[ORM\OneToOne(inversedBy: 'inscrit', cascade: ['persist', 'remove'])]
     private ?logement $logementId = null;
 
@@ -66,6 +63,12 @@ class Inscrit
 
     #[ORM\ManyToMany(targetEntity: session::class, inversedBy: 'inscrits')]
     private Collection $Session;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $agreeTerm = null;
+
+    #[ORM\OneToOne(inversedBy: 'inscrit_Id', cascade: ['persist', 'remove'])]
+    private ?Vehicule $Vehicule = null;
 
     #[ORM\ManyToOne(inversedBy: 'inscrit')]
     #[ORM\JoinColumn(nullable: false)]
@@ -258,18 +261,6 @@ class Inscrit
         return $this;
     }
 
-    public function getVehicule(): ?int
-    {
-        return $this->vehicule;
-    }
-
-    public function setVehicule(?int $vehicule): self
-    {
-        $this->vehicule = $vehicule;
-
-        return $this;
-    }
-
     public function getLogementId(): ?logement
     {
         return $this->logementId;
@@ -326,6 +317,30 @@ class Inscrit
     public function removeSession(session $session): self
     {
         $this->Session->removeElement($session);
+
+        return $this;
+    }
+
+    public function isAgreeTerm(): ?bool
+    {
+        return $this->agreeTerm;
+    }
+
+    public function setAgreeTerm(?bool $agreeTerm): self
+    {
+        $this->agreeTerm = $agreeTerm;
+
+        return $this;
+    }
+
+    public function getVehicule(): ?Vehicule
+    {
+        return $this->Vehicule;
+    }
+
+    public function setVehicule(?Vehicule $Vehicule): self
+    {
+        $this->Vehicule = $Vehicule;
 
         return $this;
     }

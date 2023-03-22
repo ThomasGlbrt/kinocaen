@@ -24,6 +24,7 @@ class InscritType extends AbstractType
         $builder
             ->add('nom', TextType::class, ['label' => false])
             ->add('prenom', TextType::class, [ 'label' => false])
+            ->add('utilisateurs', RegistrationFormType::class)
             ->add('numTel', TextType::class, [ 'label' => false, 'attr' => ['maxlength' =>10 ]])
             ->add('facebook', TextType::class, [ 'label' => false ,'required' => false])
             ->add('Pays', TextType::class, [ 'label' => false])
@@ -51,7 +52,7 @@ class InscritType extends AbstractType
                 ]
                 ])
             ->add('LogementId', LogementType::class, ['label' => false])
-            ->add('Session', SessionType::class)
+            ->add('Session', SessionType::class, ['data_class' => null])
             ->add('Competences', EntityType::class, [
                 'class' => TypeCompetences::class,
                 'label' => 'J\'ai les compétences pour :',

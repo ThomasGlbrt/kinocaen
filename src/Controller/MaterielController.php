@@ -118,7 +118,7 @@ public function ajouterMateriel(Request $request, FileUploader $fileUploader)
      }
 
 
-     public function supprimerMateriel(ManagerRegistry $doctrine, int $id, Request $request){
+    public function supprimerMateriel(ManagerRegistry $doctrine, int $id, Request $request){
 
         $materiel= $doctrine->getRepository(Materiel::class)->find($id);
     
@@ -132,4 +132,5 @@ public function ajouterMateriel(Request $request, FileUploader $fileUploader)
             return $this->redirectToRoute('materielLister');
         }
     }
+    
 }

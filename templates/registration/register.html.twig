@@ -48,12 +48,14 @@
 
 </head>
 <body class="bg-gradient-primary">
+{{ form_errors(registrationForm) }}
 <div class="container">
   <div class="card o-hidden border-0 shadow-lg my-5 p-5">
     <div class="card-body p-0">
       <div class="row">
         <div>
               <div class="text-center">
+              {{ form_start(registrationForm) }}
                 <h1 class="h4 text-gray-900 mb-4">Finalisation de l'inscription</h1>
               </div>
         <div class="col-md-12">
@@ -64,16 +66,16 @@
             <div class="card-body row">
               <div class="col-sm-6 ">
                   <div class="form-group">
-                      {{ form_widget(registrationForm.inscrit.nom, {'attr': {'class': 'form-control', 'placeholder': 'Nom'}}) }}
+                      {{ form_widget(registrationForm.nom, {'attr': {'class': 'form-control', 'placeholder': 'Nom'}}) }}
                   </div>
                   <div class="form-group">
-                      {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control', 'placeholder': 'Email'}}) }}
+                      {{ form_widget(registrationForm.utilisateurs.email, {'attr': {'class': 'form-control', 'placeholder': 'Email'}}) }}
                   </div>
                   <div class="form-group">
-                      {{ form_widget(registrationForm.inscrit.numTel, {'attr': {'class': 'form-control', 'placeholder': 'Téléphone'}}) }}
+                      {{ form_widget(registrationForm.numTel, {'attr': {'class': 'form-control', 'placeholder': 'Téléphone'}}) }}
                   </div>
                   <div class="form-group">
-                      {{ form_row(registrationForm.inscrit.Ville, { 'attr': {'class': 'form-control form-control-user', 'placeholder': 'Ville'}}) }}
+                      {{ form_row(registrationForm.Ville, { 'attr': {'class': 'form-control form-control-user', 'placeholder': 'Ville'}}) }}
                   </div>
                   <div class="form-group row">
                       <div class="col-sm-4 mb-3">
@@ -81,12 +83,12 @@
                       </div>
                       <div class="col-sm-8 mb-3">
                           <div class="form-check form-check-inline align-self-center">
-                              {{ form_widget(registrationForm.inscrit.PremierKabaret.0, {'label': 'Oui', 'attr': {'class': 'form-check-input'}}) }}
-                              {{ form_label(registrationForm.inscrit.PremierKabaret.0) }}
+                              {{ form_widget(registrationForm.PremierKabaret.0, {'label': 'Oui', 'attr': {'class': 'form-check-input'}}) }}
+                              {{ form_label(registrationForm.PremierKabaret.0) }}
                           </div>
                           <div class="form-check form-check-inline align-self-center">
-                              {{ form_widget(registrationForm.inscrit.PremierKabaret.1, {'label': 'Non', 'attr': {'class': 'form-check-input'}}) }}
-                              {{ form_label(registrationForm.inscrit.PremierKabaret.1) }}
+                              {{ form_widget(registrationForm.PremierKabaret.1, {'label': 'Non', 'attr': {'class': 'form-check-input'}}) }}
+                              {{ form_label(registrationForm.PremierKabaret.1) }}
                           </div>
                       </div>
                   </div>
@@ -95,25 +97,25 @@
                           Avez vous besoin d'un logement ?
                       </div>
                       <div class="col-sm-5 mb-3" style="height: 2.5em;">
-                          {{ form_widget(registrationForm.inscrit.LogementId.besoin, { 'attr': {'class': 'form-control form-control-user '}}) }}
+                          {{ form_widget(registrationForm.LogementId.besoin, { 'attr': {'class': 'form-control form-control-user '}}) }}
                       </div>
                   </div>
                   <div class="form-group">
-                      {{ form_row(registrationForm.inscrit.LogementId.descriptif, { 'attr': {'class': 'form-control'}}) }}
+                      {{ form_row(registrationForm.LogementId.descriptif, { 'attr': {'class': 'form-control'}}) }}
                   </div>
               </div>
               <div class="col-sm-6 ">
                   <div class="form-group">
-                      {{ form_widget(registrationForm.inscrit.prenom, {'attr': {'class': 'form-control', 'placeholder': 'Prénom'}}) }}
+                      {{ form_widget(registrationForm.prenom, {'attr': {'class': 'form-control', 'placeholder': 'Prénom'}}) }}
                   </div>
                   <div class="form-group">
-                      {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'form-control', 'placeholder': 'Mot de passe'}}) }}
+                      {{ form_widget(registrationForm.utilisateurs.plainPassword, {'attr': {'class': 'form-control', 'placeholder': 'Mot de passe'}}) }}
                   </div>
                   <div class="form-group">
-                      {{ form_widget(registrationForm.inscrit.facebook, {'attr': {'class': 'form-control', 'placeholder': 'Nom d\'utilisateur Facebook'}}) }}
+                      {{ form_widget(registrationForm.facebook, {'attr': {'class': 'form-control', 'placeholder': 'Nom d\'utilisateur Facebook'}}) }}
                   </div>
                   <div class="form-group">
-                    {{ form_widget(registrationForm.inscrit.Pays, {'attr': {'class': 'form-control', 'placeholder': 'Pays'}}) }}
+                    {{ form_widget(registrationForm.Pays, {'attr': {'class': 'form-control', 'placeholder': 'Pays'}}) }}
                     </div>
                     <div class="form-group row">
                       <div class="col-sm-7 mb-3 d-flex align-items-center">
@@ -128,18 +130,18 @@
                       </div>
                   </div>
                     <div class="form-group" id="matos-textarea" style="display: none;">
-                    {{ form_row(registrationForm.inscrit.MatosDispo, { 'attr': {'class': 'form-control form-control-user', 'placeholder': 'Décrivez ce que vous avez comme matériel'}}) }}
+                    {{ form_row(registrationForm.MatosDispo, { 'attr': {'class': 'form-control form-control-user', 'placeholder': 'Décrivez ce que vous avez comme matériel'}}) }}
                     </div>
                   <div class="form-group">
-                      {{ form_row(registrationForm.inscrit.image, { 'attr': {'class': 'form-control form-control-user'},'label': 'Photo de vous reconnaissable'}) }}
+                      {{ form_row(registrationForm.image, { 'attr': {'class': 'form-control form-control-user'},'label': 'Photo de vous reconnaissable'}) }}
                       <small>*Au format png ou jpg.</small>
                   </div>
                     <div class="form-group row d-flex align-items-center">
                       <div class="col-sm-7 mb-3">
-                        {{ form_label(registrationForm.inscrit.Permis)}}
+                        {{ form_label(registrationForm.Permis)}}
                       </div>
                       <div class="col-sm-5 mb-3" style="height: 2.5em;">
-                        {{ form_widget(registrationForm.inscrit.Permis, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_widget(registrationForm.Permis, {'attr': {'class': 'form-control'}}) }}
                       </div>
                     </div>
                     <div id="vehicule-container" style="display:none;">
@@ -161,7 +163,7 @@
                                 Nombre de place de votre voiture :
                               </div>
                               <div class="col-sm-4 mb-3" style="height: 2.5em;">
-                                {{ form_widget(registrationForm.inscrit.Vehicule.places, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_widget(registrationForm.Vehicule.places, {'attr': {'class': 'form-control'}}) }}
                               </div>
                           </div>
                         </div>
@@ -171,12 +173,12 @@
                           </div>
                           <div class="col-sm-4 mb-3" style="height: 2.5em;">
                             <div class="form-check form-check-inline align-self-center">
-                              {{ form_widget(registrationForm.inscrit.Vehicule.permis.0, {'label': 'Oui', 'attr': {'class': 'form-check-input'}}) }}
-                              {{ form_label(registrationForm.inscrit.Vehicule.permis.0) }}
+                              {{ form_widget(registrationForm.Vehicule.permis.0, {'label': 'Oui', 'attr': {'class': 'form-check-input'}}) }}
+                              {{ form_label(registrationForm.Vehicule.permis.0) }}
                             </div>
                             <div class="form-check form-check-inline align-self-center">
-                              {{ form_widget(registrationForm.inscrit.Vehicule.permis.1, {'label': 'Non', 'attr': {'class': 'form-check-input'}}) }}
-                              {{ form_label(registrationForm.inscrit.Vehicule.permis.1) }}
+                              {{ form_widget(registrationForm.Vehicule.permis.1, {'label': 'Non', 'attr': {'class': 'form-check-input'}}) }}
+                              {{ form_label(registrationForm.Vehicule.permis.1) }}
                             </div>
                           </div>
                         </div>
@@ -194,16 +196,16 @@
         <div class="card-body row">
           <div class="col-sm-6 ">
             <div class="form-group">
-                {{ form_row(registrationForm.inscrit.Session.intitule) }}
+                {{ form_row(registrationForm.Session.intitule) }}
             </div>
           </div>
           <div class="col-sm-6 ">
             <div class="form-group row align-items-center">
                 <div class="col-sm-5">
-                    {{ form_label(registrationForm.inscrit.Session.porteurProjet) }}
+                    {{ form_label(registrationForm.Session.porteurProjet) }}
                 </div>
                 <div class="col-sm-7">
-                    {{ form_widget(registrationForm.inscrit.Session.porteurProjet, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_widget(registrationForm.Session.porteurProjet, {'attr': {'class': 'form-control'}}) }}
                 </div>
             </div>
             <div id="porterProjet-container" style="display: none;">
@@ -213,12 +215,12 @@
                     </div>
                     <div class="col-sm-7 align-self-center">
                         <div class="form-check form-check-inline">
-                            {{ form_widget(registrationForm.inscrit.Session2, {'label': 'Session 2', 'attr': {'class': 'form-check-input'}}) }}
-                            {{ form_label(registrationForm.inscrit.Session2) }}
+                            {{ form_widget(registrationForm.Session2, {'label': 'Session 2', 'attr': {'class': 'form-check-input'}}) }}
+                            {{ form_label(registrationForm.Session2) }}
                         </div>
                         <div class="form-check form-check-inline">
-                            {{ form_widget(registrationForm.inscrit.Session3, {'label': 'Session 3', 'attr': {'class': 'form-check-input'}}) }}
-                            {{ form_label(registrationForm.inscrit.Session3) }}
+                            {{ form_widget(registrationForm.Session3, {'label': 'Session 3', 'attr': {'class': 'form-check-input'}}) }}
+                            {{ form_label(registrationForm.Session3) }}
                         </div>
                     </div>
                 </div>
@@ -238,10 +240,10 @@
             </div>
             <div class="card-body">
               <div class="form-group">
-                  {{ form_row(registrationForm.inscrit.Competences) }}
+                  {{ form_row(registrationForm.Competences) }}
               </div>
               <div class="form-group">
-                    {{ form_row(registrationForm.inscrit.Essai) }}
+                    {{ form_row(registrationForm.Essai) }}
               </div>
             </div>
           </div>
@@ -252,12 +254,11 @@
         <div class="form-group row align-items-center">
           <div class="col-sm-12 mb-3 text-center">
               J'accepte les <a href="{{ path('accueil') }}" target="_blank">conditions générales</a>
-            {{ form_widget(registrationForm.inscrit.agreeTerm, {'label_attr': {'class': 'mb-0'}, 'attr': {'class': 'form-check-input ml-2'}}) }}
+            {{ form_widget(registrationForm.agreeTerm, {'label_attr': {'class': 'mb-0'}, 'attr': {'class': 'form-check-input ml-2'}}) }}
           </div>
         </div>
-        <input type="submit" value="S'inscrire" class="btn btn-primary btn-user btn-block">
+        <input type="submit" value="S'inscrire" action="{{ path('inscription')}}" class="btn btn-primary btn-user btn-block" />
           {{ form_end(registrationForm) }}
-        
         <div class="text-center small"><hr>
           Vous avez un compte ? <a href="{{ path('connexion') }}">Connectez Vous</a>
         </div>
@@ -311,7 +312,7 @@ $(document).ready(function() {
   });
 
   $(document).ready(function() {
-    $("#registration_form_inscrit_Session_porteurProjet").change(function() {
+    $("#inscrit_Session_porteurProjet").change(function() {
       if ($(this).val() == 0) {
         $("#porterProjet-container").hide();
       } else {
@@ -321,7 +322,7 @@ $(document).ready(function() {
   });
 
   $(document).ready(function() {
-    $("#registration_form_inscrit_Permis").change(function() {
+    $("#inscrit_Permis").change(function() {
       if ($(this).val() == 0) {
         $("#vehicule-container").hide();
       } else {
@@ -331,11 +332,11 @@ $(document).ready(function() {
   });
 
 $(document).ready(function() {
-  $("#registration_form_inscrit_LogementId_besoin").change(function() {
+  $("#inscrit_LogementId_besoin").change(function() {
     if ($(this).val() == "1") {
-      $("#registration_form_inscrit_LogementId_descriptif").attr("placeholder", "Decrivez vos besoins en logement");
+      $("#inscrit_LogementId_descriptif").attr("placeholder", "Decrivez vos besoins en logement");
     } else {
-      $("#registration_form_inscrit_LogementId_descriptif").attr("placeholder", "Peux tu heberger, combien ? ou habites tu...");
+      $("#inscrit_LogementId_descriptif").attr("placeholder", "Peux tu heberger, combien ? ou habites tu...");
     }
   });
 });
