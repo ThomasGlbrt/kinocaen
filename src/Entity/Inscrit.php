@@ -70,6 +70,9 @@ class Inscrit
     #[ORM\OneToOne(inversedBy: 'inscrit_Id', cascade: ['persist', 'remove'])]
     private ?Vehicule $Vehicule = null;
 
+    #[ORM\OneToOne(mappedBy: 'inscrit', cascade: ['persist', 'remove'])]
+    private ?Vehicule $vehicule = null;
+
     #[ORM\ManyToOne(inversedBy: 'inscrit')]
     #[ORM\JoinColumn(nullable: false)]
     
@@ -322,6 +325,26 @@ class Inscrit
 
         return $this;
     }
+
+
+    public function getVehicule(): ?Vehicule
+    {
+        return $this->vehicule;
+    }
+
+    public function setVehicule(?Vehicule $vehicule): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($vehicule === null && $this->vehicule !== null) {
+            $this->vehicule->setInscrit(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($vehicule !== null && $vehicule->getInscrit() !== $this) {
+            $vehicule->setInscrit($this);
+        }
+
+        $this->vehicule = $vehicule;
 
     public function isAgreeTerm(): ?bool
     {
