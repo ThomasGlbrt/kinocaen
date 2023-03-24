@@ -2,26 +2,36 @@
 {% block title %}Liste des inscrits {% endblock %}
 {% block contenu %}
 <form>
-    <input type="text" id="searchInput" onkeyup="searchFunction()" placeholder="Rechercher par nom, prénom ou numéro de téléphone">
+    <input type="text" id="searchInput" onkeyup="searchFunction()" placeholder="Rechercher par nom, prénom ou numéro de téléphone" class="form-control col-md-3">
 </form>
 <table class="table table-hover table-striped" id="inscritsTable">
     <thead>
             <tr>
-                <th>Nom</th>
-                <th>Prenom</th>
+                <th>#</th>
+                <th>Particpant</th>
                 <th>Email</th>
                 <th>Téléphone</th>
-                <th>Paiement</th>
             </tr>
         </thead>
         <tbody>
             {% for i in inscrits %}
                 <tr>
-                    <td>{{i.nom}}</td>
-                    <td>{{i.prenom}}</td>
+                    <td>{{loop.index}}</td>
+                    <td><a href="{{ path('consulterInscrit', { 'id': i.id }) }}">{{i.prenom}} {{i.nom | upper }}</td></a>
                     <td>{{i.utilisateurs.email}}</td>
-                    <td>{{ "0" ~ i.numTel }}</td>
-                    <td>{{i.Paiement.montant}}</td>
+                    <td>{% if i.numTel != null %}
+                            {{ "0" ~ i.numTel }}
+                        {% else %}
+                            Pas de numéro enregistré
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if is_granted ('ROLE_ADMIN') %}
+                          <!-- Ce bouton permet de rediriger l'utilisateur vers la page de suppression d'un emprunt -->
+                          <a href="{{ path('inscritSupprimer',{ 'id': i.id}) }}" class="btn btn-sm btn-danger" onclick="return confirm('Êtes-vous sur de vouloir supprimer cet Inscrit ?')">Supprimer</a>
+                        {% endif %}
+                        <!-- Fin de la condition qui vérifie si l'utilisateur actuel a le rôle d'administrateur -->
+                      </td>
                 </tr>
             {% endfor %}
         </tbody>
@@ -34,7 +44,6 @@
       filter = input.value.toUpperCase();
       table = document.getElementById("inscritsTable");
       tr = table.getElementsByTagName("tr");
-
       // Boucle à travers toutes les lignes
       for (i = 0; i < tr.length; i++) {
         td = tr[i].getElementsByTagName("td");
