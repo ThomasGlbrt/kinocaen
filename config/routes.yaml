@@ -36,7 +36,7 @@ materielSupprimer:
 
 inscription:
     path: /inscription
-    controller: App\Controller\RegistrationController::register
+    controller: App\Controller\InscritController::register
 
 connexion:
     path: /connexion
@@ -47,7 +47,7 @@ logout:
     methods: GET
 
 
-   # Emprunt
+# Emprunt
 
 empruntConsulter:
     path: /emprunt/consulter/{id}

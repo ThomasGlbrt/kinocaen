@@ -62,7 +62,13 @@ class Inscrit
     private Collection $competences;
 
     #[ORM\ManyToMany(targetEntity: session::class, inversedBy: 'inscrits')]
-    private Collection $Session;
+    private Collection $sessions;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $agreeTerm = null;
+
+    #[ORM\OneToOne(inversedBy: 'inscrit_Id', cascade: ['persist', 'remove'])]
+    private ?Vehicule $Vehicule = null;
 
     #[ORM\OneToOne(mappedBy: 'inscrit', cascade: ['persist', 'remove'])]
     private ?Vehicule $vehicule = null;
@@ -76,7 +82,7 @@ class Inscrit
         $this->metier = new ArrayCollection();
         $this->emprunt = new ArrayCollection();
         $this->competences = new ArrayCollection();
-        $this->Session = new ArrayCollection();
+        $this->sessions = new ArrayCollection();
     }
 
 
@@ -299,17 +305,19 @@ class Inscrit
      */
     public function getSession(): Collection
     {
-        return $this->Session;
+        return $this->sessions;
     }
 
-    public function addSession(session $session): self
+    public function addSession(Session $session): self
     {
-        if (!$this->Session->contains($session)) {
-            $this->Session->add($session);
-        }
-
-        return $this;
+    if (!$this->sessions->contains($session)) {
+        $this->sessions[] = $session;
+        $session->addInscrit($this);
     }
+
+    return $this;
+    }
+
 
     public function removeSession(session $session): self
     {
@@ -317,6 +325,7 @@ class Inscrit
 
         return $this;
     }
+
 
     public function getVehicule(): ?Vehicule
     {
@@ -336,6 +345,27 @@ class Inscrit
         }
 
         $this->vehicule = $vehicule;
+
+    public function isAgreeTerm(): ?bool
+    {
+        return $this->agreeTerm;
+    }
+
+    public function setAgreeTerm(?bool $agreeTerm): self
+    {
+        $this->agreeTerm = $agreeTerm;
+
+        return $this;
+    }
+
+    public function getVehicule(): ?Vehicule
+    {
+        return $this->Vehicule;
+    }
+
+    public function setVehicule(?Vehicule $Vehicule): self
+    {
+        $this->Vehicule = $Vehicule;
 
         return $this;
     }
