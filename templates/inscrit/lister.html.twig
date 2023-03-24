@@ -7,6 +7,7 @@
 <table class="table table-hover table-striped" id="inscritsTable">
     <thead>
             <tr>
+                <th>#</th>
                 <th>Particpant</th>
                 <th>Email</th>
                 <th>Téléphone</th>
@@ -15,9 +16,15 @@
         <tbody>
             {% for i in inscrits %}
                 <tr>
+                    <td>{{loop.index}}</td>
                     <td><a href="{{ path('consulterInscrit', { 'id': i.id }) }}">{{i.prenom}} {{i.nom | upper }}</td></a>
                     <td>{{i.utilisateurs.email}}</td>
-                    <td>{{ "0" ~ i.numTel }}</td>
+                    <td>{% if i.numTel != null %}
+                            {{ "0" ~ i.numTel }}
+                        {% else %}
+                            Pas de numéro enregistré
+                        {% endif %}
+                    </td>
                     <td>
                         {% if is_granted ('ROLE_ADMIN') %}
                           <!-- Ce bouton permet de rediriger l'utilisateur vers la page de suppression d'un emprunt -->
