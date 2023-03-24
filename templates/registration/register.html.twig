@@ -215,13 +215,13 @@
                           <!-- Champ qui demande si on a le permis depuis plus de 3 ans  -->
                           <div class="col-sm-4 mb-3" style="height: 2.5em;">
                             <div class="form-check form-check-inline align-self-center">
-                              {{ form_widget(registrationForm.Vehicule.permis.0, {'label': 'Oui', 'attr': {'class': 'form-check-input'}}) }}
-                              {{ form_label(registrationForm.Vehicule.permis.0) }}
+                              {{ form_widget(registrationForm.Vehicule.permis, {'label': 'Oui', 'attr': {'class': 'form-check-input'}}) }}
+                              {{ form_label(registrationForm.Vehicule.permis) }}
                             </div>
-                            <div class="form-check form-check-inline align-self-center">
-                              {{ form_widget(registrationForm.Vehicule.permis.1, {'label': 'Non', 'attr': {'class': 'form-check-input'}}) }}
-                              {{ form_label(registrationForm.Vehicule.permis.1) }}
-                            </div>
+                            {#<div class="form-check form-check-inline align-self-center">
+                              {{ form_widget(registrationForm.Vehicule.permis, {'label': 'Non', 'attr': {'class': 'form-check-input'}}) }}
+                              {{ form_label(registrationForm.Vehicule.permis) }}
+                            </div>#}
                           </div>
                         </div>
                       </div>

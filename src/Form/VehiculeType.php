@@ -18,8 +18,9 @@ class VehiculeType extends AbstractType
             ->add('permis', ChoiceType::class, [
                 'label' => false,
                 'choices' => [
-                    'Oui' => 1,
                     'Non' => 0,
+                    'Oui' => 1,
+                    
                 ],
                 'expanded' => true,
                 'multiple' => false,

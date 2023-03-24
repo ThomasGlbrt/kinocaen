@@ -13,16 +13,13 @@ class Vehicule
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    private ?inscrit $inscrit = null;
-
     #[ORM\Column(nullable: true)]
     private ?int $places = null;
 
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $permis = null;
 
-    #[ORM\OneToOne(inversedBy: 'vehicule', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(mappedBy: 'Vehicule', cascade: ['persist', 'remove'])]
     private ?Inscrit $inscrit = null;
 
     public function getId(): ?int
@@ -39,18 +36,7 @@ class Vehicule
     {
         $this->places = $places;
 
-    public function getInscrit(): ?inscrit
-    {
-        return $this->inscrit;
     }
-
-    public function setInscrit(?inscrit $inscrit): self
-    {
-        $this->inscrit = $inscrit;
-
-        return $this;
-    }
-
 
     public function getPermis(): ?string
     {
@@ -61,16 +47,6 @@ class Vehicule
     {
         $this->permis = $permis;
 
-    public function getPlaces(): ?int
-    {
-        return $this->places;
-    }
-
-    public function setPlaces(?int $places): self
-    {
-        $this->places = $places;
-
-        return $this;
     }
 
     public function getInscrit(): ?Inscrit
@@ -80,18 +56,19 @@ class Vehicule
 
     public function setInscrit(?Inscrit $inscrit): self
     {
+        // unset the owning side of the relation if necessary
+        if ($inscrit === null && $this->inscrit !== null) {
+            $this->inscrit->setVehicule(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($inscrit !== null && $inscrit->getVehicule() !== $this) {
+            $inscrit->setVehicule($this);
+        }
+
         $this->inscrit = $inscrit;
-
-    public function getPermis(): ?string
-    {
-        return $this->permis;
-    }
-
-    public function setPermis(?string $permis): self
-    {
-        $this->permis = $permis;
-
 
         return $this;
     }
+    
 }
