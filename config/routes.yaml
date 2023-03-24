@@ -106,4 +106,8 @@ telechargerInscritPdf:
 
 telechargerTrombiPdf:
     path: /inscrit/trombi/pdf
-    controller: App\Controller\InscritController::telechargerTrombiPdf  
+    controller: App\Controller\InscritController::telechargerTrombiPdf 
+
+inscritSupprimer:
+    path: /inscrit/supprimer/{id}
+    controller: App\Controller\InscritController::supprimerInscrit

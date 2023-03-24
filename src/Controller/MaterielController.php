@@ -160,4 +160,5 @@ public function modifierMateriel(ManagerRegistry $doctrine, int $id, Request $re
             return $this->redirectToRoute('materielLister');
         }
     }
+    
 }

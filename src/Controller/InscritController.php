@@ -25,6 +25,7 @@ use App\Twig\FormatTelephoneExtension;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\Emprunt;
 
 class InscritController extends AbstractController
 {
@@ -43,8 +44,9 @@ class InscritController extends AbstractController
         $user = new Inscrit();
         $logement = new Logement();
         $utilisateurs = new Utilisateur();
-    
+        
         // Récupérer toutes les compétences de la base de données
+
         $competences = $doctrine->getRepository(TypeCompetences::class)->findAll();
     
         // Créer un formulaire pour l'inscription d'un utilisateur
@@ -53,6 +55,7 @@ class InscritController extends AbstractController
     
         if ($form->isSubmitted() && $form->isValid()) {
             // encoder le mot de passe en clair
+
             $utilisateurs->setPassword(
                 $userPasswordHasher->hashPassword(
                     $utilisateurs,
@@ -310,6 +313,41 @@ public function listerInscrit(ManagerRegistry $doctrine){
     // Récupération de tous les inscrits
     $repository = $doctrine->getRepository(Inscrit::class);
     $inscrits= $repository->findAll();
+    return $this->render('inscrit/lister.html.twig', [
+'inscrits' => $inscrits,]);	
+}
+
+public function supprimerInscrit(ManagerRegistry $doctrine, int $id, Request $request)
+{
+    $inscrit = $doctrine->getRepository(Inscrit::class)->find($id);
+
+    if (!$inscrit) {
+        throw $this->createNotFoundException('Aucun inscrit trouvé avec cet id !');
+    }
+
+    // Vérifier si l'inscrit a des emprunts
+    $emprunts = $doctrine->getRepository(Emprunt::class)->findBy(['inscrit' => $inscrit]);
+
+if (!empty($emprunts)) {
+        // Si l'inscrit a des emprunts, afficher un message d'erreur
+        $this->addFlash('error', 'Cet utilisateur a des emprunts en cours !');
+        return $this->redirectToRoute('empruntLister');
+    }
+
+    // Si l'inscrit n'a pas d'emprunts, le supprimer
+    $entityManager = $doctrine->getManager();
+    $entityManager->remove($inscrit);
+    $entityManager->flush();
+
+    $this->addFlash('success', 'L\'utilisateur a été supprimé avec succès !');
+    return $this->redirectToRoute('listerInscrit');
+}
+
+
+
+
+}
+
 
     // Renvoie d'une réponse HTTP avec le template Twig "lister.html.twig" et la liste des inscrits récupérés
     return $this->render('inscrit/lister.html.twig', [
@@ -318,3 +356,4 @@ public function listerInscrit(ManagerRegistry $doctrine){
 }
 
 }
+

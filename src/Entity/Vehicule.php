@@ -20,7 +20,7 @@ class Vehicule
     private ?string $permis = null;
 
     #[ORM\OneToOne(mappedBy: 'Vehicule', cascade: ['persist', 'remove'])]
-    private ?Inscrit $inscrit = null;
+    private ?Inscrit $inscrit_Id = null;
 
     public function getId(): ?int
     {
@@ -70,5 +70,27 @@ class Vehicule
 
         return $this;
     }
-    
+
+    public function getInscritId(): ?Inscrit
+    {
+        return $this->inscrit_Id;
+    }
+
+    public function setInscritId(?Inscrit $inscrit_Id): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($inscrit_Id === null && $this->inscrit_Id !== null) {
+            $this->inscrit_Id->setVehicule(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($inscrit_Id !== null && $inscrit_Id->getVehicule() !== $this) {
+            $inscrit_Id->setVehicule($this);
+        }
+
+        $this->inscrit_Id = $inscrit_Id;
+
+        return $this;
+    }
+
 }

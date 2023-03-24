@@ -70,6 +70,12 @@ class Inscrit
     #[ORM\OneToOne(inversedBy: 'inscrit', cascade: ['persist', 'remove'])]
     private ?Vehicule $Vehicule = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $agreeTerm = null;
+
+    #[ORM\OneToOne(inversedBy: 'inscrit_Id', cascade: ['persist', 'remove'])]
+    private ?Vehicule $Vehicule = null;
+
     #[ORM\ManyToOne(inversedBy: 'inscrit')]
     #[ORM\JoinColumn(nullable: false)]
     
@@ -319,6 +325,30 @@ class Inscrit
     public function removeSession(session $session): self
     {
         $this->Session->removeElement($session);
+
+        return $this;
+    }
+
+    public function isAgreeTerm(): ?bool
+    {
+        return $this->agreeTerm;
+    }
+
+    public function setAgreeTerm(?bool $agreeTerm): self
+    {
+        $this->agreeTerm = $agreeTerm;
+
+        return $this;
+    }
+
+    public function getVehicule(): ?Vehicule
+    {
+        return $this->Vehicule;
+    }
+
+    public function setVehicule(?Vehicule $Vehicule): self
+    {
+        $this->Vehicule = $Vehicule;
 
         return $this;
     }
