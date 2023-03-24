@@ -22,6 +22,8 @@ class InscritType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+
+        //Ici son crées tous les champs du formulaire inscrit
             ->add('nom', TextType::class, ['label' => false])
             ->add('prenom', TextType::class, [ 'label' => false])
             ->add('utilisateurs', RegistrationFormType::class)
@@ -51,8 +53,8 @@ class InscritType extends AbstractType
                     ])
                 ]
                 ])
-            ->add('LogementId', LogementType::class, ['label' => false])
-            ->add('Session', SessionType::class, ['data_class' => null])
+            ->add('LogementId', LogementType::class, ['label' => false]) //Utilisation du formualire LogementType
+            ->add('Session', SessionType::class, ['data_class' => null]) //Utilisation du formulaire SessionType
             ->add('Competences', EntityType::class, [
                 'class' => TypeCompetences::class,
                 'label' => 'J\'ai les compétences pour :',
@@ -80,19 +82,7 @@ class InscritType extends AbstractType
                        'Oui' => 1,
                        'Non' => 0,
                    ],])
-            ->add('Vehicule', VehiculeType::class)
-            ->add('Session2', CheckboxType::class, [
-                    'label' =>'Session 2',
-                    'required' => false,
-                    'mapped' => false,
-                    'value' => 1
-                ])
-            ->add('Session3', CheckboxType::class, [
-                    'label' => 'Session 3',
-                    'required' => false,
-                    'mapped' => false,
-                    'value' => 2
-                ])
+            ->add('Vehicule', VehiculeType::class) //Utilisation du formulaire VehiculeType
             ->add('agreeTerm', CheckboxType::class, [
                 'required' => true,
                 'attr' => [

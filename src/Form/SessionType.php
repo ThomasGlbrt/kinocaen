@@ -13,6 +13,7 @@ class SessionType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        
         $builder
         ->add('intitule', ChoiceType::class, [
             'label' => 'A quel session ?',
@@ -27,8 +28,7 @@ class SessionType extends AbstractType
                 'class' => 'my-checkbox-class'
             ]
         ])
-        
-        
+
         ->add('porteurProjet', ChoiceType::class, [ 
             'label' => "Es tu porteur de projet ?",
             'placeholder' => '--',
@@ -37,7 +37,26 @@ class SessionType extends AbstractType
                    'Oui' => 1,
                    'Non' => 0,
             ]])
-        ;
+        
+        ->add('porteurProjetSession2', ChoiceType::class, [ 
+            'label' => "Es tu porteur de projet ?",
+            'expanded' => true,
+            'multiple' => false,
+            'required' => true,
+            'choices'  => [
+                   'Oui' => 1,
+                   'Non' => 0,
+            ]])
+
+        ->add('porteurProjetSession3', ChoiceType::class, [ 
+            'label' => "Es tu porteur de projet ?",
+            'expanded' => true,
+            'multiple' => false,
+            'required' => true,
+            'choices'  => [
+                   'Oui' => 1,
+                   'Non' => 0,
+            ]]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

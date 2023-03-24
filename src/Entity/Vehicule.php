@@ -36,7 +36,6 @@ class Vehicule
     {
         $this->places = $places;
 
-        return $this;
     }
 
     public function getPermis(): ?string
@@ -47,6 +46,27 @@ class Vehicule
     public function setPermis(?string $permis): self
     {
         $this->permis = $permis;
+
+    }
+
+    public function getInscrit(): ?Inscrit
+    {
+        return $this->inscrit;
+    }
+
+    public function setInscrit(?Inscrit $inscrit): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($inscrit === null && $this->inscrit !== null) {
+            $this->inscrit->setVehicule(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($inscrit !== null && $inscrit->getVehicule() !== $this) {
+            $inscrit->setVehicule($this);
+        }
+
+        $this->inscrit = $inscrit;
 
         return $this;
     }
@@ -72,4 +92,5 @@ class Vehicule
 
         return $this;
     }
+
 }
