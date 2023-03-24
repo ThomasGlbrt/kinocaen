@@ -1,28 +1,40 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{materiel.intitule}}
+    {{ materiel.intitule }}
 {% endblock %}
 
 {% block contenu %}
-        <h5>{{materiel.intitule}}</h5>
-        <table>
-            <tr><td rowspan="8" class="imgInst">
-				{% set photo = 'start/img/materiel/'~ materiel.id ~'.jpg' %}
-				<span class="zoom"><img src="{{ asset(photo | trans )}}" width=300px title="{{ materiel.intitule }}" alt="{{ materiel.intitule }}"/></span>
-            </td></tr>
-            <tr><td>Description : {{materiel.description}}</td></tr>
-        </table></br>
-            <a href="{{ path('materielLister') }}">
-                <button class="btn btn-primary">Fermer</button></a>&nbsp;&nbsp;
-            <a href="{{ path('empruntAjouter', { 'id': materiel.id }) }}">
-                <button class="btn btn-primary">Emprunter</button></a>
-            {% if is_granted ('ROLE_ADMIN') %}
-            <a href="{{ path('materielModifier',{ 'id': materiel.id }) }}">
-                <button type="button" class="btn btn-warning">Modifier</button>
-            </a>
-            <a href="{{ path('materielSupprimer', { 'id': materiel.id }) }}">
-                <button type="button" class="btn btn-danger" onclick="return confirm('Êtes-vous sur de vouloir supprimer ce matériel ?')">Supprimer</button>
-            </a>
-            {% endif %}
+    <h5>{{ materiel.intitule }}</h5>
+    <table>
+        <tr>
+            <td rowspan="8" class="imgInst">
+                {% set photo = 'images/'~ materiel.intitule ~'.jpg' %}
+                {% if asset(photo) %} {# Vérifie si l'image existe #}
+                    <span class="zoom">
+                        <img src="{{ asset(photo) }}" width="300px" title="{{ materiel.intitule }}" alt="{{ materiel.intitule }}" />
+                    </span>
+                {% else %}
+                    <span class="zoom">
+                        <img src="{{ asset('images/no_image.jpg') }}" width="300px" title="Pas d'image" alt="Pas d'image" />
+                    </span>
+                {% endif %}
+            </td>
+        </tr>
+        <tr><td>Description : {{ materiel.description }}</td></tr> {# Affiche la description du matériel #}
+    </table></br>
+    <a href="{{ path('materielLister') }}" class="btn btn-primary"> {# Lien pour retourner à la liste des matériels #}
+        Fermer
+    </a>&nbsp;&nbsp;
+    <a href="{{ path('empruntAjouter', { 'id': materiel.id }) }}" class="btn btn-primary"> {# Lien pour emprunter le matériel #}
+        Emprunter
+    </a>
+    {% if is_granted ('ROLE_ADMIN') %} {# Affiche les boutons de modification et suppression pour les utilisateurs ayant le rôle admin #}
+    <a href="{{ path('materielModifier', { 'id': materiel.id }) }}" class="btn btn-warning">
+        Modifier
+    </a>
+    <a href="{{ path('materielSupprimer', { 'id': materiel.id }) }}" class="text-decoration-none" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce matériel ?')">
+        <button type="button" class="btn btn-danger">Supprimer</button>
+    </a>
+    {% endif %}
 {% endblock %}

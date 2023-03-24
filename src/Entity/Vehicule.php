@@ -22,10 +22,22 @@ class Vehicule
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $permis = null;
 
+    #[ORM\OneToOne(inversedBy: 'vehicule', cascade: ['persist', 'remove'])]
+    private ?Inscrit $inscrit = null;
+
     public function getId(): ?int
     {
         return $this->id;
     }
+
+    public function getPlaces(): ?int
+    {
+        return $this->places;
+    }
+
+    public function setPlaces(?int $places): self
+    {
+        $this->places = $places;
 
     public function getInscrit(): ?inscrit
     {
@@ -39,6 +51,16 @@ class Vehicule
         return $this;
     }
 
+
+    public function getPermis(): ?string
+    {
+        return $this->permis;
+    }
+
+    public function setPermis(?string $permis): self
+    {
+        $this->permis = $permis;
+
     public function getPlaces(): ?int
     {
         return $this->places;
@@ -51,6 +73,15 @@ class Vehicule
         return $this;
     }
 
+    public function getInscrit(): ?Inscrit
+    {
+        return $this->inscrit;
+    }
+
+    public function setInscrit(?Inscrit $inscrit): self
+    {
+        $this->inscrit = $inscrit;
+
     public function getPermis(): ?string
     {
         return $this->permis;
@@ -59,6 +90,7 @@ class Vehicule
     public function setPermis(?string $permis): self
     {
         $this->permis = $permis;
+
 
         return $this;
     }
