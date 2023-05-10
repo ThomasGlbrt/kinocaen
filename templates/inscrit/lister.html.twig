@@ -26,12 +26,14 @@
                         {% endif %}
                     </td>
                     <td>
-                        {% if is_granted ('ROLE_ADMIN') %}
-                          <!-- Ce bouton permet de rediriger l'utilisateur vers la page de suppression d'un emprunt -->
-                          <a href="{{ path('inscritSupprimer',{ 'id': i.id}) }}" class="btn btn-sm btn-danger" onclick="return confirm('Êtes-vous sur de vouloir supprimer cet Inscrit ?')">Supprimer</a>
-                        {% endif %}
-                        <!-- Fin de la condition qui vérifie si l'utilisateur actuel a le rôle d'administrateur -->
-                      </td>
+                      {% if is_granted ('ROLE_ADMIN') %}
+                        <!-- Ce bouton permet de rediriger l'utilisateur vers la page de modification d'un emprunt -->
+                        <a href="{{ path('modifierInscrit',{ 'id': i.id}) }}" class="btn btn-sm btn-warning">Modifier</a>
+                        <!-- Ce bouton permet de rediriger l'utilisateur vers la page de suppression d'un emprunt -->
+                        <a href="{{ path('supprimerInscrit',{ 'id': i.id}) }}" class="btn btn-sm btn-danger" onclick="return confirm('Êtes-vous sur de vouloir supprimer cet Inscrit ?')">Supprimer</a>
+                      {% endif %}
+                      <!-- Fin de la condition qui vérifie si l'utilisateur actuel a le rôle d'administrateur -->
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>

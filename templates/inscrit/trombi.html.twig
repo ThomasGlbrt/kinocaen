@@ -1,27 +1,21 @@
 {% extends 'base.html.twig' %}
 {% block title %}Trombinoscope {% endblock %}
 {% block contenu %}
+
 <div class="container">
-    <div class="">&nbsp;
-                <a href="{{path('telechargerTrombiPdf')}}" class="btn btn-success">Télécharger en pdf
-                </a>
-            </div></br>
+    <div class="row mb-3">
+        <div class="col">
+            <a href="{{path('telechargerTrombiPdf')}}" class="btn btn-success">Télécharger en pdf</a>
+        </div>
+    </div>
     <div class="row">
         {% for i in inscrits %}
-        <div class="col-md-6">
-            <div class="card mb-4" style="height:95%;" onclick="window.location.href='{{path('consulterInscrit', {'id': i.id})}}'">
+        <div class="col-md-6 mb-2">
+            <div class="card mb-5" onclick="window.location.href='{{path('consulterInscrit', {'id': i.id})}}'">
                 <div class="row">
                     <div class="col-md-8">
                         <div class="card-body">
                             <h2 class="mb-4" style="font-size: 1rem;">{{ i.prenom }} {{i.nom|upper}}</h2>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <p class="card-title font-weight-bold" style="font-size: 0.8rem;">Poste</p>
-                                </div>
-                                <div class="col-md-8">
-                                    <p class="card-text" style="font-size: 0.8rem;">{{i.poste}}</p>
-                                </div>
-                            </div>
                             <div class="row">
                                 <div class="col-md-4">
                                     <p class="card-title font-weight-bold" style="font-size: 0.8rem;">Email</p>
@@ -39,39 +33,62 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-4">
-                                    <p class="card-title font-weight-bold" style="font-size: 0.8rem;">Talent</p>
-                                </div>
-                                <div class="col-md-8">
-                                    <p class="card-text" style="font-size: 0.8rem;">{{i.talent}}</p>
-                                </div>
+                              <div class="col-md-4">
+                                <p class="card-title font-weight-bold" style="font-size: 0.8rem;">Ville et pays</p>
+                              </div>
+                              <div class="col-md-8">
+                                <p class="card-text" style="font-size: 0.8rem;">{% if (i.ville and i.pays) != null %}{{i.ville|capitalize}}{% if i.ville != null %},{% endif %} {{i.pays|upper}}{% else %} Location non renseigné {% endif %}</p>
+                              </div>
+                            </div>
+
+                            <div class="row">
+                              <div class="col-md-4">
+                                <p class="card-title font-weight-bold" style="font-size: 0.8rem;">Facebook</p>
+                              </div>
+                              <div class="col-md-8">
+                                <p class="card-text" style="font-size: 0.8rem;">{% if i.facebook != null %}{{i.facebook}}{% else %} Pas renseigné {% endif %}</p>
+                              </div>
+                            </div>
+
+                            <div class="row">
+                              <div class="col-md-4">
+                                <p class="card-title font-weight-bold" style="font-size: 0.8rem;">Sessions et porteur de projet</p>
+                              </div>
+                              <div class="col-md-8">
+                                <p class="card-text" style="font-size: 0.8rem;">
+                                    {% for s in i.Session %}
+                                        <li class="card-text" style="font-size: 0.8rem;list-style:none; ">{{m.intitule}}</li>
+                                    {% else %}
+                                        <li class="card-text" style="font-size: 0.8rem;list-style:none;">Pas de sessions inscrit</li>
+                                    {% endfor %}
+                                </p>
+                              </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-4">
-                                    <p class="card-title font-weight-bold" style="font-size: 0.8rem;">Chose à dire en plus</p>
-                                </div>
-                                <div class="col-md-8">
-                                    <p class="card-text" style="font-size: 0.8rem;">{{i.choseplus}}</p>
-                                </div>
+                              <div class="col-md-4">
+                                <p class="card-title font-weight-bold" style="font-size: 0.8rem;">Permis de conduire </p>
+                              </div>
+                              <div class="col-md-8">
+                                <p class="card-text" style="font-size: 0.8rem;">{% if i.permis == 1 %} Permis obtenu {% if i.vehicule != null %}  depuis moins de 3ans. {% else %} depuis plus de 3ans. {% endif %} {% else %} Pas de permis {% endif %}</p>
+                              </div>
                             </div>
+
                             <div class="row">
-                                <div class="col-md-4">
-                                    <p class="card-title font-weight-bold" style="font-size: 0.8rem;">Métiers</p>
-                                </div>
-                                <div class="col-md-8">
-                                    <ul class="list-unstyled" style="font-size: 0.8rem;">
-                                        {% for m in i.metier %}
-                                        <li>{{m.nom}}</li>
-                                        {% else %}
-                                        <li>Pas de métier défini</li>
-                                        {% endfor %}
-                                    </ul>
-                                </div>
+                              <div class="col-md-4">
+                                <p class="card-title font-weight-bold" style="font-size: 0.8rem;">Voiture</p>
+                              </div>
+                              <div class="col-md-8">
+                                <p class="card-text" style="font-size: 0.8rem;">{% if i.vehicule != null %} Oui, Nombre de place : {{i.vehicule.places}}{% else %} Pas de voiture {% endif %}</p>
+                              </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4" style="text-align: center; display: flex; align-items: center;">
-                        <img src='{{asset('images/' ~ i.image) }}' alt="image de profil" class="img-fluid mx-auto">
+                    <div class="col-md-4 d-flex align-items-center justify-content-center">
+                        {% if i.image != null %}
+                            <img src="{{asset('images/' ~ i.image)}}" alt="image de profile" class="img-fluid mx-auto">
+                        {% else %}
+                            <img src="{{asset('images/No_image_available.png')}}" alt="image de profile" class="img-fluid mx-auto">
+                        {% endif %}
                     </div>
                 </div>
             </div>

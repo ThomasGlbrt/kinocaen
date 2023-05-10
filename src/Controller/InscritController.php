@@ -317,4 +317,20 @@ public function listerInscrit(ManagerRegistry $doctrine){
     ]);
 }
 
+
+public function supprimerInscrit(ManagerRegistry $doctrine, int $id, Request $request){
+
+    $inscrit= $doctrine->getRepository(Inscrit::class)->find($id);
+
+    if (!$inscrit){
+        throw $this->createNotFoundException('Aucun Inscrit trouvé avec cet id !');
+    }
+    else{
+        $entityManager = $doctrine->getManager();
+        $entityManager->remove($inscrit);
+        $entityManager->flush();
+        return $this->redirectToRoute('listerInscrit');
+    }
+}
+
 }
