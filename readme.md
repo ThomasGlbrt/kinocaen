@@ -12,4 +12,4 @@
 
 
 # Accès bdd distante :
-> kino.inforostand14.net | kino / MProot
+> kino.inforostand14.net | kino / MPkino
