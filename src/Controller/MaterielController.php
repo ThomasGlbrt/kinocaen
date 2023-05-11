@@ -45,39 +45,56 @@ class MaterielController extends AbstractController
 	}
 
 
-    public function listerMateriel(ManagerRegistry $doctrine)
-{
-    $repository = $doctrine->getRepository(Materiel::class);
-    $materiels = $repository->findAll();
-    $categorieMateriels = [];
-
-    foreach ($materiels as $materiel) {
-        $categorie = $materiel->getCategorie()->getLibelle();
-        if (!array_key_exists($categorie, $categorieMateriels)) {
-            $categorieMateriels[$categorie] = [];
+    public function listerMateriel(ManagerRegistry $doctrine, Request $request)
+    {
+        $repository = $doctrine->getRepository(Materiel::class);
+        $materiels = $repository->findAll();
+        $categorieMateriels = [];
+    
+        foreach ($materiels as $materiel) {
+            $categorie = $materiel->getCategorie()->getLibelle();
+            if (!array_key_exists($categorie, $categorieMateriels)) {
+                $categorieMateriels[$categorie] = [];
+            }
+            $categorieMateriels[$categorie][] = $materiel;
         }
-        $categorieMateriels[$categorie][] = $materiel;
+    
+        $searchQuery = $request->query->get('q');
+    
+        // Supprimer les catégories vides
+        foreach ($categorieMateriels as $categorie => $materiels) {
+            if (count($materiels) == 0) {
+                unset($categorieMateriels[$categorie]);
+            }
+        }
+    
+        return $this->render('materiel/lister.html.twig', [
+            'categorieMateriels' => $categorieMateriels,
+            'searchQuery' => $searchQuery,
+        ]);
     }
-
-    return $this->render('materiel/lister.html.twig', [
-        'categorieMateriels' => $categorieMateriels,
-    ]);
-}
+    
 
 
-public function ajouterMateriel(Request $request, FileUploader $fileUploader, ManagerRegistry $doctrine)
-{
-    $materiel = new Materiel();
-    $form = $this->createForm(MaterielType::class, $materiel);
-    $form->handleRequest($request);
 
-    if ($form->isSubmitted() && $form->isValid()) {
-        $imageFile = $form->get('image')->getData();
-if ($imageFile) {
-    $intitule = $materiel->getIntitule();
-    $imageFileName = $fileUploader->FileUploader($imageFile, $intitule . '.' . $imageFile->guessExtension());
-    $materiel->setImage($imageFileName);
-}
+    public function ajouterMateriel(Request $request, FileUploader $fileUploader, ManagerRegistry $doctrine)
+    {
+        $materiel = new Materiel();
+        $form = $this->createForm(MaterielType::class, $materiel);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $imageFile = $form->get('image')->getData();
+
+            if ($imageFile instanceof UploadedFile) {
+                $intitule = $materiel->getIntitule();
+                $extension = $imageFile->guessExtension();
+                $imageFileName = $fileUploader->upload($imageFile, $intitule . '.' . $extension);
+                $materiel->setImage($imageFileName);
+            } else {
+                // Aucun fichier d'image inséré, attribuer l'image par défaut
+                $materiel->setImage('No_image_available.png');
+            }
 
         $entityManager = $doctrine->getManager();
         $entityManager->persist($materiel);
@@ -99,51 +116,33 @@ if ($imageFile) {
 }
 
 
-public function modifierMateriel(ManagerRegistry $doctrine, int $id, Request $request, FileUploader $fileUploader): Response
-    {
-        // Récupération du matériel à modifier depuis la base de données
-        $entityManager = $doctrine->getManager();
-        $materiel = $entityManager->getRepository(Materiel::class)->find($id);
+public function modifierMateriel(ManagerRegistry $doctrine, int $id, Request $request): Response
+{
+    // Récupération du matériel à modifier depuis la base de données
+    $entityManager = $doctrine->getManager();
+    $materiel = $entityManager->getRepository(Materiel::class)->find($id);
 
-        if (!$materiel) {
-            throw $this->createNotFoundException('Aucun matériel trouvé pour l\'id '.$id);
-        }
-
-        // Stockage de l'image actuelle du matériel
-        $imageActuelle = $materiel->getImage();
-
-        // Création d'un formulaire pour la modification du matériel
-        $form = $this->createForm(MaterielModifierType::class, $materiel);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            /** @var UploadedFile|null $imageFile */
-            $imageFile = $form->get('image')->getData();
-
-            if ($imageFile) {
-                // Suppression de l'ancienne image du matériel si elle existe
-                if ($imageActuelle && file_exists($this->getParameter('images_directory').'/'.$imageActuelle)) {
-                    unlink($this->getParameter('images_directory').'/'.$imageActuelle);
-                }
-
-                // Enregistrement de la nouvelle image du matériel
-                $fileName = $fileUploader->upload($imageFile);
-                $materiel->setImage($fileName);
-            } else {
-                $materiel->setImage($imageActuelle);
-            }
-
-            // Enregistrement des modifications du matériel dans la base de données
-            $entityManager->flush();
-
-            return $this->redirectToRoute('accueil');
-        }
-
-        return $this->render('materiel/ajouter.html.twig', [
-            'form' => $form->createView(),
-            'materiel' => $materiel,
-        ]);
+    if (!$materiel) {
+        throw $this->createNotFoundException('Aucun matériel trouvé pour l\'id '.$id);
     }
+
+    // Création d'un formulaire pour la modification du matériel
+    $form = $this->createForm(MaterielModifierType::class, $materiel);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        // Enregistrement des modifications du matériel dans la base de données
+        $entityManager->flush();
+
+        return $this->redirectToRoute('materielLister');
+    }
+
+    return $this->render('materiel/modifier.html.twig', [
+        'form' => $form->createView(),
+        'materiel' => $materiel,
+    ]);
+}
+
 
 
     public function supprimerMateriel(ManagerRegistry $doctrine, int $id, Request $request){

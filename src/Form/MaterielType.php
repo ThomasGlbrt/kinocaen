@@ -22,7 +22,9 @@ class MaterielType extends AbstractType
         $builder->add('intitule')
 
         // Ajout d'un champ "description" de type "textarea"
-        ->add('description')
+        ->add('description', TextareaType::class, [
+            'attr' => ['rows' => 3], 'required' => false,
+        ])
 
         // Ajout d'un champ "categorie" de type "entity", lié à l'entité "Categorie"
         // Le champ affiche la propriété "libelle" des entités "Categorie"

@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier un emprunt{% endblock %}
+
+{% block contenu %}
+    <h4>Modifier un emprunt</h4>
+    <br>
+    {# Formulaire pour modifier un emprunt #}
+    {{ form_start(form) }}
+
+    {# Champ date de début de l'emprunt #}
+    <div class="col-sm-6 mb-3 mb-sm-0">
+        {{ form_widget(form.dateDebut, {'attr': {'class': 'form-control', 'placeholder': 'Date de début'}}) }}
+    </div><br>
+
+    {# Champ date de fin de l'emprunt #}
+    <div class="col-sm-6 mb-3 mb-sm-0">
+        {{ form_widget(form.dateFin, {'attr': {'class': 'form-control', 'placeholder': 'Date de fin'}}) }}
+    </div><br>
+
+    {# Champ matériel de l'emprunt #}
+    <div class="col-sm-6 mb-3 mb-sm-0">
+        {{ form_widget(form.materiel, {'attr': {'class': 'form-control', 'placeholder': 'Matériel'}}) }}
+    </div><br>
+
+    {# Champ inscrit de l'emprunt #}
+    <div class="col-sm-6 mb-3 mb-sm-0">
+        {{ form_widget(form.inscrit, {'attr': {'class': 'form-control', 'placeholder': 'Inscrit'}}) }}
+    </div><br>
+
+    {# Bouton pour soumettre le formulaire #}
+    <a href="{{ path('empruntLister') }}" class="btn btn-primary">Retour</a>
+    <button type="submit" class="btn btn-primary">Enregistrer</button>
+
+    {{ form_end(form) }}
+{% endblock %}

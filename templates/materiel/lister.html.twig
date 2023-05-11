@@ -1,65 +1,89 @@
-{% extends 'base.html.twig' %}
-{% block title %}Liste du Matériel{% endblock %}
-{% block contenu %}
-    <h5>LISTE DU MATERIEL</h5></br>
+{% extends 'base.html.twig' %}  {# Étendre le template de base #}
+{% block title %}Liste du Matériel{% endblock %}  {# Définition du titre de la page #}
+{% block contenu %}  {# Début du bloc de contenu #}
+    <h5>LISTE DU MATERIEL</h5></br>  {# Titre de la liste du matériel #}
     
-    <div class="input-group">
+    <div class="input-group">  {# Div contenant le groupe d'entrée #}
         <div class="form-outline">
-          <input type="search-input" id="searchInput" class="form-control" />
-        </div>
+            <input type="search" id="searchInput" class="form-control" />  {# Champ de recherche #}
+        </div>&nbsp;
         <button type="button" class="btn btn-primary">
-          <i class="fas fa-search"></i>
-        </button>&nbsp;&nbsp;
-        {% if is_granted ('ROLE_ADMIN') %}
-        <a href="{{ path('materielAjouter') }}" class="btn btn-primary">Nouveau Matériel</a>
+            <i class="fas fa-search"></i>  {# Bouton de recherche #}
+        </button>&nbsp;
+        
+        {% if is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('materielAjouter') }}" class="btn btn-primary">Nouveau Matériel</a>  {# Bouton d'ajout de nouveau matériel pour l'administrateur #}
         {% endif %}
     </div>
     
     {% for category, materiels in categorieMateriels %}
-        <br><h5>{{ category }}</h5>
-        <div class="row">
+        <br><h5 class="category" data-category="{{ category }}">{{ category }}</h5>  {# Titre de la catégorie #}
+        <div class="row">  {# Div contenant les cartes de matériel #}
             {% for e in materiels %}
-                <div class="col-md-4" id="{{ e.id }}">
-                    <div class="card mt-4 " style="height:90%;">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ e.intitule }}</h5>
-                            {% if e.description != '' %}
-                                <div class="card-text">
-                                    {{ e.description[:60] }}...
-                                </div>
-                            {% endif %}
-                        </div>
-                        <div class="card-footer">
-                            <a href="{{ path('materielConsulter', { 'id': e.id }) }}">
-                                <button type="button" class="btn btn-primary">
-                                    Voir plus
-                                </button>
-                            </a>
+                {% set title = e.intitule|lower %}
+                {% set description = e.description|lower %}
+                {% if searchQuery is empty or title matches '/^.*'~searchQuery~'.*$/i' or description matches '/^.*'~searchQuery~'.*$/i' %}
+                    {% set resultsFound = true %}
+                    <div class="col-md-4 card-container" id="{{ e.id }}">  {# Conteneur de la carte de matériel #}
+                        <div class="card mt-4" style="height:90%;">  {# Carte de matériel #}
+                            <div class="card-body">
+                                <h5 class="card-title">{{ e.intitule }}</h5>  {# Titre du matériel #}
+                                {% if e.description != '' %}
+                                    <div class="card-text">
+                                        {{ e.description[:60] }}...  {# Description abrégée du matériel #}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="card-footer">
+                                <a href="{{ path('materielConsulter', { 'id': e.id }) }}">  {# Lien vers la page de consultation du matériel #}
+                                    <button type="button" class="btn btn-primary">
+                                        Voir plus  {# Bouton pour voir plus de détails du matériel #}
+                                    </button>
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
+                {% endif %}
             {% endfor %}
         </div>
     {% endfor %}
+
+    {% if not resultsFound %}
+        <div class="alert alert-warning" role="alert">
+            Aucun résultat trouvé pour la recherche "{{ searchQuery }}". Veuillez réessayer avec une autre recherche.
+        </div>
+    {% endif %}
     
     <script>
         document.getElementById("searchInput").addEventListener("keyup", function(){
             filterResults();
         });
-
+    
         function filterResults() {
             var input = document.getElementById("searchInput").value.toLowerCase();
-            var cards = document.getElementsByClassName("col-md-4");
+            var cards = document.getElementsByClassName("col-md-4 card-container");
+            var resultsFound = false;
             for (var i = 0; i < cards.length; i++) {
-                var card = cards[i];
+                var card = cards[i].querySelector(".card");
                 var title = card.getElementsByClassName("card-title")[0].innerHTML.toLowerCase();
                 var description = card.getElementsByClassName("card-text")[0].innerHTML.toLowerCase();
+                
                 if (title.indexOf(input) > -1 || description.indexOf(input) > -1) {
                     card.style.display = "block";
+                    cards[i].style.display = "block";
+                    resultsFound = true;
                 } else {
                     card.style.display = "none";
+                    cards[i].style.display = "none";
                 }
+            }
+            
+            if (!resultsFound) {
+                document.getElementsByClassName("alert")[0].style.display = "block";
+            } else {
+                document.getElementsByClassName("alert")[0].style.display = "none";
             }
         }
     </script>
+    
 {% endblock %}
