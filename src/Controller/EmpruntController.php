@@ -131,42 +131,32 @@ class EmpruntController extends AbstractController
 }
 
 
-    public function modifierEmprunt(ManagerRegistry $doctrine, $id, Request $request)
-    {
-        // Récupère l'emprunt correspondant à l'id donné en paramètre
-        $emprunt = $doctrine->getRepository(Emprunt::class)->find($id);
+public function modifierEmprunt(ManagerRegistry $doctrine, int $id, Request $request): Response
+{
+    // Récupération de l'emprunt à modifier depuis la base de données
+    $entityManager = $doctrine->getManager();
+    $emprunt = $entityManager->getRepository(Emprunt::class)->find($id);
 
-        // Si aucun emprunt n'est trouvé pour cet id
-        if (!$emprunt) {
-            throw $this->createNotFoundException('Aucun Emprunt trouvé avec le numéro '.$id);
-        } else {
-            // Création du formulaire de modification d'emprunt à partir de l'objet EmpruntModifierType
-            $form = $this->createForm(EmpruntModifierType::class, $emprunt);
-
-            // Traitement de la requête HTTP
-            $form->handleRequest($request);
-
-            // Si le formulaire a été soumis et est valide
-            if ($form->isSubmitted() && $form->isValid()) {
-                // Récupération des données du formulaire
-                $emprunt = $form->getData();
-                // Persistence des données de l'emprunt dans la base de données
-                $entityManager = $doctrine->getManager();
-                $entityManager->persist($emprunt);
-                $entityManager->flush();
-
-                // Rendu de la vue pour consulter l'emprunt modifié
-                return $this->render('emprunt/consulter.html.twig', [
-                    'emprunt' => $emprunt,
-                ]);
-            } else {
-                // Sinon, rendu du formulaire de modification d'emprunt
-                return $this->render('emprunt/ajouter.html.twig', [
-                    'form' => $form->createView(),
-                ]);
-            }
-        }
+    if (!$emprunt) {
+        throw $this->createNotFoundException('Aucun emprunt trouvé pour l\'id '.$id);
     }
+
+    // Création d'un formulaire pour la modification de l'emprunt
+    $form = $this->createForm(EmpruntModifierType::class, $emprunt);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        // Enregistrement des modifications de l'emprunt dans la base de données
+        $entityManager->flush();
+
+        return $this->redirectToRoute('empruntConsulter', ['id' => $emprunt->getId()]);
+    }
+
+    return $this->render('emprunt/modifier.html.twig', [
+        'form' => $form->createView(),
+        'emprunt' => $emprunt,
+    ]);
+}
 
 
     public function supprimerEmprunt(ManagerRegistry $doctrine, int $id, Request $request)
