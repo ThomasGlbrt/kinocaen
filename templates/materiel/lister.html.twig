@@ -1,24 +1,26 @@
-{% extends 'base.html.twig' %}  {# Étendre le template de base #}
-{% block title %}Liste du Matériel{% endblock %}  {# Définition du titre de la page #}
-{% block contenu %}  {# Début du bloc de contenu #}
-    <h5>LISTE DU MATERIEL</h5></br>  {# Titre de la liste du matériel #}
-    
-    <div class="input-group">  {# Div contenant le groupe d'entrée #}
+{% extends 'base.html.twig' %}
+{% block title %}Liste du Matériel{% endblock %}
+{% block contenu %}
+    <h5>LISTE DU MATERIEL</h5><br>
+
+    <div class="input-group">
         <div class="form-outline">
-            <input type="search" id="searchInput" class="form-control" />  {# Champ de recherche #}
+            <input type="search" id="searchInput" class="form-control" />
         </div>&nbsp;
         <button type="button" class="btn btn-primary">
-            <i class="fas fa-search"></i>  {# Bouton de recherche #}
+            <i class="fas fa-search"></i>
         </button>&nbsp;
-        
+
         {% if is_granted('ROLE_ADMIN') %}
-            <a href="{{ path('materielAjouter') }}" class="btn btn-primary">Nouveau Matériel</a>  {# Bouton d'ajout de nouveau matériel pour l'administrateur #}
+            <a href="{{ path('materielAjouter') }}" class="btn btn-primary">Nouveau Matériel</a>
         {% endif %}
     </div>
-    
+
+    {% set resultsFound = false %} {# Initialisation de la variable resultsFound en dehors de la boucle #}
+
     {% for category, materiels in categorieMateriels %}
-        <br><h5 class="category" data-category="{{ category }}">{{ category }}</h5>  {# Titre de la catégorie #}
-        <div class="row">  {# Div contenant les cartes de matériel #}
+        <br><h5 class="category" data-category="{{ category }}">{{ category }}</h5>
+        <div class="row">
             {% for e in materiels %}
                 {% set title = e.intitule|lower %}
                 {% set description = e.description|lower %}
