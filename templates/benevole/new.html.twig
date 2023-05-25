@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter Benevole{% endblock %}
+
+{% block contenu %}
+    <h4>Ajouter un benevole</h4>
+    </br>
+    
+    {{ include('benevole/_form.html.twig') }}
+    <a href="{{ path('app_benevole_index') }}" class="btn btn-primary">Retour a la liste</a>
+{% endblock %}

@@ -1,0 +1,20 @@
+{{ form_start(form) }}
+    <div class="col-sm-6 mb-3 mb-sm-0">
+        {{ form_widget(form.nom, {'attr': {'class': 'form-control', 'placeholder': 'Nom'}}) }}
+    </div></br>
+    <div class="col-sm-6 mb-3 mb-sm-0">
+        {{ form_widget(form.prenom, {'attr': {'class': 'form-control', 'placeholder': 'Prenom'}}) }}
+    </div></br>
+    <div class="col-sm-6 mb-3 mb-sm-0">
+        {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Email'}}) }}
+    </div></br>
+    <div class="col-sm-6 mb-3 mb-sm-0">
+        {{ form_widget(form.tel, {'attr': {'class': 'form-control', 'placeholder': 'Telephone'}}) }}
+    </div></br>
+    <div class="form-group">
+        {{ form_row(form.pole) }}
+    </div></br>
+    <button class="btn btn-success">{{ button_label|default('Save') }}</button>
+
+
+{{ form_end(form) }}

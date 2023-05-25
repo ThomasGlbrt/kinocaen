@@ -30,10 +30,11 @@ security:
         #- { path: ^/, roles: ROLE_USER }
         #- { path: ^/^/modifier, roles: ROLE_ADMIN }
         #- { path: ^/^/ajouter, roles: ROLE_ADMIN }
+        - { path: '^/benevole', roles: ROLE_ADMIN }
+        - { path: '^/materiel', roles: ROLE_MAG_ADMIN }
         
 
     role_hierarchy:
-        ROLE_USER:        PUBLIC_ACCESS
         ROLE_MAG_ADMIN:   ROLE_USER
         ROLE_LAB_ADMIN:   ROLE_USER
         ROLE_ADMIN:       [ROLE_USER, ROLE_MAG_ADMIN, ROLE_LAB_ADMIN]

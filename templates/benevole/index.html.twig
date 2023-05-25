@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Benevole index{% endblock %}
+
+{% block contenu %}
+    <h1>Benevole index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Prenom</th>
+                <th>Email</th>
+                <th>Tel</th>
+                <th>Pole</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for benevole in benevoles %}
+            <tr>
+                <td>{{ benevole.id }}</td>
+                <td>{{ benevole.nom }}</td>
+                <td>{{ benevole.prenom }}</td>
+                <td>{{ benevole.email }}</td>
+                <td>{{ benevole.tel }}</td>
+                <td>{% for b in benevole.pole %} {{ b.intitule }} {% else %} Pas de pole enregistré {% endfor %}</td>
+                <td>
+                    <a class="btn btn-primary" href="{{ path('app_benevole_show', {'id': benevole.id}) }}">Consulter</a>
+                    <a class="btn btn-warning" href="{{ path('app_benevole_edit', {'id': benevole.id}) }}">Editer</a>
+                    <form method="post" action="{{ path('app_benevole_delete', {'id': benevole.id}) }}" onsubmit="return confirm('Etes vous sur de supprimer ce bénévole ?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ benevole.id) }}"></br>
+                        <button class="btn btn-danger">Supprimer</button>
+                    </form>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">Aucun bénévole inscrit</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="btn btn-info" href="{{ path('app_benevole_new') }}">Ajouter</a>
+{% endblock %}
