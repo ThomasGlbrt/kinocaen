@@ -70,6 +70,9 @@ class Inscrit
     #[ORM\OneToOne(inversedBy: 'inscrit', cascade: ['persist', 'remove'])]
     private ?Vehicule $Vehicule = null;
 
+    #[ORM\ManyToMany(targetEntity: Essai::class, inversedBy: 'inscrits')]
+    private Collection $Essai;
+
     #[ORM\ManyToOne(inversedBy: 'inscrit')]
     #[ORM\JoinColumn(nullable: false)]
     
@@ -80,6 +83,7 @@ class Inscrit
         $this->emprunt = new ArrayCollection();
         $this->competences = new ArrayCollection();
         $this->sessions = new ArrayCollection();
+        $this->Essai = new ArrayCollection();
     }
 
 
@@ -344,6 +348,30 @@ class Inscrit
     public function setVehicule(?Vehicule $Vehicule): self
     {
         $this->Vehicule = $Vehicule;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Essai>
+     */
+    public function getEssai(): Collection
+    {
+        return $this->Essai;
+    }
+
+    public function addEssai(Essai $essai): self
+    {
+        if (!$this->Essai->contains($essai)) {
+            $this->Essai->add($essai);
+        }
+
+        return $this;
+    }
+
+    public function removeEssai(Essai $essai): self
+    {
+        $this->Essai->removeElement($essai);
 
         return $this;
     }

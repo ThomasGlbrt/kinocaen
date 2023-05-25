@@ -35,7 +35,7 @@
                             <p class="card-title font-weight-bold">Logement</p>
                         </div>
                         <div class="col-md-8">
-                            <p class="card-text">{% if inscrit.Logementid == null %}Pas de situation{% if inscrit.Logementid != null %}, depuis moins de 3 ans {% else %}, depuis plus de 3ans {% endif %} {% else %} Non {% endif %}</p>
+                            <p class="card-text">{% if inscrit.Logementid == null %}Pas de situation {% else %} {{inscrit.Logementid.besoin}} {% endif %}</p>
                         </div>
                     </div>
                     <div class="row">
